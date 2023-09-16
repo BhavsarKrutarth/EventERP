@@ -1,0 +1,1138 @@
+﻿@model EventERP.Models.PagePermission
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>@{ var title = "Jewellery ERP"; if (Model != null) { title = Model.NAME; } else { title = ViewBag.Title; } }@title</title>
+
+    <link rel="icon" href="~/Content/assets/images/As.png" type="imagee/png" sizes="32x32">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+    @Styles.Render("~/Content/css")
+
+    <script src="~/Content/assets/js/core/libraries/jquery.min.js"></script>
+    @*@Scripts.Render("~/bundles/jquery")*@
+
+    <script src="@Url.Content("~/bundles/jquery?v=" + DateTime.UtcNow)"></script>
+    @* @Url.Content("~/bundles/jquery?v=" + System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/bundles/jquery"))" *@
+
+    <script src="~/Scripts/Common/Common.js?v=@DateTime.UtcNow"></script>
+</head>
+
+<body class="navbar-top pace-done">
+    <div id="div_loading"></div>
+
+    <input type="hidden" id="MenuName" value="@Model.ACTION" />
+
+    <!-- Main navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#0" style="padding: 9px 10px;">
+                <h2 style="margin-top:0px;text-transform:capitalize;">@title</h2>
+            </a>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-mobile">
+            <ul class="nav navbar-nav navbar-right">
+                <li style="padding: 7px 0px 0px 5px;">
+                    <a id="linkCalculator">
+                        <i style="font-size: 17px !important;" class="fa fa-calculator" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li style="margin-right:10px;">
+                    <input type="text" class="form-control MenuSearch" onkeyup="CommonjsView.AutosuggestAccountName(this)" id="CommonSearch" style="margin-top: 7px;" placeholder="Account Search" />
+                    <div id="CommonData">
+                        <div class="col-md-12">
+                            @*<div class="col-md-3">
+                                    <ul id="AccountList"></ul>
+                                </div>*@
+                            <div class="col-md-12" id="MainDetailsViewDiv">
+                                <div class="row DetailsDiv">
+                                    <div class="col-md-2 pr-0">
+                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["domainpath"]/Content/assets/images/default-user.png" id="MainImgVender" class="img-rounded" alt="">
+                                    </div>
+                                    <div class="col-md-10 pl-0">
+                                        <p id="AccountNameMain">
+                                            <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnViewMainMetalLedger">View Metal Ledger</button>
+                                            <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnViewMainLedger">View Ledger</button>
+                                            <button id="EditMain"><i class="fa fa-pencil"></i>&nbsp;&nbsp; Edit</button>
+                                        </p>
+                                        <p id="MainBalance"><span id="lblBalanceMain1">Balance : </span><span id="lblBalanceMain2">0.00</span></p>
+                                        <p class="lblMain"><span class="lbl1">Account : </span><span class="lbl2" id="lblMainAccountName"></span></p>
+                                        <p class="lblMain"><span class="lbl1">Group : </span><span class="lbl2" id="BalanceGroupMain"></span></p>
+                                        <p class="lblMain"><span class="lbl1">City :</span><span class="lbl2" id="CityMain"></span></p>
+                                        <p class="lblMain"><span class="lbl1">Contact No :</span><span class="lbl2" id="ContactMain"></span></p>
+                                    </div>
+                                </div>
+                                <div class="row DetailsGridDiv">
+                                    <div class="col-sm-12 p-0">
+                                        <div class="jqGrid_wrapper" id="jqgrid_MainLedger">
+                                            <table id="table_list_MainLedger"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <input type="text" class="form-control MenuSearch" id="MenuSearch" style="margin-top: 7px;" placeholder="Menu Search" />
+                    <div id="menudata1" style="display:none">
+                    </div>
+                </li>
+                <li style="padding: 1px 0px 0px 10px;">
+                    <label id="CurrentAccountYear" style="margin: 10px 5px;font-size: 15px;" AccYearId="@EventERP.CommonClasses.SessionFacade.UserSession.ACCOUNTYEARID">@EventERP.CommonClasses.SessionFacade.UserSession.ACCOUNTYEAR</label>
+                    <input type="hidden" id="lbl_startdate" value="@EventERP.CommonClasses.SessionFacade.UserSession.ACCOUNTYEARFROMDATE" />
+                    <input type="hidden" id="lbl_enddate" value="@EventERP.CommonClasses.SessionFacade.UserSession.ACCOUNTYEARTODATE" />
+                </li>
+                <li style="padding: 7px 0px 0px 5px;">
+                    <a id="linkiconfavorite">
+                        <i style="font-size: 17px !important; color: #ffee58;" class="fa fa-star" aria-hidden="true"></i>
+                    </a>
+                </li>
+                @if (@Model.NAME != null)
+                {
+                    <li style="padding: 7px 6px 0px 0px;">
+                        <a id="linkhelpicon">
+                            <i style="font-size: 17px !important;" class="fa fa-question-circle help-master-icon help-icon-mobileview" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                }
+                <li>
+                    <div class="form-group" style="margin-top: 7px;">
+                        <select id="ddlPartyBranch" class="form-control actosoft-dropdwon" onchange="SubmitEmpAccountYearBranch()"></select>
+                    </div>
+                </li>
+
+                <li style="padding:8px 0px;"><a href="@Url.Action("LogOut","Login")" class="pr-0"><i class="icon-switch2"></i> Logout</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="navbar navbar-default second-fix-navbar" id="navbar-second">
+        <ul class="nav navbar-nav no-border visible-xs-block">
+            <li><a class="text-center collapsed" data-toggle="collapse" data-target="#navbar-second-toggle"><i class="icon-menu7"></i></a></li>
+        </ul>
+        <div class="navbar-collapse collapse" id="navbar-second-toggle">
+            @MvcHtmlString.Create(EventERP.CommonClasses.SessionFacade.MenuListstr)
+
+            @*<span class="pull-right mt-5 EmployeeName" onload="AccountNameLogin()" style="font-weight:600"></span>*@
+        </div>
+    </div>
+    <!-- /second navbar -->
+    <!-- Floating Buttons -->
+    <div id="container-floating">
+        <div class="nd1 nds" onclick="openaccyear()">
+            <img class="reminder">
+            <p class="letter"><i class="icon-calendar"></i></p>
+        </div>
+        <div id="floating-button">
+            <p class="plus"><i class="icon-cog2"></i></p>
+            <i class="icon-cross2 edit"></i>
+        </div>
+    </div>
+    <!-- /Floating Buttons -->
+    <!-- Year Master Modal -->
+    <div id="accyearmasmodal" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h5 class="modal-title"><span><i class="icon-calendar" style="margin-bottom: 3px;"></i>&nbsp; Set Account Year</span></h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" style="font-size: 15px;padding-top: 5px;">Account Year</label>
+                            <div class="col-sm-8">
+                                <select type="text" tabindex="1" name="AccountYearName" id="ddlaccountyear" class="form-control" onchange="SubmitEmpAccountYearBranch()"></select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Year Master Modal -->
+    @*<input type="hidden" id="hdnMainAccountyearId" value="@EventERP.CommonClasses.SessionFacade.UserSession.ACCOUNTYEARID" />
+        <input type="hidden" id="hdnBranchId" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPBRANCHID" />
+        <input type="hidden" id="hdnBranchName" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPBRANCHNAME" />
+        <input type="hidden" id="hdnAccountName" value="@EventERP.CommonClasses.SessionFacade.UserSession.FULLNAME" />
+        <input type="hidden" id="hdnAccountId" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPID" />
+        <input type="hidden" id="hdnshortname" value="@EventERP.CommonClasses.SessionFacade.UserSession.SHORTNAME" />*@
+    <!--end-->
+    <!-- Shortcut form modal -->
+
+    <div id="panelShortcut" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">KeyBoard Shortcuts</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="KeyboardShortcut"></div>
+                    @*<div class="row ">
+                            <div class="col-sm-5">
+                                <div class="shortcutkey">Alt + N</div>
+                            </div>
+                            <div class="col-sm-7 bottomline">
+                                <p stype="padding-top: 6px;">Open New Form</p>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-sm-5">
+                                <div class="shortcutkey">Alt + S</div>
+                            </div>
+                            <div class="col-sm-7 bottomline">
+                                <p stype="padding-top: 6px;">Save Data</p>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-sm-5">
+                                <div class="shortcutkey">Alt + C</div>
+                            </div>
+                            <div class="col-sm-7 bottomline">
+                                <p stype="padding-top: 6px; ">Close Form</p>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-sm-5">
+                                <div class="shortcutkey">Alt + Shift + F</div>
+                            </div>
+                            <div class="col-sm-7 bottomline">
+                                <p stype="padding-top: 6px; ">Search</p>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-sm-5">
+                                <div class="shortcutkey">Enter</div>
+                            </div>
+                            <div class="col-sm-7 bottomline">
+                                <p stype="padding-top: 6px;">Go to Next</p>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-sm-5">
+                                <div class="shortcutkey">Shift + Enter</div>
+                            </div>
+                            <div class="col-sm-7 bottomline">
+                                <p stype="padding-top: 6px;">Go to Previous</p>
+                            </div>
+                        </div>*@
+                </div>
+                <div class="modal-footer">
+                    <button id="CancelShortcut" name="CancelShortcut" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="CommonNewPageModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document" style="width:100%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="CommonNewPageModalTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="CommonNewPageModalIframe" style="width:100%">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="FavoriteBack">
+        <div id="FavoritePanal" class="sidepanel">
+        </div>
+    </div>
+
+    <!----------Print Modal----------->
+    <div id="ModalPrint" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title pull-left">Print</h5>
+                </div>
+                <form class="form-horizontal">
+                    <div class="modal-body">
+                        @*<p>You are really want to print?</p>*@
+                        <p> Are you sure print report?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="PrintYes" class="btn btn-success">Yes</button>
+                        <button type="button" id="PrintNo" class="btn btn-danger">No</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!----------/Print Modal----------->
+
+    <div class="page-container">
+        <div class="page-content">
+            <div class="content-wrapper">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="hdnMainAccountyearId" value="@EventERP.CommonClasses.SessionFacade.UserSession.ACCOUNTYEARID" />
+    <input type="hidden" id="hdnBranchId" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPBRANCHID" />
+    <input type="hidden" id="hdnBranchName" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPBRANCHNAME" />
+    <input type="hidden" id="hdnAccountName" value="@EventERP.CommonClasses.SessionFacade.UserSession.FULLNAME" />
+    <input type="hidden" id="hdnAccountId" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPID" />
+    <input type="hidden" id="hdnshortname" value="@EventERP.CommonClasses.SessionFacade.UserSession.SHORTNAME" />
+    <input type="hidden" id="EmpCounterId" value="@EventERP.CommonClasses.SessionFacade.UserSession.COUNTERID" />
+    <input type="hidden" id="UserGroupName" value="@EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME" />
+    @*<input type="hidden" id="hdnSession" value="@EventERP.CommonClasses.SessionFacade.UserSession" />*@
+
+
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        function getDomain() {
+            var domainPath = '@System.Configuration.ConfigurationManager.AppSettings["domainPath"]';
+            return domainPath;
+        }
+        function getAccountYearId() {
+            return '@EventERP.CommonClasses.SessionFacade.UserSession.ACCOUNTYEARID';
+        }
+        function isA() {
+            if ('@Model' != null && '@Model.ISADD' == '1') {
+                return true;
+            }
+            return false;
+        }
+        @*function GetHsnCode() {
+            if ('@Model' != null) {
+                return @Model.HSNID;
+            }
+            return '';
+        }*@
+        function isU() {
+            if ('@Model' != null && '@Model.ISUPDATE' == '1') {
+                return true;
+            }
+            return false;
+        }
+        function isD() {
+            if ('@Model' != null && '@Model.ISDELETE' == '1') {
+                return true;
+            }
+            return false;
+        }
+        function isDW() {
+            if ('@Model' != null && '@Model.ISDOWNLOAD' == '1') {
+                return true;
+            }
+            return false;
+        }
+        function isSDL() {
+            if ('@Model' != null && '@Model.ISSAMEDAYLOCK' == '1') {
+                return true;
+            }
+            return false;
+        }
+        function addnew(url, MenuName) {
+            $(".navbar-nav .open").removeClass('open');
+            $("#menudata1").hide();
+            window.open(getDomain() + url, '_blank');
+        }
+
+        function AccountNameLogin() {
+            var AccountName = '@EventERP.CommonClasses.SessionFacade.UserSession.FULLNAME';
+            if (!$('#navbar-second-toggle span.EmployeeName').is(':visible')) {
+                $('#navbar-second-toggle').append('<span class="pull-right mt-5 EmployeeName" style="font-weight:600">' + AccountName + '</span>');
+            }
+            if ($(".EmployeeName").html() == '') {
+                $(".EmployeeName").html(AccountName);
+            }
+        }
+
+        $("#linkhelpicon").click(function () {
+            $("#panelShortcut").modal("show");
+        })
+        $("#CancelShortcut").click(function () {
+            $("#panelShortcut").modal("hide");
+        })
+        var CommonView = {
+            variables: {
+                PerformMasterOperationurl: "/Common/OpeartionsOnMaster?ServiceName=CUSTOMERMASTER_CRUD",
+                Oper: "Add",
+                Masterid: 0,
+                addedit: "added",
+            },
+            AddEditPatyCustomer: function (id, type) {
+                CommonView.bindBalanceSheetGroup();
+                CommonView.AutosuggestCityName('ddlCityCommon');
+                CommonView.AutosuggestCityName('ddlPlaceOfSupplyCommon');
+                if (id)
+                    CommonView.GetCustomerDetails(id, type);
+                else {
+                    CommonView.variables.Oper = "Add";
+                    CommonView.variables.Masterid = '';
+                    $('#ddlmastertypeCommon').attr('disabled', false);
+                }
+                if (!type) {
+                    $("#lblMobileCommmon").addClass('addstar');
+                    $("#txtmobilenoCommon").addClass('required');
+                } else {
+                    if (type.toLowerCase() == 'party') {
+                        $("#lblMobileCommmon").addClass('addstar');
+                        $("#txtmobilenoCommon").addClass('required');
+                    } else {
+                        $("#lblMobileCommmon").removeClass('addstar');
+                        $("#txtmobilenoCommon").removeClass('required')
+                    }
+                }
+
+                $("#AddEditPartyCusomerModal").modal('show');
+                setTimeout(function () {
+                    if (id)
+                        $("#txtAccountNameCommon").focus();
+                    else
+                        $("#ddlmastertypeCommon").focus();
+                }, 100)
+            },
+            bindBalanceSheetGroup: function () {
+                $("#ddlBalnceSheetGroupCommon").html("");
+                BindDropdown('ddlBalnceSheetGroupCommon', 'BalnceSheetGroupListCommon', getDomain() + "/Common/BindMastersDetails?ServiceName=BALANCESHEETGROUPMAS_GET&IsRecordAll=true&ISACTIVE=1", '-- Balance Sheet Group --');
+                if ($("#txtAccount").attr('AccountType') == 'CUSTOMER')
+                    $('#ddlBalnceSheetGroupCommon option').filter(function () {
+                        return (($(this).text()).includes('DEBTORS'));
+                    }).prop('selected', true);
+                else
+                    $('#ddlBalnceSheetGroupCommon option').filter(function () {
+                        return (($(this).text()).includes('CREDITORS'));
+                    }).prop('selected', true);
+                $("#ddlmastertypeCommon").on('change', function () {
+                    $("label.error").hide();
+                    if ($(this).val() == 'PartyMaster') {
+                        $("#lblMobileCommmon").addClass('addstar');
+                        $("#txtmobilenoCommon").addClass('required');
+                        $("#dvCommonPlaceOfSupply").show();
+                        $('#ddlBalnceSheetGroupCommon option').filter(function () {
+                            return (($(this).text()).includes('CREDITORS'));
+                        }).prop('selected', true);
+                    }
+                    else if ($(this).val() == 'CustomerMaster') {
+                        $("#lblMobileCommmon").removeClass('addstar');
+                        $("#txtmobilenoCommon").removeClass('required');
+                        $("#dvCommonPlaceOfSupply").hide();
+                        $('#ddlBalnceSheetGroupCommon option').filter(function () {
+                            return (($(this).text()).includes('DEBTORS'));
+                        }).prop('selected', true);
+                    } else {
+                        $("#lblMobileCommmon").removeClass('addstar');
+                        $("#txtmobilenoCommon").removeClass('required');
+                        $("#dvCommonPlaceOfSupply").hide();
+                    }
+                });
+            },
+            AutosuggestCityName: function (id) {
+                try {
+                    $("#" + id).autocomplete({
+                        source: function (request, response) {
+                            var url = getDomain() + "/Common/BindMastersDetails?ServiceName=COMMON_CITYMASTER_GET&ISRECORDALL=1&_search=true&searchField=CITYNAME&searchOper=cn&searchString=" + $("#" + id).val();
+                            $.ajax({
+                                url: url,
+                                type: "POST",
+                                async: false,
+                                cache: false,
+                                success: function (data) {
+                                    if ($(data).find('RESPONSECODE').text() == "0") {
+                                        var JsonObject = xml2json.parser(data);
+                                        if (JsonObject.serviceresponse.detailslist != undefined) {
+                                            var List;
+                                            if (JsonObject.serviceresponse.detailslist.details.length > 1)
+                                                List = JsonObject.serviceresponse.detailslist.details;
+                                            else
+                                                List = JsonObject.serviceresponse.detailslist;
+                                            response(
+                                                 $.map(List, function (item) {
+                                                     if (jQuery.type(item) == "object") {
+
+                                                         return {
+                                                             label: item.cityname,
+                                                             value: item.cityname,
+                                                             CityId: item.cityid,
+                                                             StateId: item.stateid
+                                                         }
+                                                     }
+                                                     else {
+                                                         return {
+                                                             label: item.cityname,
+                                                             value: item.cityname,
+                                                             CityId: item.cityid,
+                                                             StateId: item.stateid
+                                                         }
+                                                     }
+                                                 }))
+                                        }
+                                        else {
+                                            if ($("#" + id).val().length <= 1) {
+                                                $("#" + id).attr('cityid', '');
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        if ($("#ddlCityCommon").val().length <= 1) {
+                                            $("#ddlCityCommon").attr('cityid', '');
+                                        }
+                                        notificationMessage('Head Name', $(data).find('RESPONSEMESSAGE').text(), 'error');
+                                    }
+                                }
+                            })
+                        },
+                        messages: {
+                            noResults: "No Results Found"
+                        },
+                        select: function (event, ui) {
+                            $("#" + id).attr('cityid', ui.item.CityId);
+                        },
+                        change: function (event, ui) {
+                            if (!ui.item) {
+                            }
+                        },
+                        focus: function (event, ui) {
+                        },
+                        minLength: 1,
+                        autoFocus: true
+                    });
+                } catch (e) {
+                    ErrorDetails(e, Purchasedetailview.variables.File);
+                }
+            },
+            GetCustomerDetails: function (id, type) {
+                var myfilter;
+                myfilter = {
+                    rules: []
+                };
+                myfilter.rules.push({
+                    field: "ACCID", op: "eq", data: id
+                });
+                var url = getDomain() + "/Common/BindMastersDetails?ServiceName=CUSTOMERPARTY_GET&myfilters=" + JSON.stringify(myfilter);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        if ($(data).find('RESPONSECODE').text() == "0") {
+                            var JsonObject = xml2json.parser(data);
+
+                            if (JsonObject.serviceresponse.detailslist != undefined) {
+                                List = JsonObject.serviceresponse.detailslist.details;
+
+                                CommonView.variables.Oper = "Edit";
+                                CommonView.variables.Masterid = List.accountid;
+                                $("#txtAccountNameCommon").val(List.accountname);
+                                $("#ddlBalnceSheetGroupCommon").val(List.balancesheetgroupid);
+                                $("#ddlmastertypeCommon").val(List.mastertype);
+                                $('#ddlmastertypeCommon').attr('disabled', true);
+                                $("#ddlCityCommon").attr('cityid', List.cityid);
+                                $("#ddlCityCommon").val(List.cityname);
+                                $("#ddlPlaceOfSupplyCommon").attr('cityid', List.supplycityid);
+                                $("#ddlPlaceOfSupplyCommon").val(List.supplycityname);
+                                $("#txtmobilenoCommon").val(List.contact.toString() == '[object Object]' ? '' : List.contact);
+                                //$("#txtPhonenoCommon").val(List.phone);
+                                if (List.address)
+                                    if (List.address.length)
+                                        $("#txtAddressCommon1").val(List.address);
+
+                                if (List.address2)
+                                    if (List.address2.length)
+                                        $("#txtAddressCommon2").val(List.address2);
+
+                                if (List.address3)
+                                    if (List.address3.length)
+                                        $("#txtAddressCommon3").val(List.address3);
+
+                                if (List.pincode)
+                                    if (List.pincode.toString().length)
+                                        $("#txtPincodeCommon").val(List.pincode);
+
+                                if (List.adharcardno)
+                                    if (List.adharcardno.length)
+                                        $("#txtAdharCommon").val(List.adharcardno);
+
+                                if (List.gstno)
+                                    if (List.gstno.length)
+                                        $("#txtGSTCommon").val(List.gstno);
+
+                                if (List.panno)
+                                    if (List.panno.length)
+                                        $("#txtPannoCommon").val(List.panno);
+                            }
+                        }
+                    }
+                });
+            },
+            AccountNameAutoComplete: function () {
+                $('#txtAccount').autocomplete({
+                    source: function (request, response) {
+                        var myfilter;
+                        myfilter = { rules: [] };
+                        myfilter.rules.push({ field: "SEARCH", op: "eq", data: $('#txtAccount').val() });
+                        var url = getDomain() + "/Common/BindMastersDetails?ServiceName=CUSTOMERPARTY_GET&myfilters=" + JSON.stringify(myfilter);
+                        $.ajax({
+                            url: url,
+                            type: "POST",
+                            async: false,
+                            cache: false,
+                            success: function (data) {
+                                if ($(data).find('RESPONSECODE').text() == "0") {
+                                    var JsonObject = xml2json.parser(data);
+
+                                    if (JsonObject.serviceresponse.detailslist != undefined) {
+                                        var List;
+                                        if (JsonObject.serviceresponse.detailslist.details.length > 1)
+                                            List = JsonObject.serviceresponse.detailslist.details;
+                                        else
+                                            List = JsonObject.serviceresponse.detailslist;
+                                        response(
+                                             $.map(List, function (item) {
+                                                 if (jQuery.type(item) == "object") {
+
+                                                     return {
+                                                         label: item.searchdata,
+                                                         value: item.accountname,
+                                                         partyid: item.accountid,
+                                                         partyname: item.accountname,
+                                                         mobile: item.contact,
+                                                         accounttype: item.accounttype,
+                                                         address: item.address
+
+                                                     }
+                                                 }
+                                                 else {
+                                                     return {
+                                                         label: item.searchdata,
+                                                         value: item.accountname,
+                                                         partyid: item.accountid,
+                                                         partyname: item.accountname,
+                                                         mobile: item.contact,
+                                                         accounttype: item.accounttype,
+                                                         address: item.address
+
+                                                     }
+                                                 }
+                                             }))
+                                    }
+                                    else {
+                                        if ($("#txtAccount").val().length <= 1) {
+                                            $("#txtAccount").attr('AccountId', '');
+                                            $("#txtAccount").attr('AccountType', '');
+                                            $("#partyid").val('');
+                                            $("#AccountDetails").html('');
+                                            $("#partytype").val('');
+                                        }
+                                        var result = [
+                                            {
+                                                label: 'No Results Found',
+                                                value: ''
+                                            }
+                                        ];
+                                        response(result);
+                                    }
+                                }
+                                else {
+                                    if ($("#txtAccount").val().length <= 1) {
+                                        $("#partyid").val('');
+                                        $("#AccountDetails").html('');
+                                        $("#partytype").val('');
+                                        $("#txtAccount").attr('AccountId', '');
+                                        $("#txtAccount").attr('AccountType', '');
+                                    }
+                                    notificationMessage('Head Name', $(data).find('RESPONSEMESSAGE').text(), 'error');
+                                }
+                            }
+                        })
+                    },
+                    messages: {
+                        noResults: "No Results Found"
+                    },
+                    select: function (event, ui) {
+                        if (ui.item.label != 'No Results Found') {
+                            $("#txtAccount").attr('AccountId', ui.item.partyid);
+                            $("#txtAccount").attr('AccountType', ui.item.accounttype);
+                            $("#partyid").val(ui.item.partyid);
+                            $("#partytype").val(ui.item.accounttype);
+                            $("#contact").html(ui.item.mobile.toString() == '[object Object]' ? '' : ui.item.mobile);
+                            $("#address").html(ui.item.address);
+                            if ($("#partytype").val() == 'CUSTOMER') {
+                                $(".partyTax").hide();
+                                $("#PartyLbl").html('Amt');
+                            } else {
+                                $(".partyTax").show();
+                                $("#PartyLbl").html('Taxable Amt');
+                            }
+                            Velidation(0, 0, 0);
+                        } else {
+                            setTimeout(function () {
+                                $("#txtAccount").val('');
+                            }, 1)
+                        }
+                    },
+                    change: function (event, ui) {
+                        if (!ui.item) {
+                            //$("#partyid").val('');
+                        }
+                    },
+                    focus: function (event, ui) {
+                        //$("#partyid").val('');
+                    },
+                    minLength: 1,
+                    autoFocus: true
+                });
+            }
+        }
+
+        $(document).ready(function () {
+            AccountNameLogin();
+            $('#MenuSearch').keyup(function () {
+                jQuery.expr[':'].contains = function (a, i, m) {
+                    return jQuery(a).text().toUpperCase()
+                        .indexOf(m[3].toUpperCase()) >= 0;
+                };
+                var text = $(this).val();
+                if (text != '') {
+                    var data = $(".mega-menu li:not(.icon-hammer-wrench):contains('" + text + "')")
+                    $("#menudata1").hide();
+                    if (data.length) {
+                        $("#menudata1").html('');
+                        $(".mega-menu li:not(.icon-hammer-wrench):contains('" + text + "')").clone().appendTo("#menudata1");
+                        $("#menudata1").show();
+                    } else {
+                        $("#menudata1").html('');
+                    }
+                }
+                else {
+                    $("#menudata1").hide();
+                    $("#menudata1").html('');
+                }
+            });
+
+            $(".CommonAddEditPartyCustomer").click(function () {
+                var type = $("#txtAccount").attr('AccountType');
+                var id = '';
+                if ($("#txtAccount").val() != '') {
+                    id = $("#txtAccount").attr('AccountId')
+                }
+                if (type == 'CUSTOMER') {
+                    $("#hdnCommonCustomerId").val(id);
+                    $("#hdnCommonNewCustomer").val('1');
+                    $("#ddlmastertypeCommon").val('CustomerMaster');
+                    $("#dvCommonPlaceOfSupply").hide();
+                }
+                else {
+                    $("#hdnCommonPartyId").val(id);
+                    $("#hdnCommonNewParty").val('1');
+                    $("#ddlmastertypeCommon").val('PartyMaster');
+                    $("#dvCommonPlaceOfSupply").show();
+                }
+                $("#hdnCommonPreviousActiveId").val($(".actosoft-tabs .active a").attr('id'));
+                CommonView.AddEditPatyCustomer(id, type);
+            });
+
+            $("#btnCancelModal").click(function () {
+                $("#formaccCommon").trigger("reset");
+                $("#formaccCommon").validate().resetForm();
+                setTimeout(function () {
+                    $("#AddEditPartyCusomerModal").modal('hide');
+                }, 50)
+            });
+
+            $("#btnSaveModal").click(function () {
+                isvalid = $("#formaccCommon").valid();
+                if (!isvalid) {
+                    return false;
+                }
+                if ($("#ddlCityCommon").attr('cityid') == '' || $("#ddlCityCommon").attr('cityid') == undefined) {
+                    $("#ddlCityCommon").val('');
+                    notificationMessage('', 'Please select City.', 'warning');
+                    $("#ddlCityCommon").focus();
+                    return;
+                }
+                $('#btnSaveCustomerMaster').attr('disabled', true);
+                if ($("#ddlmastertypeCommon").val() == "CustomerMaster") {
+                    CommonView.variables.PerformMasterOperationurl = "/Common/OpeartionsOnMaster?ServiceName=CUSTOMERMASTER_CRUD"
+                    var data = {
+                        "oper": CommonView.variables.Oper,
+                        "CUSTOMERACCID": CommonView.variables.Masterid,
+                        "ACCOUNTNAME": $("#txtAccountNameCommon").val(),
+                        "CITYID": $("#ddlCityCommon").attr('cityid'),
+                        "MOBILE": $("#txtmobilenoCommon").val(),
+                        "BALANCESHEETGROUPID": $("#ddlBalnceSheetGroupCommon").val()
+                    };
+                    if ($("#txtmobilenoCommon").val().includes('-') == true) {
+                        data.MOBILE = $("#txtmobilenoCommon").val().replace('-', '');
+                    }
+                }
+                else {
+                    if ($("#ddlPlaceOfSupplyCommon").val() != '' && !$("#ddlPlaceOfSupplyCommon").attr('cityid')) {
+                        notificationTost('warning', 'Select Supply city.');
+                        return;
+                    }
+                    CommonView.variables.PerformMasterOperationurl = "/Common/OpeartionsOnMaster?ServiceName=PARTYMASTER_CRUD"
+                    var data = {
+                        "oper": CommonView.variables.Oper,
+                        "PARTYMASTERID": CommonView.variables.Masterid,
+                        "PARTYNAME": $("#txtAccountNameCommon").val(),
+                        "BALANCESHEETGROUPID": $("#ddlBalnceSheetGroupCommon").val(),
+                        "MASTERTYPE": $("#ddlmastertypeCommon").val(),
+                        "CITYID": $("#ddlCityCommon").attr('cityid'),
+                        "MOBILE1": $("#txtmobilenoCommon").val(),
+                    };
+                    if ($("#ddlPlaceOfSupplyCommon").val()) {
+                        data.SUPPLYCITYID = $("#ddlPlaceOfSupplyCommon").attr('cityid');
+                    }
+                    if ($("#txtmobilenoCommon").val().includes('-') == true) {
+                        data.MOBILE1 = $("#txtmobilenoCommon").val().replace('-', '');
+                    }
+                }
+                $("#txtAdharCommon").val().replace('____ ____ ____', '').replace(/_/g, '') ? data.ADHARCARDNO = $("#txtAdharCommon").val() : "";
+                $("#txtAddressCommon1").val() ? data.ADDRESS1 = capitalize($("#txtAddressCommon1").val()) : "";
+                $("#txtAddressCommon2").val() ? data.ADDRESS2 = capitalize($("#txtAddressCommon2").val()) : "";
+                $("#txtAddressCommon3").val() ? data.ADDRESS3 = capitalize($("#txtAddressCommon3").val()) : "";
+                $("#txtPincodeCommon").val().replace(/_/g, '') ? data.PINCODE = $("#txtPincodeCommon").val() : "";
+                //$("#txtPhonenoCommon").val() ? data.PHONENO = $("#txtPhonenoCommon").val() : "";
+                $("#txtGSTCommon").val().replace('_____________z_', '').replace(/_/g, '') ? data.GSTNO = $("#txtGSTCommon").val() : "";
+                $("#txtPannoCommon").val().replace('__________', '').replace(/_/g, '') ? data.PANNO = $("#txtPannoCommon").val() : "";
+                $.ajax({
+                    url: getDomain() + CommonView.variables.PerformMasterOperationurl,
+                    data: data,
+                    async: false,
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        try {
+                            $('#btnSaveModal').attr('disabled', false);
+                            if ($(data).find('RESPONSECODE').text() == "0") {
+                                if ($("#ddlmastertypeCommon").val() == "CustomerMaster") {
+                                    if ($("#hdnCommonCustomerId").val()) {
+                                        $("#hdnCommonNewCustomerId").val($("#hdnCommonCustomerId").val());
+                                        $("#hdnCommonCustomerId").val('');
+                                    } else {
+                                        $("#hdnCommonNewCustomerId").val($(data).find('CUSTOMERID').text());
+                                    }
+                                    $("#formaccCommon").trigger("reset");
+                                    $("#formaccCommon").validate().resetForm();
+                                    $("#" + $("#hdnCommonPreviousActiveId").val()).click()
+                                }
+                                else {
+                                    if ($("#hdnCommonPartyId").val()) {
+                                        $("#hdnCommonNewPartyId").val($("#hdnCommonPartyId").val());
+                                        $("#hdnCommonPartyId").val('');
+                                    } else {
+                                        $("#hdnCommonNewPartyId").val($(data).find('PARTYID').text());
+                                    }
+                                    $("#formaccCommon").trigger("reset");
+                                    $("#formaccCommon").validate().resetForm();
+                                    $("#" + $("#hdnCommonPreviousActiveId").val()).click()
+                                }
+                                $("#AddEditPartyCusomerModal").modal('hide');
+                                notificationMessage(CommonView.variables.Oper + ' Operation', 'Record is ' + CommonView.variables.addedit + ' successfully', 'success');
+                            }
+                            else {
+                                InvalidResponseCode(data);
+                            }
+                        } catch (e) {
+                            ErrorDetails(e, CommonView.variables.File);
+                        }
+                    },
+                    error: OnError
+                });
+            });
+
+            $("#CommonCityModal").on('hide.bs.modal', function () {
+                $("#ddlCityCommon").val($("#txtCityAddCommon").val());
+                $("#ddlCityCommon").attr('cityid', $("#hdnNewCityId").val());
+                $("#hdnNewCityId").val('');
+                $(".CommonCityAddForm").trigger("reset");
+            });
+            // --------------------------------------- CommonMaster cancel/submit btn  ----------------------------------------//
+            $("#btnCommonCancel1").click(function () {
+                $("#txtCommonName").val("");
+                $("#txtDisplayOrderCommon").val("");
+                $("#CommonMasModal").modal('hide');
+            });
+            $("#btncommonSubmit1").click(function () {
+                var isValid = $(".CommonNameAddForm").valid();
+                if (!isValid)
+                    return;
+                var data = {
+                    "COMMONMASTERDETAILNAME": $("#txtCommonName").val(),
+                    "DISPLAYORDER": $("#txtDisplayOrderCommon").val(),
+                    "COMMONMASTERNAME": $(".Commonmastitle").html(),
+                    "ISACTIVE": (($('input[name="IsActiveCommon"]').prop("checked") == true) ? 1 : 0),
+                    "oper": 'Add',
+                }
+                $.ajax({
+                    url: getDomain() + "/Common/OpeartionsOnMaster?ServiceName=COMMONMASTERDETAIL_CRUD",
+                    data: data,
+                    async: false,
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        var JsonObject = xml2json.parser(data);
+                        if ($(data).find('RESPONSECODE').text() == "0") {
+                            $("#" + $("#hdndropdownid").val()).html('');
+                            BindCommonDetailsByType(CommonName, $("#hdndropdownid").val(), 'CommonMasterDetailDropdownList', '---select ' + CommonName + '---');
+                        }
+                        if ($("#" + $("#hdndropdownid").val()).attr('multiple') != undefined) {
+                            var newVAl = new Option(JsonObject.serviceresponse.commonmasterdetailname, JsonObject.serviceresponse.commonmasterdetailid, true, true);
+                            $("#" + $("#hdndropdownid").val()).append(newVAl).trigger('change');
+                        } else {
+                            $("#" + $("#hdndropdownid").val()).val(JsonObject.serviceresponse.commonmasterdetailid);
+                        }
+                        $("#CommonMasModal").modal('hide');
+
+                    },
+                    error: OnError
+                });
+            });
+            $("input").click(function () {
+                this.select();
+            });
+            // --------------------------------------- /CommonMaster cancel/submit btn  ---------------------------------------//
+        });
+    </script>
+    <script type="text/x-jsrender" id="AccountyearDropdownList">
+        <option value="{{>accountyearid}}">{{>accountyear}}</option>
+    </script>
+    <script type="text/x-jsrender" id="CityDropdownList">
+        <option value="{{>cityid}}">{{>cityname}}</option>
+    </script>
+    <script type="text/x-jsrender" id="StateDropdownList">
+        <option value="{{>stateid}}">{{>statename}}</option>
+    </script>
+    <script id="CommonMasterDetailDropdownList" type="text/x-jsrender">
+        <option value="{{>commonmasterdetailid}}">{{>commonmasterdetailname.replaceAll('&amp;','&')}}</option>
+    </script>
+    <script id="BranchDropdownList" type="text/x-jsrender">
+        <option value="{{>branchid}}">{{>branchname}}</option>
+    </script>
+    <script type="text/x-jsrender" id="CounterDropdownList">
+        <option value="{{>counterid}}">{{>countername}}</option>
+    </script>
+    <script id="BalnceSheetGroupListCommon" type="text/x-jsrender">
+        <option value="{{>balancesheetgroupid}}">{{>bsgroupname}}</option>
+    </script>
+    <!-- Common Master Modal -->
+    <div id="CommonMasModal" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><span><i class="icon-calendar" style="margin-bottom: 3px;"></i>&nbsp; Add <span class="Commonmastitle"></span></span></h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal CommonNameAddForm">
+                        <div class="form-group">
+                            <label class="control-label col-sm-4 Commonmastitle" style="font-size: 15px;padding-top: 5px;"></label>
+                            <div class="col-sm-8">
+                                <input type="text" tabindex="1001" placeholder="Enter Name" name="txtCommonName" id="txtCommonName" class="form-control required">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" style="font-size: 15px;padding-top: 5px;">Display Order</label>
+                            <div class="col-sm-4">
+                                <input type="number" tabindex="1002" placeholder="Display Order" name="txtDisplayOrderCommon" id="txtDisplayOrderCommon" class="form-control number required">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Is Active</label>
+                            <div class="col-md-1 ">
+                                <input id="IsActiveCommon" type="checkbox" name="IsActiveCommon" tabindex="1003" checked class="icheckminimal" />
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="padding-right: 0;">
+                            @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                            {
+                                <button class="btn btn-success btnSave" type="button" tabindex="1004" id="btncommonSubmit1"><i class="fa fa-floppy-o"></i> Save</button>
+                            }
+                            <button class="btn bg-slate-400 btnCancel" type="button" id="btnCommonCancel1" tabindex="1005" name="Cancel"><i class="fa fa-times"></i> Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <!-- /Common Master Modal -->
+    <!-- Add Edit form modal -->
+    <div class="modal" id="AddEditPartyCusomerModal" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h5 class="modal-title"><span><i class="icon-user" style="margin-bottom: 3px;"></i>&nbsp; Party/Customer entry</span></h5>
+                </div>
+                <div class="modal-body row">
+                    <form class="form-horizontal" action="#" id="formaccCommon">
+                        <div class="form-group">
+                            <label class="control-label col-md-2 txtR">Master Type<span style="color:red"> *</span></label>
+                            <div class="col-md-3">
+                                <select name="ddlmastertypeCommon" tabindex="1001" style="height:29px;width: 100%;" id="ddlmastertypeCommon">
+                                    <option value="CustomerMaster" selected>Customer Master</option>
+                                    <option value="PartyMaster" selected>Party Master</option>
+                                    <option value="OtherAccountMaster">Other Account Master</option>
+                                    <option value="Supplier">Supplier</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2 txtR">Account Name<span style="color:red"> *</span></label>
+                            <div class="col-md-4 pr-0">
+                                <input type="text" class="form-control required uppercase" placeholder="Enter the Name" tabindex="1002" name="PartyName" id="txtAccountNameCommon" required>
+                            </div>
+                            <label class="control-label col-lg-2 text-right">Bal. Group<span style="color:red"> *</span></label>
+                            <div class="col-lg-3">
+                                <select class="form-control required" name="ddlBalnceSheetGroupCommon" id="ddlBalnceSheetGroupCommon" tabindex="1003" required></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2 text-right" id="lblMobileCommmon">Mobile No</label>
+                            <div class="col-lg-4 pr-0">
+                                <input type="text" class="form-control required mobilenomask" name="txtmobilenoCommon" id="txtmobilenoCommon" tabindex="1004">
+                            </div>
+                            @*<label class="control-label col-lg-2 text-right">Phone No</label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control" name="txtPhonenoCommon" id="txtPhonenoCommon" tabindex="1005">
+                                </div>*@
+                            <label class="control-label col-lg-2 text-right">Adhar No</label>
+                            <div class="col-lg-3">
+                                <input type="text" class="form-control uppercase adhaarnomask" name="txtAdharCommon" id="txtAdharCommon" tabindex="1011">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2 text-right">Address1</label>
+                            <div class="col-lg-4 pr-0">
+                                <input type="text" class="form-control" name="txtAddressCommon1" id="txtAddressCommon1" tabindex="1006" style="text-transform: capitalize;">
+                            </div>
+                            <label class="control-label col-lg-2 text-right">GST</label>
+                            <div class="col-lg-3">
+                                <div class="input-group">
+                                    <input type="text" class="form-control uppercase masked gstnomask" onfocusout="OnChangeGST('txtPannoCommon', 'txtGSTCommon')" name="txtGSTCommon" id="txtGSTCommon" tabindex="1012">
+                                    <span class="input-group-addon gstcheck" style="background-color: #4caf50;color: white;">chek</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2 text-right">Address2</label>
+                            <div class="col-lg-4 pr-0">
+                                <input type="text" class="form-control" name="txtAddressCommon2" id="txtAddressCommon2" tabindex="1007" style="text-transform: capitalize;">
+                            </div>
+                            <label class="control-label col-lg-2 text-right">Pan No</label>
+                            <div class="col-lg-3">
+                                <input type="text" class="form-control pannomask masked" name="txtPannoCommon" id="txtPannoCommon" tabindex="1013">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2 text-right">Address3</label>
+                            <div class="col-lg-4 pr-0">
+                                <input type="text" class="form-control" name="txtAddressCommon3" id="txtAddressCommon3" tabindex="1008" style="text-transform: capitalize;">
+                            </div>
+                            <div id="dvCommonPlaceOfSupply">
+                                <label class="control-label col-lg-2 text-right">Place Of Supply</label>
+                                <div class="col-lg-3">
+                                    <input type="text" style="width:100%;" class="form-control upparcase" name="ddlPlaceOfSupplyCommon" id="ddlPlaceOfSupplyCommon" tabindex="1014">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2 text-right">City<span style="color:red"> *</span></label>
+                            <div class="col-lg-2 pr-0">
+                                <div class="input-group">
+                                    <input type="text" style="width:100%;" class="form-control upparcase" name="ddlCityCommon" id="ddlCityCommon" tabindex="1009" required>
+                                    <span class="input-group-addon CommonAddCity" name="CommonAddCity" style="background-color: #4caf50;color: white;"><i class="fa fa-plus"></i></span>
+                                </div>
+                            </div>
+                            <label class="control-label col-lg-1 text-right">Pincode</label>
+                            <div class="col-lg-1 pr-0 pl-0">
+                                <input type="text" class="form-control pincodemask" name="txtPincodeCommon" id="txtPincodeCommon" tabindex="1010">
+                            </div>
+                        </div>
+
+                        @*<div class="form-group">
+                               <label class="control-label col-lg-2 text-right">Pincode</label>
+                                <div class="col-lg-2">
+                                    <input type="text" class="form-control pincodemask" name="txtPincodeCommon" id="txtPincodeCommon" tabindex="1010">
+                                </div>
+                            </div>*@
+                    </form>
+                </div>
+                <div class="modal-footer row">
+                    <div class="txtR p-0">
+                        <button type="button" id="btnSaveModal" class="btn btn-success btnSave"><span class="fa fa-floppy-o"></span> Save</button>
+                        <button name="btnCancelModal" id="btnCancelModal" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common City Master Modal -->
+    <div id="CommonCityModal" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">City Master</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal CommonCityAddForm">
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" style="font-size: 15px;padding-top: 5px;"> State</label>
+                            <div class="col-sm-4">
+                                <select id="ddlCommonAddState" tabindex="2001" class="form-control required"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" style="font-size: 15px;padding-top: 5px;">City</label>
+                            <div class="col-sm-4">
+                                <input type="text" tabindex="2002" placeholder="City" name="txtCityAddCommon" id="txtCityAddCommon" class="form-control required">
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="padding-right: 0;">
+                            @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                            {
+                                <button class="btn btn-success btnSave" type="button" tabindex="2003" id="btnCommonCityAddSave"><i class="fa fa-floppy-o"></i> Save</button>
+                            }
+                            <button class="btn bg-slate-400 btnCancel btnCommonCityAddCancel" type="button" id="btnCommonCityAddCancel" tabindex="2004" name="Cancel"><i class="fa fa-times"></i> Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <!-- /Common Master Modal -->
+    <input type="hidden" value="" id="hdnNewCityId" />
+    <input type="hidden" value="" id="hdndropdownid" />
+
+    <!-- -------------------------------use in customer metal recipt--------------------------------  -->
+    <input type="hidden" id="hdnCustomerId" />
+
+    <!-- ------------------------------- use in customer Master--------------------------------  -->
+    <input type="hidden" id="hdnCommonCustomerId" />
+    <input type="hidden" id="hdnCommonNewCustomer" />
+    <input type="hidden" id="hdnCommonNewCustomerId" />
+
+    <!-- -------------------------------use in Party Master--------------------------------  -->
+    <input type="hidden" id="hdnCommonPartyId" />  <!--  For Edit   -->
+    <input type="hidden" id="hdnCommonNewParty" />  <!--  For Add    -->
+    <input type="hidden" id="hdnCommonNewPartyId" />  <!--  New Added Id   -->
+
+    <input type="hidden" id="hdnCommonPreviousActiveId" />   <!--  Previous tab id    -->
+    <!-- Add Edit form modal -->
+    <input type="hidden" id="hdnHsnCodeId" />
+</body>
+</html>
+

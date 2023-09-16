@@ -1,0 +1,70 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<style>
+    .button_a {
+        background-color: #99999929;
+        border-radius: 1000px;
+        padding: 1em 2em;
+        grid-column-gap: 0.75em;
+        letter-spacing: .05em;
+        text-decoration: none;
+        text-transform: uppercase;
+        line-height: 1;
+        font-weight: 500;
+        font-size: 0.8rem;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+
+    h2 {
+        font-family: 'Untitled Serif','Times New Roman',sans-serif;
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 3.625em;
+    }
+
+    p {
+        font-size: 1.25em;
+        line-height: 1.5;
+    }
+</style>
+
+<div class="container" style="margin-top: 8rem;">
+    <div class="section_content">
+        <div class="">
+            <h2>Page not found</h2>
+            <p>The page you are looking for doesn't exist or has been moved</p>
+
+            <div class="" style="display: grid; justify-content: start;">
+                <a href="@Url.Action("Index","Home")" class="button_a d-flex" style="">
+                    <div class="button_text">Home</div>
+                    <div class="button_icon w-embed">
+                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.172 10.9999L10.808 5.63592L12.222 4.22192L20 11.9999L12.222 19.7779L10.808 18.3639L16.172 12.9999H4V10.9999H16.172Z" fill="currentColor"></path>
+                        </svg>
+                    </div>
+                </a>
+            </div>
+
+            @*<img src="~/Content/img/404.jpg" style="width:50%;" />*@
+            @*<h1 class="text-danger">Error.</h1>
+                <h2 class="text-danger">An error occurred while processing your request.</h2>*@
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(".fixed-top-nav").css('position', 'unset');
+        $(".breadcrumb-maindiv").hide();
+
+        $("footer").addClass('FooterFixed');
+
+                    //$(".fixed-top-nav").addClass('position-relative');
+    </script>
+} 

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventERP", "EventERP.csproj", "{AC24CEDA-D679-4143-8971-660C0350E3C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC24CEDA-D679-4143-8971-660C0350E3C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC24CEDA-D679-4143-8971-660C0350E3C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC24CEDA-D679-4143-8971-660C0350E3C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC24CEDA-D679-4143-8971-660C0350E3C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0596ADF-9CC1-4B09-9F25-6DE3F2DF9169}
+	EndGlobalSection
+EndGlobal

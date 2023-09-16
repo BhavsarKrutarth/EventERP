@@ -1,0 +1,359 @@
+@model EventERP.Models.PagePermission
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <title>@{ var title = "Jewellery ERP"; if (Model != null) { title = Model.NAME; } else { title = ViewBag.Title; } }@title</title>
+
+    <link rel="icon" href="~/Content/assets/images/As.png" type="imagee/png" sizes="32x32">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+
+    @*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">*@
+    @Styles.Render("~/Content/newcss")
+    <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+    @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>*@
+    @Scripts.Render("~/bundles/newjquery")
+
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+
+    <script src="~/Scripts/Common/commonscript.js?v=@DateTime.UtcNow"></script>
+
+</head>
+<body>
+    <div class="as_d_flex as_h_100">
+        <div class="as_v_head">
+            <div class="as_nav_top">
+                <img src="~/Content/assets/images/As.png" alt="" />
+            </div>
+            <div class="as_nav_bdy">
+                @MvcHtmlString.Create(EventERP.CommonClasses.SessionFacade.MenuListstrNew)
+            </div>
+            <div class="as_nav_btm">
+                <ul>
+                    <li class="as_info">
+                        <a href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" class="icn_exlemation" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 18.5C12.5523 18.5 13 18.0523 13 17.5L13 10.5C13 9.94772 12.5523 9.5 12 9.5C11.4477 9.5 11 9.94772 11 10.5L11 17.5C11 18.0523 11.4477 18.5 12 18.5Z" />
+                                <path d="M12 8.5C12.8284 8.5 13.5 7.82843 13.5 7C13.5 6.17157 12.8284 5.5 12 5.5C11.1716 5.5 10.5 6.17157 10.5 7C10.5 7.82843 11.1716 8.5 12 8.5Z" />
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1C5.92487 1 1 5.92487 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" />
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="as_calc">
+                        <a href="ms-calculator://">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icn_clc" width="24" height="24" viewBox="0 0 32 32">
+                                <g fill="none" fill-rule="evenodd">
+                                    <path d="m0 0h32v32h-32z" />
+                                    <path d="m24.5 0c2.209139 0 4 1.790861 4 4v24c0 2.209139-1.790861 4-4 4h-17c-2.209139 0-4-1.790861-4-4v-24c0-2.209139 1.790861-4 4-4zm-14.5 24c-.82842712 0-1.5.6715729-1.5 1.5s.67157288 1.5 1.5 1.5c.8284271 0 1.5-.6715729 1.5-1.5s-.6715729-1.5-1.5-1.5zm6 0c-.8284271 0-1.5.6715729-1.5 1.5s.6715729 1.5 1.5 1.5 1.5-.6715729 1.5-1.5-.6715729-1.5-1.5-1.5zm6 0c-.8284271 0-1.5.6715729-1.5 1.5s.6715729 1.5 1.5 1.5 1.5-.6715729 1.5-1.5-.6715729-1.5-1.5-1.5zm-12-6c-.82842712 0-1.5.6715729-1.5 1.5s.67157288 1.5 1.5 1.5c.8284271 0 1.5-.6715729 1.5-1.5s-.6715729-1.5-1.5-1.5zm6 0c-.8284271 0-1.5.6715729-1.5 1.5s.6715729 1.5 1.5 1.5 1.5-.6715729 1.5-1.5-.6715729-1.5-1.5-1.5zm6 0c-.8284271 0-1.5.6715729-1.5 1.5s.6715729 1.5 1.5 1.5 1.5-.6715729 1.5-1.5-.6715729-1.5-1.5-1.5zm-12-6c-.82842712 0-1.5.6715729-1.5 1.5s.67157288 1.5 1.5 1.5c.8284271 0 1.5-.6715729 1.5-1.5s-.6715729-1.5-1.5-1.5zm6 0c-.8284271 0-1.5.6715729-1.5 1.5s.6715729 1.5 1.5 1.5 1.5-.6715729 1.5-1.5-.6715729-1.5-1.5-1.5zm6 0c-.8284271 0-1.5.6715729-1.5 1.5s.6715729 1.5 1.5 1.5 1.5-.6715729 1.5-1.5-.6715729-1.5-1.5-1.5zm1.5-9h-15c-1.1045695 0-2 .8954305-2 2v2c0 1.1045695.8954305 2 2 2h15c1.1045695 0 2-.8954305 2-2v-2c0-1.1045695-.8954305-2-2-2z" />
+                                </g>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="as_lgout">
+                        <a href="@Url.Action("LogOut","Login")">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                 fill="none">
+                                <path d="M7 4C7.55228 4 8 3.55228 8 3C8 2.44772 7.55228 2 7 2H4C2.89543 2 2 2.89543 2 4V20C2 21.1046 2.89543 22 4 22H7C7.55228 22 8 21.5523 8 21C8 20.4477 7.55228 20 7 20H4V4H7Z"
+                                      fill="#ad2c2c" />
+                                <path d="M21.7071 12.7071L16.7071 17.7071C16.3166 18.0976 15.6834 18.0976 15.2929 17.7071C14.9024 17.3166 14.9024 16.6834 15.2929 16.2929L18.5858 13H8C7.44771 13 7 12.5523 7 12C7 11.4477 7.44771 11 8 11H18.5858L15.2929 7.70711C14.9024 7.31658 14.9024 6.68342 15.2929 6.29289C15.6834 5.90237 16.3166 5.90237 16.7071 6.29289L21.7071 11.2929C22.0976 11.6834 22.0976 12.3166 21.7071 12.7071Z"
+                                      fill="#ad2c2cc7" />
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="HdnSubMenu" hidden>
+            @*id="kt"*@
+            @MvcHtmlString.Create(EventERP.CommonClasses.SessionFacade.SubMenuListstr)
+        </div>
+        <!-- sub menu List  -->
+        <ul class="as_sub_popover">
+            @*<span class="as_pop_arw"></span>
+                <li>
+                    <span>My Attendance</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="m21.747 10.576-5.303 4.293 1.894 6.187c.127.253 0 .632-.252.758-.127.126-.253.126-.38.126-.125 0-.252 0-.378-.126l-5.177-3.788-5.303 3.788a.805.805 0 0 1-.758 0c-.252-.126-.379-.505-.252-.758l1.641-6.313-5.177-4.167c-.252-.126-.379-.505-.252-.757.126-.253.378-.506.63-.506h6.693l2.02-5.808c.127-.252.38-.505.632-.505s.505.253.631.505l2.147 5.808h6.566c.252 0 .505.253.631.506 0 .252-.126.505-.253.757Z"
+                              fill-opacity="0" stroke="#000000" stroke-width="1.5" stroke-miterlimit="10"
+                              stroke-linejoin="round" />
+                    </svg>
+                </li>
+                <li>
+                    <span>My Status Report</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="m21.747 10.576-5.303 4.293 1.894 6.187c.127.253 0 .632-.252.758-.127.126-.253.126-.38.126-.125 0-.252 0-.378-.126l-5.177-3.788-5.303 3.788a.805.805 0 0 1-.758 0c-.252-.126-.379-.505-.252-.758l1.641-6.313-5.177-4.167c-.252-.126-.379-.505-.252-.757.126-.253.378-.506.63-.506h6.693l2.02-5.808c.127-.252.38-.505.632-.505s.505.253.631.505l2.147 5.808h6.566c.252 0 .505.253.631.506 0 .252-.126.505-.253.757Z"
+                              fill-opacity="0" stroke="#000000" stroke-width="1.5" stroke-miterlimit="10"
+                              stroke-linejoin="round" />
+                    </svg>
+                </li>
+                <li>
+                    <span>My Attendance Requests</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="m21.747 10.576-5.303 4.293 1.894 6.187c.127.253 0 .632-.252.758-.127.126-.253.126-.38.126-.125 0-.252 0-.378-.126l-5.177-3.788-5.303 3.788a.805.805 0 0 1-.758 0c-.252-.126-.379-.505-.252-.758l1.641-6.313-5.177-4.167c-.252-.126-.379-.505-.252-.757.126-.253.378-.506.63-.506h6.693l2.02-5.808c.127-.252.38-.505.632-.505s.505.253.631.505l2.147 5.808h6.566c.252 0 .505.253.631.506 0 .252-.126.505-.253.757Z"
+                              fill-opacity="0" stroke="#000000" stroke-width="1.5" stroke-miterlimit="10"
+                              stroke-linejoin="round" />
+                    </svg>
+                </li>
+                <li>
+                    <span>My Late In</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="m21.747 10.576-5.303 4.293 1.894 6.187c.127.253 0 .632-.252.758-.127.126-.253.126-.38.126-.125 0-.252 0-.378-.126l-5.177-3.788-5.303 3.788a.805.805 0 0 1-.758 0c-.252-.126-.379-.505-.252-.758l1.641-6.313-5.177-4.167c-.252-.126-.379-.505-.252-.757.126-.253.378-.506.63-.506h6.693l2.02-5.808c.127-.252.38-.505.632-.505s.505.253.631.505l2.147 5.808h6.566c.252 0 .505.253.631.506 0 .252-.126.505-.253.757Z"
+                              fill-opacity="0" stroke="#000000" stroke-width="1.5" stroke-miterlimit="10"
+                              stroke-linejoin="round" />
+                    </svg>
+                </li>
+                <li>
+                    <span>My Early Out</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="m21.747 10.576-5.303 4.293 1.894 6.187c.127.253 0 .632-.252.758-.127.126-.253.126-.38.126-.125 0-.252 0-.378-.126l-5.177-3.788-5.303 3.788a.805.805 0 0 1-.758 0c-.252-.126-.379-.505-.252-.758l1.641-6.313-5.177-4.167c-.252-.126-.379-.505-.252-.757.126-.253.378-.506.63-.506h6.693l2.02-5.808c.127-.252.38-.505.632-.505s.505.253.631.505l2.147 5.808h6.566c.252 0 .505.253.631.506 0 .252-.126.505-.253.757Z"
+                              fill-opacity="0" stroke="#000000" stroke-width="1.5" stroke-miterlimit="10"
+                              stroke-linejoin="round" />
+                    </svg>
+                </li>*@
+        </ul>
+        <!-- shortcuts popup  -->
+        <div class="shor_pop">
+            <div class="as_shor_box">
+                <table class="key_srt_tbl">
+                    <tr>
+                        <th colspan="2">
+                            <div class="as_d_flex as_justify_between as_align_center">
+                                <p>Keyboard Shortcuts</p><svg xmlns="http://www.w3.org/2000/svg" class="tbl_pop_cls" width="22" height="22" viewBox="0 0 24 24" fill="none">
+                                    <path d="M17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289Z" fill="#000000" />
+                                </svg>
+                            </div>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>Alt + N</td>
+                        <td>Open New Form</td>
+                    </tr>
+                    <tr>
+                        <td>Alt + S</td>
+                        <td>Save Data</td>
+                    </tr>
+                    <tr>
+                        <td>Alt + C</td>
+                        <td>Close Form</td>
+                    </tr>
+                    <tr>
+                        <td>Alt + Shift + F</td>
+                        <td>Search</td>
+                    </tr>
+                    <tr>
+                        <td>Enter</td>
+                        <td>Go To Next</td>
+                    </tr>
+                    <tr>
+                        <td>Shift + Enter</td>
+                        <td>Go To Previous</td>
+                    </tr>
+                    <tr>
+                        <td>Space</td>
+                        <td>Dropdown Open</td>
+                    </tr>
+                    <tr>
+                        <td>F1</td>
+                        <td>Empname Modal Open</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="as_body">
+            <div class="as_body_header">
+                <h4>Jewellery ERP 0.0.1 Beta</h4>
+                <div class="bdy_hd_srch">
+                    <form autocomplete="off">
+                        <div class="as_txtbx_wraper">
+                            <span class="as_txtbx_icn">
+                                <svg class="as_pointer tbl_srch_trg" data-search-own="tbl_srch_date" data-search-tar="date_index" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10 1C5.02944 1 1 5.02944 1 10C1 14.9706 5.02944 19 10 19C12.125 19 14.078 18.2635 15.6177 17.0319L20.2929 21.7071C20.6834 22.0976 21.3166 22.0976 21.7071 21.7071C22.0976 21.3166 22.0976 20.6834 21.7071 20.2929L17.0319 15.6177C18.2635 14.078 19 12.125 19 10C19 5.02944 14.9706 1 10 1ZM3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10Z" fill="#000000"></path>
+                                </svg>
+                            </span>
+                            <input type="text" class="as_txtbx" placeholder="Search for Menu..." onkeyup="CommonView.AutosuggestAccountName(this)" autocomplete="off" value="">
+                        </div>
+                    </form>
+                </div>
+                <div class="bdy_hd_drp">
+                    <select name="financialYear" title="Account Year" id="ddlaccountyear"></select>
+                    <select name="branches" title="Branch List" id="ddlbranchList"></select>
+                </div>
+            </div>
+            <div class="page-container">
+                <div class="page-content">
+                    <div class="content-wrapper">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!----------Print Modal----------->
+    <div id="ModalPrint" class="shor_pop modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="as_shor_box modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title pull-left">Print</h5>
+                </div>
+                <form class="form-horizontal">
+                    <div class="modal-body">
+                        @*<p>You are really want to print?</p>*@
+                        <p> Are you sure print report?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="PrintYes" class="btn btn-success">Yes</button>
+                        <button type="button" id="PrintNo" class="btn btn-danger">No</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!----------/Print Modal----------->
+
+    <input type="hidden" id="EmpCounterId" value="@EventERP.CommonClasses.SessionFacade.UserSession.COUNTERID" />
+    <input type="hidden" id="UserGroupName" value="@EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME" />
+    <input type="hidden" id="hdnMainAccountyearId" value="@EventERP.CommonClasses.SessionFacade.UserSession.ACCOUNTYEARID" />
+    <input type="hidden" id="hdnBranchId" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPBRANCHID" />
+    <input type="hidden" id="hdnBranchName" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPBRANCHNAME" />
+    <input type="hidden" id="hdnAccountName" value="@EventERP.CommonClasses.SessionFacade.UserSession.FULLNAME" />
+    <input type="hidden" id="hdnAccountId" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPID" />
+    <input type="hidden" id="hdnshortname" value="@EventERP.CommonClasses.SessionFacade.UserSession.SHORTNAME" />
+
+
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        function GetHsnCode() {
+            if ('@Model' != null) {
+                return @Model.HSNID;
+            }
+            return '';
+        }
+
+        function getDomain() {
+            var domainPath = '@System.Configuration.ConfigurationManager.AppSettings["domainPath"]';
+            return domainPath;
+        }
+        function getAccountYearId() {
+            return '@EventERP.CommonClasses.SessionFacade.UserSession.ACCOUNTYEARID';
+        }
+        function isA() {
+            if ('@Model' != null && '@Model.ISADD' == '1') {
+                return true;
+            }
+            return false;
+        }
+        function isU() {
+            if ('@Model' != null && '@Model.ISUPDATE' == '1') {
+                return true;
+            }
+            return false;
+        }
+        function isD() {
+            if ('@Model' != null && '@Model.ISDELETE' == '1') {
+                return true;
+            }
+            return false;
+        }
+        function isDW() {
+            if ('@Model' != null && '@Model.ISDOWNLOAD' == '1') {
+                return true;
+            }
+            return false;
+        }
+        function isSDL() {
+            if ('@Model' != null && '@Model.ISSAMEDAYLOCK' == '1') {
+                return true;
+            }
+            return false;
+        }
+        function addnew(url, MenuName) {
+            window.open(getDomain() + url, '_blank');
+        }
+
+        function AccountNameLogin() {
+            var AccountName = '@EventERP.CommonClasses.SessionFacade.UserSession.FULLNAME';
+            if (!$('#navbar-second-toggle span.EmployeeName').is(':visible')) {
+                $('#navbar-second-toggle').append('<span class="pull-right mt-5 EmployeeName" style="font-weight:600">' + AccountName + '</span>');
+            }
+            if ($(".EmployeeName").html() == '') {
+                $(".EmployeeName").html(AccountName);
+            }
+        }
+        var onSvg = false;
+        function svgOverHandler(event) {
+            onSvg = true;
+        }
+        function svgOoutHandler() {
+            onSvg = false;
+        }
+        function navHandler(thisTag) {
+            if (!onSvg)
+            window.open($(thisTag).data('href'));
+        }
+        // Layout in menu Svg click color change
+        function svgOnclick(thisTag) {
+            var oper = 'add';
+            if ($(thisTag).is('.starChecked') == true) {
+                oper = 'delete';
+                $(thisTag).removeClass('starChecked')
+            }
+            else {
+                $(thisTag).addClass('starChecked');
+            }
+
+            //if ($(this).children().hasClass('fa-star')) {
+            //    $(this).children().removeClass('fa-star').addClass('fa-star-o');
+            //} else {
+            //    $(this).children().removeClass('fa-star-o').addClass('fa-star');
+            //}
+
+            var data = {
+                "MENUID": $(thisTag).attr('id'),
+                "oper": oper,
+            }
+            $.ajax({
+                url: getDomain() + "/Common/OpeartionsOnMaster?ServiceName=EMPLOYEE_FAVORITE_MENU_CRUD",
+                data: data,
+                async: false,
+                cache: false,
+                type: 'POST',
+                success: function (data) {
+                    //var data = {
+                    //    Menu: escape($(".as_nav_bdy").html().replace('open', ''))
+                    //}
+                    //$.ajax({
+                    //    url: getDomain() + "/Login/ChangeMenu",
+                    //    data: data,
+                    //    async: false,
+                    //    cache: false,
+                    //    type: 'POST',
+                    //    success: function (data) {
+                    //    },
+                    //    error: OnError
+                    //});
+                },
+                error: OnError
+            });
+        }
+    </script>
+    <script type="text/x-jsrender" id="AccountyearDropdownList">
+        <option value="{{>accountyearid}}">{{>accountyear}}</option>
+    </script>
+    <script id="BranchDropdownList" type="text/x-jsrender">
+        <option value="{{>branchid}}">{{>branchname}}</option>
+    </script>
+
+</body>
+</html>
+

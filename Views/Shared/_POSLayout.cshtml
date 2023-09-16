@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @*<title>@ViewBag.Title</title>*@
+    <title>@{ var title = "Jewellery ERP"; if (Model != null) { title = Model.NAME; } else { title = ViewBag.Title; } }@title</title>
+
+    @Styles.Render("~/Content/newcss")
+    <link href="~/Content/assets/Customcss/POScommon.css" rel="stylesheet" />
+
+    @Scripts.Render("~/bundles/newjquery")
+
+    <script src="~/Scripts/Common/PosScript.js?v=0.1"></script>
+
+</head>
+<body>
+
+    <div>
+        @RenderBody()
+    </div>
+
+
+    <input type="hidden" id="hdnMainAccountyearId" value="@EventERP.CommonClasses.SessionFacade.UserSession.ACCOUNTYEARID" />
+    <input type="hidden" id="hdnBranchId" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPBRANCHID" />
+    <input type="hidden" id="hdnBranchName" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPBRANCHNAME" />
+    <input type="hidden" id="hdnAccountName" value="@EventERP.CommonClasses.SessionFacade.UserSession.FULLNAME" />
+    <input type="hidden" id="hdnAccountId" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPID" />
+    <input type="hidden" id="hdnshortname" value="@EventERP.CommonClasses.SessionFacade.UserSession.SHORTNAME" />
+    <input type="hidden" id="EmpCounterId" value="@EventERP.CommonClasses.SessionFacade.UserSession.COUNTERID" />
+    <input type="hidden" id="UserGroupName" value="@EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME" />
+
+
+    <script type="text/javascript">
+        function getDomain() {
+            var domainPath = '@System.Configuration.ConfigurationManager.AppSettings["domainPath"]';
+            return domainPath;
+        }
+    </script>
+
+</body>
+</html>

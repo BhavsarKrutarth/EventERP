@@ -1,0 +1,15 @@
+:root {
+    --highlight: #deb887;
+    --highlightSemitrans: #deb8872b;
+    --highlightTrans: #deb88700;
+    --bodyBackground: #f5f6fa;
+    --starChecked: #ffc107;
+    --green: #43a047;
+    --red: #ad2c2c;
+    --navIcon: #73788B;
+    --icnPrnt: #43a047;
+    --icnEdit: #43a047;
+    --icnClc: #43a047;
+    --icnTrace: #ad2c2c;
+    --icnExlemation: #161616;
+}

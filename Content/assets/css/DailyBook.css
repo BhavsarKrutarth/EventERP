@@ -1,0 +1,48 @@
+﻿
+.table_list_DailyBookReport_leftghead_1 {
+    display: none !important;
+}
+
+.card {
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .1875rem;
+}
+
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}
+
+.AmountSpacing {
+    letter-spacing: 2px;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.lblMainAmount {
+    font-size: 17px;
+    font-weight: 400;
+}
+
+.MetallblDaily {
+    float: right;
+}
+
+#panelSummaryView .col-lg-3 {
+    cursor: pointer;
+}
+
+[jqfootlevel="0"] {
+    display: none !important;
+}
+
+.daybookrow {
+    font-weight: 500 !important;
+    font-size: 14px !important;
+}

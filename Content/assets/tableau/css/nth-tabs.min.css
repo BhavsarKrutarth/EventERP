@@ -1,0 +1,229 @@
+.nth-tabs {
+    color: #76838f;
+    font-family: "Helvetica Neue",Helvetica,Tahoma,Arial,"Microsoft Yahei","Hiragino Sans GB","WenQuanYi Micro Hei",sans-serif;
+    border: 1px solid #E4EAEC !important;
+}
+
+    .nth-tabs .page-tabs {
+        width: 100%;
+        height: 42px;
+        background: #fafafa;
+        line-height: 40px;
+        position: relative;
+    }
+
+    .nth-tabs .content-tabs {
+        width: 100%;
+        position: relative;
+        /*height: 42px;*/
+        background: #fafafa;
+        line-height: 40px;
+        overflow: hidden;
+    }
+
+    .nth-tabs .content-tabs-container {
+        width: 100000px;
+        margin-left: 40px;
+        overflow: hidden;
+        height: 43px;
+        transition: margin-left 1s;
+        -moz-transition: margin-left 1s;
+        -webkit-transition: margin-left 1s;
+        -o-transition: margin-left 1s;
+    }
+
+.tab-content {
+    overflow: auto;
+}
+
+.nth-tabs, .tab-content, .tab-pane {
+    height: 100%;
+}
+
+.nth-tabs-content {
+    width: 100%;
+    height: calc(100% - 42px);
+    position: relative;
+    overflow-x: hidden;
+}
+
+.nth-tabs-frame {
+    width: 100%;
+    height: calc(100% - 42px);
+    position: relative;
+    overflow-x: hidden;
+}
+
+.nth-tabs .roll-nav {
+    position: absolute;
+    width: 40px;
+    height: 43px;
+    text-align: center;
+    color: #999;
+    background-color: #FFF;
+    z-index: 2;
+    top: 0;
+}
+
+.nth-tabs a.roll-nav:hover {
+    color: #797979 !important;
+}
+
+.nth-tabs a.roll-nav:active, .nth-tabs a.roll-nav:visited {
+    color: #95A0AA;
+}
+
+.nth-tabs .roll-nav-left {
+    left: 0;
+    border-bottom: 1px solid #E4EAEC;
+    border-right: 1px #b7bcc1 solid;
+}
+
+.nth-tabs .roll-nav-right {
+    right: 0px;
+    border-bottom: 1px solid #E4EAEC;
+    border-left: 1px #b7bcc1 solid;
+}
+
+.nth-tabs .tab-close {
+    top: 1px;
+    right: -2px;
+    /* width: 16px; */
+    /* height: 16px; */
+    /* text-align: center; */
+    /* line-height: 21px; */
+    color: #f11717;
+    font-size:14px;
+}
+
+    .nth-tabs .tab-close:hover {
+        background-color: #f96868;
+    color: #fff;
+    cursor: pointer;
+    }
+
+.nth-tabs .tab-down {
+    border-top: 4px solid;
+    -webkit-transition: .25s;
+    -o-transition: .25s;
+    transition: .25s;
+    -webkit-transform: scale(1.001);
+    -ms-transform: scale(1.001);
+    -o-transform: scale(1.001);
+    transform: scale(1.001);
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
+
+.nth-tabs .right-nav-list {
+    right: 0;
+    border-bottom: 1px solid #E4EAEC;
+}
+
+    .nth-tabs .right-nav-list a {
+        color: #999;
+    }
+
+        .nth-tabs .right-nav-list a:hover {
+            color: #797979;
+            text-decoration: none;
+        }
+
+.tab-list-scrollbar {
+    max-height: 250px;
+    max-width: 180px;
+}
+
+.scrollbar-outer {
+    overflow: hidden;
+}
+
+.actosoft-tabs {
+    background-color: #FFF;
+    /*border-bottom: 1px solid #E4EAEC !important;*/
+    padding:0px 5px;
+}
+.actosoft-tabs li{
+    display:inline-block !important;
+    line-height: 20px;
+    padding: 3px 2px !important;
+}
+
+    .actosoft-tabs a {
+        color: #76838f;
+        border-radius: 0;
+    }
+
+    .actosoft-tabs > li > a {
+          padding: 3px 10px;
+    border: 1px solid #000000;
+    color: #000;
+    /* border-radius: 8px; */
+    font-weight: 600;
+    
+    }
+
+    .actosoft-tabs > li.active > a, .actosoft-tabs > li.active > a:focus, .actosoft-tabs > li.active > a:hover {
+            padding: 3px 10px;
+            border: 1px solid #000000;
+            background: #333537;
+            color: #ffffff;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+    }
+
+.nav > li > a:focus, .nav > li > a:hover {
+    background-color: #F3F7F9;
+}
+
+[class*=animation-] {
+    -webkit-animation-duration: .5s;
+    -o-animation-duration: .5s;
+    animation-duration: .5s;
+    -webkit-animation-timing-function: ease-out;
+    -o-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+
+.animation-fade {
+    -webkit-animation-name: fadeIn;
+    -o-animation-name: fadeIn;
+    animation-name: fadeIn;
+    -webkit-animation-duration: .8s;
+    -o-animation-duration: .8s;
+    animation-duration: .8s;
+    -webkit-animation-timing-function: linear;
+    -o-animation-timing-function: linear;
+    animation-timing-function: linear;
+}
+
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}

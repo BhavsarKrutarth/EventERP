@@ -1,0 +1,245 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout_New.cshtml";
+    ViewBag.Title = "DashboardDetails";
+}
+
+<style>
+    .BoxStyle {
+        height: 130px;
+        /*width: 210px;*/
+        color: black;
+        background-color: unset;
+        transition-duration: 800ms;
+    }
+
+    #DashboardDiv {
+        position: relative;
+        top: 45px;
+    }
+
+    .card {
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-clip: border-box;
+        border-radius: .1875rem;
+    }
+
+        .card:hover {
+            cursor: pointer;
+        }
+
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1.25rem;
+    }
+
+    .IconSpacing {
+        letter-spacing: 2px;
+        font-size: 25px;
+        font-weight: 500;
+    }
+
+    .LetterSpacing {
+        letter-spacing: 1px;
+        font-size: 15px;
+        font-weight: 400;
+        text-align: center;
+    }
+
+    .circle {
+        background-color: #0093E9;
+        background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+        border-radius: 10px;
+        width: 70px;
+        height: 70px;
+        margin: 0px auto;
+        padding-top: 25px;
+    }
+
+    .favorite_icon {
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+        float: right
+    }
+
+    .fa-star:before {
+        color: #ffc107;
+    }
+
+    .AmountSpacing {
+        letter-spacing: 10px;
+        font-size: 15px;
+        font-weight: 400;
+    }
+</style>
+
+<script src="~/Content/assets/plugin/Excel/xls.core.min.js"></script>
+<script src="~/Content/assets/plugin/Excel/xlsx.core.min.js"></script>
+
+<div id="DashboardDiv">
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="page-header-content">
+            <div class="page-title" style="overflow:auto">
+                <h4 style="float: left;margin-bottom: 15px;">
+                    <span class="text-semibold">Home</span> - Dashboard
+                    <small class="display-block">Jay Shree Krishna! @EventERP.CommonClasses.SessionFacade.UserSession.FULLNAME</small>
+                </h4>
+                @if (EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME != "Administrator")
+                {
+                    if (EventERP.CommonClasses.SessionFacade.UserSession.ISCHECKIN == 0)
+                    {
+                        using (Html.BeginForm("Checkin", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
+                        {
+                            <button class="btn btn-success" type="submit" id="checkin" style="float: right;margin-top: 15px;">Check In</button>
+                        }
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("CheckOut", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
+                        {
+                            <button class="btn btn-warning" type="submit" id="checkout" style="float: right;margin-top: 15px;">Check Out</button>
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <div class="page-content">
+            <div class="content-wrapper">
+                @*@if (EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Administrator" || EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Admin")
+                    {*@
+
+                <div class="row col-sm-12 m-0" id="FavoriteMenu">
+
+                </div>
+
+                <!--<div class="col-sm-12">
+                    <div class="panel" id="panelSummaryView">
+                        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+                            <div class="col-md-12" style="min-height: 453px;">
+                                <div class="col-md-12">
+                                    <div class="row pt-0" id="FavoriteMenu">
+                                        <div class="col-lg-3">
+                                            <div class="card" style="color:#000;background:#f5f5f5">
+                                                <h5 class="card-title favorite_icon"><span><i class="fa fa-star" style="font-size: 17px;padding: 6px;"></i></span></h5>
+                                                <div class="card-body">
+                                                    <div class="d-flex">
+                                                        <div class="list-icons ml-auto circle" style="text-align: center;">
+                                                            <span class="icon-pencil4 IconSpacing"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="lblMainAmount LetterSpacing pt-10">
+                                                        Openning Balance
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>-->
+
+                                @*<div class="col-md-5" style="height: 100%;float: right;">
+                                        <div class="col-md-12" style="margin-top: 25px !important;padding-bottom: 32px !important;height: 100%;">
+                                            <div class="card" style="background: #b80909;height: 100%;border-radius: 5px;">
+                                                <div class="card-body p-5" style="height: 100%;">
+                                                    <div class="jqGrid_wrapper" id="jqgrid_CrediterDebtorAccountList" style="height: 100%;background: #fff;border: 2px solid #b80909;">
+                                                        <table id="table_CrediterDebtorDetailsList"></table>
+                                                        <div id="pager_CrediterDebtorDetailsList"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                            <!--</div>
+                        </div>
+                    </div>
+                </div>-->
+                @*}*@
+            </div>
+        </div>
+    </div>
+
+
+    @*<button type="button" class="btn btnsize" id="btnPrint" style="float: left;background-color: #0f9a9a;margin-left: 3px;"><i class="fas fa-print">&nbsp;&nbsp;</i>Print</button>
+        <input type="file" class="btn btnsize" id="fileUpload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="float: left;background-color: #0f9a9a;margin-left: 3px;">
+        <a id="DocumentUpload" href="javascript:void(0)"></a>
+        <span class="filename" id="filename"></span>
+
+        <input type="button" id="upload" value="Upload">*@
+</div>
+
+<!--<div id="DashboardDiv">
+    <!-- Page header -->
+<!--<div class="page-header">
+    <div class="page-header-content">
+        <div class="page-title" style="overflow:auto">
+            <h4 style="float: left;margin-bottom: 15px;margin-left:15px">
+                <span class="text-semibold">Home</span> - Dashboard
+                <small class="display-block">Jay Shree Krishna! @EventERP.CommonClasses.SessionFacade.UserSession.FULLNAME</small>
+            </h4>
+            @if (EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME != "Administrator")
+            {
+                if (EventERP.CommonClasses.SessionFacade.UserSession.ISCHECKIN == 0)
+                {
+                    using (Html.BeginForm("Checkin", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
+                    {
+                        <button class="btn btn-success" type="submit" id="checkin" style="float: right;margin-top: 15px;">Check In</button>
+                    }
+                }
+                else
+                {
+                    using (Html.BeginForm("CheckOut", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
+                    {
+                        <button class="btn btn-warning" type="submit" id="checkout" style="float: right;margin-top: 15px;">Check Out</button>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div class="page-container">
+    <div class="page-content">
+        <div class="content-wrapper">-->
+@*@if (EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Administrator" || EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Admin")
+    {*@
+<!--<div class="as_row as_gap_10" id="FavoriteMenu">-->
+@*<div class="col-lg-3">
+        <div class="card" style="color:#000;background:#f5f5f5">
+            <h5 class="card-title favorite_icon"><span><i class="fa fa-star" style="font-size: 17px;padding: 6px;"></i></span></h5>
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="list-icons ml-auto circle" style="text-align: center;">
+                        <span class="icon-pencil4 IconSpacing"></span>
+                    </div>
+                </div>
+                <div class="lblMainAmount LetterSpacing pt-10">
+                    Openning Balance
+                </div>
+            </div>
+        </div>
+    </div>*@
+@*}*@
+<!--</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="PrintForm" style="display:none">-->
+@*<div class="card card-body" style="width: 339.84px;height:64.32px">
+        <p style="margin:0px; font-weight:700"><span id="itemname" style="padding-right:15px; text-transform:capitalize">ring</span> <span id="weight">102.320</span></p>
+        <p style="margin:0px; padding-top:10px"><span id="type">18kt</span></p>
+    </div>*@
+<!--</div>-->
+
+
+@section scripts{
+    <script src="~/Scripts/MasterScripts/Home/DashboardDetails.js?v=@DateTime.UtcNow"></script>
+}

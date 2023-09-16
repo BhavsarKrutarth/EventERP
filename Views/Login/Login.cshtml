@@ -1,0 +1,150 @@
+@model EventERP.Models.LoginViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Login - Jewellery ERP</title>
+
+    <link rel="icon" href="~/Content/assets/images/As.png" type="imagee/png" sizes="32x32">
+
+    <!-- Global stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+    <link href="~/Content/assets/css/icons/icomoon/icomoon.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/assets/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/assets/css/icons/glyphicons/glyphicons.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/assets/css/components.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/assets/css/colors.css" rel="stylesheet" type="text/css">
+    <!-- /global stylesheets -->
+    <!-- Core JS files -->
+    @*<script type="text/javascript" src="~/Content/assets/js/plugins/loaders/pace.min.js"></script>*@
+    <script type="text/javascript" src="~/Content/assets/js/core/libraries/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Content/assets/js/core/libraries/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Content/assets/js/plugins/loaders/blockui.min.js"></script>
+    <script type="text/javascript" src="~/Content/assets/js/plugins/ui/nicescroll.min.js"></script>
+    <script type="text/javascript" src="~/Content/assets/js/plugins/ui/drilldown.js"></script>
+    <!-- /core JS files -->
+    <!-- Theme JS files -->
+    @*<script type="text/javascript" src="assets/js/core/app.js"></script>*@
+    <!-- /theme JS files -->
+    <style>
+        .login-container {
+            background: url('@System.Configuration.ConfigurationManager.AppSettings["domainPath"]/Content/assets/1.jpg');
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+        .form-control {
+            height: 36px !important;
+        }
+        #Password {
+            text-security: disc !important;
+            -webkit-text-security: disc !important;
+            -moz-text-security: disc !importants;
+        }
+    </style>
+</head>
+
+<body>
+    <link href="" rel="stylesheet" />
+    <link href="" rel="stylesheet" />
+    <link href="" rel="stylesheet" />
+    <link href="" rel="stylesheet" />
+    <!-- Page container -->
+    <div class="page-container login-container">
+        <!-- Page content -->
+        <div class="page-content">
+            <!-- Main content -->
+            <div class="content-wrapper">
+                <!-- Simple login form -->
+                <div class="panel panel-body login-form">
+                    <div class="text-center">
+                        @*<h3 style="color:#8b6414;font-weight: 700;">JEWELLRY ERP</h3>*@
+                        <h5>Login to your account <small class="display-block">Enter your credentials below</small></h5>
+                    </div>
+
+                    <label id="errormsg" style="color:red;text-align:center">@ViewBag.Message</label>
+
+                    @using (Html.BeginForm("DoLogin", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group has-feedback has-feedback-left" style="margin-bottom: 20px;">
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username", @required = "" })
+                            <div class="form-control-feedback">
+                                <i class="icon-user text-muted"></i>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback has-feedback-left" style="margin-bottom: 20px;">
+                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @type = "text", @placeholder = "Password", @required = "", @autocomplete = "off" })
+                            <div class="form-control-feedback">
+                                <i class="icon-lock2 text-muted"></i>
+                            </div>
+                        </div>
+                        <div class="form-group text-center" style="margin-bottom: 20px;">
+                            <button class="btn btn-primary btn-block" id="loginbtn" type="submit">Sign in<i class="icon-circle-right2 position-right"></i></button>
+                        </div>
+                        @*<div class="text-center">
+                                <a>Forgot password?</a>
+                            </div>*@
+                    }
+
+
+                </div>
+                <!-- /simple login form -->
+            </div>
+            <!-- /main content -->
+        </div>
+        <!-- /page content -->
+    </div>
+    <!-- /page container -->
+    <script>
+        $(document).ready(function () {
+            $("#UserName").focus();
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    $("#loginbtn").click();
+                }
+            });
+        });
+        window.onload = function () {
+            init();
+        }
+        function init() {
+            var x = $("#Password");
+            var style = window.getComputedStyle(x);
+            console.log(style);
+
+            if (style.webkitTextSecurity) {
+                // Do nothing
+            } else {
+                x.setAttribute("type", "password");
+            }
+        }
+        function getDomain() {
+            var domainPath = '@System.Configuration.ConfigurationManager.AppSettings["domainPath"]';
+            return domainPath;
+        }
+    </script>
+    @*<script type="text/javascript">
+            function btnsignin() {
+                if ($("#txtusename").val() == "admin" && $("#txtpassword").val() == "admin") {
+                    $("#errormsg").hide();
+                    window.location.href = getDomain() + "/Home/Dashboard";
+                }
+                else {
+                    $("#errormsg").show();
+                    return false;
+                }
+            }
+        </script>*@
+</body>
+<!-- Mirrored from demo.interface.club/limitless/layout_4/LTR/login_simple.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 26 Mar 2016 05:23:04 GMT -->
+</html>
+

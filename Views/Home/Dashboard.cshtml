@@ -1,0 +1,644 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_New.cshtml";
+    ViewBag.Title = "Dashboard";
+}
+
+<style>
+    .content-tabs-container {
+        border-bottom: 1px solid #e4eaec;
+    }
+
+    #MainTabDiv {
+        /*height: 755px;*/
+        top: 30px;
+        position: relative;
+    }
+
+    #DashboardDiv {
+        position: relative;
+        top: 45px;
+    }
+
+    .table_list_DailyBookReport_leftghead_1 {
+        display: none !important;
+    }
+
+    .card {
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-clip: border-box;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .1875rem;
+    }
+
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1.25rem;
+    }
+
+    .AmountSpacing {
+        letter-spacing: 2px;
+        font-size: 25px;
+        font-weight: 500;
+    }
+
+    .lblMainAmount {
+        font-size: 17px;
+        font-weight: 400;
+    }
+
+    .MetallblDaily {
+        float: right;
+    }
+
+    #panelSummaryView .col-lg-3 {
+        cursor: pointer;
+    }
+
+    [jqfootlevel="0"] {
+        display: none !important;
+    }
+
+    .daybookrow {
+        font-weight: 500 !important;
+        font-size: 14px !important;
+    }
+</style>
+<div id="DashboardDiv">
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="page-header-content">
+            <div class="page-title" style="overflow:auto">
+                <h4 style="float: left;margin-bottom: 15px;">
+                    <span class="text-semibold">Home</span> - Dashboard
+                    <small class="display-block">Jay Shree Krishna! @EventERP.CommonClasses.SessionFacade.UserSession.FULLNAME</small>
+                </h4>
+                @if (EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME != "Administrator")
+                {
+                    if (EventERP.CommonClasses.SessionFacade.UserSession.ISCHECKIN == 0)
+                    {
+                        using (Html.BeginForm("Checkin", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
+                        {
+                            <button class="btn btn-success" type="submit" id="checkin" style="float: right;margin-top: 15px;">Check In</button>
+                        }
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("CheckOut", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
+                        {
+                            <button class="btn btn-warning" type="submit" id="checkout" style="float: right;margin-top: 15px;">Check Out</button>
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <div class="page-content">
+            <div class="content-wrapper">
+                @*<div class="panel">
+                        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+                            <div class="col-md-12">
+                                <div class="col-sm-2">
+                                    <i class="icon-city"></i>
+                                    <span>City State Country</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                @if (EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Administrator" || EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Admin")
+                {
+                    <div class="col-sm-12">
+                        <div class="panel" id="panelSummaryView">
+                            <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+                                <div class="col-md-12" style="min-height: 453px;">
+                                    <div class="col-md-9">
+                                        <div class="row" style="margin-top: 10px !important;">
+                                            <div class="col-lg-3">
+                                                <div class="card" style="background:#FDB813;color:#fff;">
+                                                    <div class="card-body">
+                                                        <div class="d-flex">
+                                                            <h3 class="font-weight-semibold mb-0 AmountSpacing" id="OpeningBalance">₹ 0.00</h3>
+                                                            <div class="list-icons ml-auto">
+                                                                <a class="list-icons-item" data-action="reload"></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="lblMainAmount">
+                                                            Openning Balance
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="opening-balance"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="card" style="background:#F37020;color:#fff;">
+                                                    <div class="card-body">
+                                                        <div class="d-flex">
+                                                            <h3 class="font-weight-semibold mb-0 AmountSpacing" id="CreditAmount">₹ 0.00</h3>
+                                                        </div>
+
+                                                        <div class="lblMainAmount">
+                                                            Credit Amount
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="container-fluid">
+                                                        <div id="credit-amount"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="card" style="background:#C9234B;color:#fff;">
+                                                    <div class="card-body">
+                                                        <div class="d-flex">
+                                                            <h3 class="font-weight-semibold mb-0 AmountSpacing" id="DebitAmount">₹ 0.00</h3>
+                                                        </div>
+
+                                                        <div class="lblMainAmount">
+                                                            Debit Amount
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="debit-amount"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="card" style="background:#635FAB;color:#fff;">
+                                                    <div class="card-body">
+                                                        <div class="d-flex">
+                                                            <h3 class="font-weight-semibold mb-0 AmountSpacing" id="FinalBalance">₹ 0.00</h3>
+                                                        </div>
+
+                                                        <div class="lblMainAmount">
+                                                            Balance Amount
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="balance-amount"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-top: 10px !important;margin-bottom: 10px !important;">
+                                            <div class="col-lg-3">
+                                                <div class="card" style="background:#fdb813bf;color:#fff">
+                                                    <div class="card-body">
+                                                        <div class="d-flex" id="MetalOpening">
+                                                            <h2>Opening Metal</h2>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="card" style="background:#f37020bf;color:#fff">
+                                                    <div class="card-body">
+                                                        <div class="d-flex" id="MetalCredit">
+                                                            <h2>Credit Metal</h2>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="card" style="background:#c9234bbf;color:#fff">
+                                                    <div class="card-body">
+                                                        <div class="d-flex" id="MetalDebit">
+                                                            <h2>Debit Metal</h2>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="card" style="background:#635fabbf;color:#fff">
+                                                    <div class="card-body">
+                                                        <div class="d-flex" id="MetalBalance">
+                                                            <h2>Balance Metal</h2>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="height: 100%;">
+                                        <div class="col-md-12" style="margin-top: 25px !important;padding-bottom: 32px !important;height: 100%;">
+                                            <div class="card" style="background: #0089CF;height: 100%;">
+                                                <div class="card-body" style="height: 100%;">
+                                                    <div class="jqGrid_wrapper" id="jqgrid_CrediterDebtorAccountList" style="height: 100%;background: #fff;">
+                                                        <table id="table_CrediterDebtorDetailsList"></table>
+                                                        <div id="pager_CrediterDebtorDetailsList"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="panel panel-flat clear1 col-sm-12">
+                            <div class="panel-heading mb-10 overflow-auto">
+                                <div style="padding:0px;background:#fff;">
+                                    <div class="pull-right header-elements pr-10" style="background: #fff;width:14%;margin-top:3px;">
+                                        <a class="text-default daterange-ranges-monthwise font-weight-semibold cursor-pointer dropdown-toggle" style="padding: 5px;margin-right: 5px;border: 1px solid #d9d9d9;height: 30px;">
+                                            <i class="icon-calendar3 mr-2"></i>
+                                            <span></span>
+                                        </a>
+                                        <button id="refreshMonthWise"><i class="fa fa-refresh"></i></button>
+                                    </div>
+                                    <div class="pull-right pr-10">
+                                        <input type="text" class="form-control txtAutoComplete" placeholder="Branch" name="txtMonthWiseDashboardBranch" id="txtMonthWiseDashboardBranch" onkeyup="DashboardBranchAutoComplete(this);" autofocus>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="MonthlySales" style="width: 100%; height: 400px; background-color: #FFFFFF;"></div>
+                        </div>
+                    </div>
+                    <!-- Main charts -->
+                    <div class="col-sm-12">
+                        <!-- Sales stats -->
+                        <div class="panel panel-flat clear1 col-sm-12">
+                            <div class="panel-heading mb-10 overflow-auto">
+                                <h6 class="panel-title pull-left">Sales statistics</h6>
+                                <div style="padding:0px;background:#fff;">
+                                    <div class="pull-right header-elements pr-10" style="background: #fff;width:13%;margin-top:3px;">
+                                        <a class="text-default daterange-ranges-datewise font-weight-semibold cursor-pointer dropdown-toggle" style="padding: 5px;margin-right: 5px;border: 1px solid #d9d9d9;height: 30px;">
+                                            <i class="icon-calendar3 mr-2"></i>
+                                            <span></span>
+                                        </a>
+                                        <button id="refreshDateWise"><i class="fa fa-refresh"></i></button>
+                                    </div>
+                                    <div class="pull-right pr-10">
+                                        <input type="text" class="form-control txtAutoComplete" placeholder="Branch" name="txtDateWiseDashboardBranch" id="txtDateWiseDashboardBranch" onkeyup="DashboardBranchAutoComplete(this);" autofocus>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row text-center">
+                                    <div class="col-md-4">
+                                        <div class="content-group">
+                                            <h5 class="text-semibold no-margin"><i class="icon-calendar5 position-left text-slate"></i> 5960000</h5>
+                                            <span class="text-muted text-size-small">orders weekly</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="content-group">
+                                            <h5 class="text-semibold no-margin"><i class="icon-calendar52 position-left text-slate"></i> 120500000</h5>
+                                            <span class="text-muted text-size-small">orders monthly</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="content-group">
+                                            <h5 class="text-semibold no-margin"><i class="icon-cash3 position-left text-slate"></i> ₹234640000</h5>
+                                            <span class="text-muted text-size-small">average revenue</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-group-sm" id="app_sales"></div>
+                            <div id="monthly-sales-stats"></div>
+                        </div>
+                        <!-- /sales stats -->
+                    </div>
+                    <!-- /main charts -->
+                    <!-- main Bar chart -->
+                    <div class="col-sm-12">
+                        <div class="panel panel-flat clear1 col-sm-6">
+                            <div class="panel-heading" style="overflow: auto;">
+                                <div class="header-elements pull-right">
+                                    <a class="text-default daterange-ranges font-weight-semibold cursor-pointer dropdown-toggle" style="padding: 5px;margin-right: 5px;border: 1px solid #d9d9d9;height: 30px;">
+                                        <i class="icon-calendar3 mr-2"></i>
+                                        <span></span>
+                                    </a>
+                                    @*<button id="refreshBranch"><i class="fa fa-refresh"></i></button>*@
+                                </div>
+                            </div>
+                            <div id="StorSales" style="width: 100%; height: 400px; background-color: #FFFFFF;"></div>
+                        </div>
+                        <div class="panel panel-flat clear1 col-sm-6">
+                            <div class="panel-heading" style="overflow:auto">
+                                <div class="header-elements pull-right">
+                                    <a class="text-default daterange-ranges-group font-weight-semibold cursor-pointer dropdown-toggle" style="padding: 5px;margin-right: 5px;border: 1px solid #d9d9d9;height: 30px;">
+                                        <i class="icon-calendar3 mr-2"></i>
+                                        <span></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div id="GroupSales" style="width: 100%; height: 400px; background-color: #FFFFFF;"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="panel panel-flat clear1 col-sm-12">
+                            <div style="padding:0px;margin-top:15px;background:#fff;">
+                                <div class="pull-right header-elements p-15" style="background: #fff;width:14%">
+                                    <a class="text-default daterange-ranges-item font-weight-semibold cursor-pointer dropdown-toggle" style="padding: 5px;margin-right: 5px;border: 1px solid #d9d9d9;height: 30px;">
+                                        <i class="icon-calendar3 mr-2"></i>
+                                        <span></span>
+                                    </a>
+                                    <button id="refreshItem"><i class="fa fa-refresh"></i></button>
+                                </div>
+                                <div class="pull-right p-10" style="margin-top:3px;">
+                                    <input type="text" class="form-control txtAutoComplete" placeholder="Branch" name="txtDashboardBranch" id="txtDashboardBranch" onkeyup="DashboardBranchAutoComplete(this);" autofocus>
+                                </div>
+                                <div id="Collection" style="width: 100%; height: 400px; background-color: #FFFFFF;"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="panel panel-flat clear1 col-sm-12">
+                            <div class="panel-heading mb-10 overflow-auto">
+                                <div style="padding:0px;background:#fff;">
+                                    <div class="pull-right header-elements pr-10" style="background: #fff;width:10%;margin-top:3px;text-align:right;">
+                                        <a class="text-default daterange-ranges-salesman font-weight-semibold cursor-pointer dropdown-toggle" style="padding: 5px;margin-right: 5px;border: 1px solid #d9d9d9;height: 30px;">
+                                            <i class="icon-calendar3 mr-2"></i>
+                                            <span></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="SalesManSales" style="width: 100%; height: 400px; background-color: #FFFFFF;"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="panel panel-flat clear1 col-sm-12">
+                            <div class="panel-heading mb-10 overflow-auto">
+                                <div style="padding:0px;background:#fff;">
+                                    <div class="pull-right header-elements pr-10" style="background: #fff;width:10%;margin-top:3px;text-align:right;">
+                                        <a class="text-default daterange-ranges-party font-weight-semibold cursor-pointer dropdown-toggle" style="padding: 5px;margin-right: 5px;border: 1px solid #d9d9d9;height: 30px;">
+                                            <i class="icon-calendar3 mr-2"></i>
+                                            <span></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="PartySales" style="width: 100%; height: 400px; background-color: #FFFFFF;"></div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-sm-12">
+                        <div class="panel" id="panelSummaryView">
+                            <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+                                <div class="col-md-12">
+                                    <div class="row" style="margin-top: 10px !important;">
+                                        <div class="col-lg-3">
+                                            <div class="card" style="background:#FDB813;color:#fff;">
+                                                <div class="card-body">
+                                                    <div class="d-flex">
+                                                        <h3 class="font-weight-semibold mb-0 AmountSpacing" id="lblDashTarget">0.00 g</h3>
+                                                        <div class="list-icons ml-auto">
+                                                            <a class="list-icons-item" data-action="reload"></a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="lblMainAmount">
+                                                        Target
+                                                    </div>
+                                                </div>
+
+                                                <div id="opening-balance"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="card" style="background:#C9234B;color:#fff;">
+                                                <div class="card-body">
+                                                    <div class="d-flex">
+                                                        <h3 class="font-weight-semibold mb-0 AmountSpacing" id="lblDashAchived">0.00 g</h3>
+                                                    </div>
+
+                                                    <div class="lblMainAmount">
+                                                        Next Target
+                                                    </div>
+                                                </div>
+
+                                                <div id="debit-amount"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="card" style="background:#F37020;color:#fff;">
+                                                <div class="card-body">
+                                                    <div class="d-flex">
+                                                        <h3 class="font-weight-semibold mb-0 AmountSpacing" id="lblDashSales">0.00 g</h3>
+                                                    </div>
+
+                                                    <div class="lblMainAmount">
+                                                        Sales
+                                                    </div>
+                                                </div>
+
+                                                <div class="container-fluid">
+                                                    <div id="credit-amount"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="card" style="background:#635FAB;color:#fff;">
+                                                <div class="card-body">
+                                                    <div class="d-flex">
+                                                        <h3 class="font-weight-semibold mb-0 AmountSpacing" id="lblDashInsentive">₹ 0.00</h3>
+                                                    </div>
+
+                                                    <div class="lblMainAmount">
+                                                        Insentive
+                                                    </div>
+                                                </div>
+
+                                                <div id="balance-amount"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sales stats -->
+                    <div class="panel panel-flat clear1 col-sm-12 pr-0">
+                        <div class="col-sm-6" style="padding-left: 0px;">
+                            <div class="panel-heading">
+                                <h6 class="panel-title">Sales statistics</h6>
+                                <div class="heading-elements" style="margin-top: -10px;">
+                                    <form class="form-inline">
+                                        <div class="btn btn-sm btn-default btn-lr" onclick="DateLess('txtFromDate')"><span class="fa fa-chevron-left"></span></div>
+                                        <div class="form-group">
+                                            <input type="date" onchange="DateFilter()" tabindex="1" name="txtFromDate" id="txtFromDate" class="form-control col-lg-6">
+                                        </div>
+                                        <div class="btn btn-sm btn-default btn-lr" onclick="DateAdd('txtFromDate')" style="margin-right: 10px;"><span class="fa fa-chevron-right"></span></div>
+                                        To
+                                        <div class="btn btn-sm btn-default btn-lr" onclick="DateLess('txtToDate')" style="margin-left: 10px;"><span class="fa fa-chevron-left"></span></div>
+                                        <div class="form-group">
+                                            <input type="date" onchange="DateFilter()" tabindex="2" name="txtToDate" id="txtToDate" class="form-control col-lg-6">
+                                        </div>
+                                        <div class="btn btn-sm btn-default btn-lr" onclick="DateAdd('txtToDate')"><span class="fa fa-chevron-right"></span></div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="EmployeeSales" style="width: 100%; background-color: #FFFFFF;"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="jqGrid_wrapper" id="jqgrid_MyTimeSheet" style="margin: 8px 0;">
+                                <table id="table_MyTimeSheet"></table>
+                                <div id="pager_MyTimeSheet"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /sales stats -->
+                    <input type="hidden" id="NewEmpId" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPID" />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-wrapper" style="display:none;" id="MainTabDiv">
+    @*<div class="nth-tabs" id="main-tabs">
+        </div>*@
+</div>
+<!-- Common Master Modal -->
+<div id="CommonMasModal" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span><i class="icon-calendar" style="margin-bottom: 3px;"></i>&nbsp; Add <span class="Commonmastitle"></span></span></h5>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal CommonNameAddForm">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 Commonmastitle" style="font-size: 15px;padding-top: 5px;"></label>
+                        <div class="col-sm-8">
+                            <input type="text" tabindex="1" placeholder="Enter Name" name="txtCommonName" id="txtCommonName" class="form-control required">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" style="font-size: 15px;padding-top: 5px;">Display Order</label>
+                        <div class="col-sm-4">
+                            <input type="number" tabindex="2" placeholder="Display Order" name="txtDisplayOrderCommon" id="txtDisplayOrderCommon" class="form-control number required">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Is Active</label>
+                        <div class="col-md-1 ">
+                            <input id="IsActiveCommon" type="checkbox" name="IsActiveCommon" tabindex="3" checked class="icheckminimal" />
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="padding-right: 0;">
+                        @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                        {
+                            <button class="btn btn-success btnSave" type="button" tabindex="4" id="btncommonSubmit"><i class="fa fa-floppy-o"></i> Save</button>
+                        }
+                        <button class="btn bg-slate-400 btnCancel" type="button" id="btnCommonCancel" tabindex="5" name="Cancel"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<input type="hidden" id="NewEmpId" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPID" />
+<!-- -------------------------------use in tag generate page--------------------------------  -->
+@*<input type="hidden" id="hdnLotIdForTag" />*@
+@*<!-- -------------------------------use in customer metal recipt--------------------------------  -->
+    <input type="hidden" id="hdnCustomerId" />
+
+    <!-- ------------------------------- use in customer Master--------------------------------  -->
+    <input type="hidden" id="hdnCommonCustomerId" />
+    <input type="hidden" id="hdnCommonNewCustomer" />
+    <input type="hidden" id="hdnCommonNewCustomerId" />
+
+    <!-- -------------------------------use in Party Master--------------------------------  -->
+    <input type="hidden" id="hdnCommonPartyId" />  <!--  For Edit   -->
+    <input type="hidden" id="hdnCommonNewParty" />  <!--  For Add    -->
+    <input type="hidden" id="hdnCommonNewPartyId" />  <!--  New Added Id   -->
+
+    <input type="hidden" id="hdnCommonPreviousActiveId" />   <!--  Previous tab id    -->*@
+<!-- -------------------------------use in customer metal recipt--------------------------------  -->
+<input type="hidden" id="hdnCustomerId" />
+
+<!-- ------------------------------- use in customer Master--------------------------------  -->
+<input type="hidden" id="hdnCommonCustomerId" />
+<input type="hidden" id="hdnCommonNewCustomer" />
+<input type="hidden" id="hdnCommonNewCustomerId" />
+
+<!-- -------------------------------use in Party Master--------------------------------  -->
+<input type="hidden" id="hdnCommonPartyId" />  <!--  For Edit   -->
+<input type="hidden" id="hdnCommonNewParty" />  <!--  For Add    -->
+<input type="hidden" id="hdnCommonNewPartyId" />  <!--  New Added Id   -->
+<input type="hidden" id="hdnCommonPreviousActiveId" />   <!--  Previous tab id    -->
+<!-- /Common Master Modal -->
+@section scripts{
+
+    <script>
+                    //var nthTabs;
+                    //$(document).ready(function () {
+                    //nthTabs = $("#main-tabs").nthTabs();
+                    //$("#Dashboard").click(function () {
+                    //    $("#MainTabDiv").hide();
+                    //    $("#DashboardDiv").show();
+                    //});
+
+                    //});
+                    //function addnew(url, MenuName) {
+                    //    //var already = false;
+                    //    //name = url.slice(1);
+                    //    //name = name.slice(name.indexOf('/'), name.length).slice(1);
+                    //    //var tabs = $("#main-tabs ul li a");
+                    //    //if (tabs.length >= 1) {
+                    //    //    for (i = 0; tabs.length >= i ; i++) {
+                    //    //        if ($(tabs[i]).attr('id') == ('id' + name)) {
+                    //    //            if ($(tabs[i]).attr('id') == 'idTagGenerate') {
+                    //    //                var iframe_reload = document.getElementById("iframe" + name);
+                    //    //                iframe_reload.src = iframe_reload.src;
+                    //    //            }
+                    //    //            $('a[href=#' + name + ']').click();
+                    //    //            already = true;
+                    //    //            return;
+                    //    //        } else {
+                    //    //            already = false;
+                    //    //        }
+                    //    //    }
+                    //    //}
+                    //    //if (already == false) {
+                    //    //    $("#DashboardDiv").hide();
+                    //    //    $("#MainTabDiv").show();
+                    //    //    var id = Math.ceil(Math.random() * 1000);
+                    //    //    nthTabs.addTab({
+                    //    //        id: name,
+                    //    //        title: MenuName,
+                    //    //        url: getDomain() + url,
+                    //    //        active: true,
+                    //    //        allowClose: true,
+                    //    //        location: false,
+                    //    //        fadeIn: true
+                    //    //    });
+                    //    //}
+                    //    //$("#iframe" + name).focus();
+                    //}
+    </script>
+    <script src="~/Content/assets/js/charts/amchats/amcharts.js"></script>
+    <script src="~/Content/assets/js/charts/amchats/serial.js"></script>
+
+    @*<script src="~/Content/assets/js/core/app.js"></script>*@
+    <script src="~/Content/assets/js/plugins/pickers/daterangepicker.js"></script>
+    @if (EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Administrator" || EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Admin")
+    {
+        <!-- amCharts javascript code -->
+        <script src="~/Content/assets/js/charts/linechart.js"></script>
+        <script src="~/Content/assets/js/charts/sparklinechart.js"></script>
+        <script src="~/Content/assets/js/charts/barchart.js"></script>
+        <script src="~/Content/assets/js/charts/amchats/pie.js"></script>
+        <script src="~/Scripts/MasterScripts/Home/dashboard.js"></script>
+    }
+    else
+    {
+        <script src="~/Scripts/MasterScripts/Home/dashboard_emp.js"></script>
+    }
+}
+
