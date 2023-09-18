@@ -1,0 +1,169 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .select2-container {
+        width: 100% !important;
+    }
+</style>
+
+
+
+<div class="page-container">
+    <!-- Add/Edit form modal -->
+    <div id="panelBranchMasterEdit" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Branch Master</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="frmBranchMaster" method="get">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2 txtR">Branch Name<span style="color:red"> *</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control required uppercase" placeholder="Enter Branch Name" tabindex="1" name="txtBranchName" id="txtBranchName" autofocus>
+                            </div>
+                            @*<label class="control-label col-sm-2 txtR">Company<span style="color:red"> *</span></label>
+                                <div class="col-sm-4">
+                                    <select class="form-control required" name="ddlCompany" id="ddlCompany" tabindex="7"></select>
+                                </div>*@
+                            <label class="control-label col-sm-2 txtR">Mobile No<span style="color:red"> *</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control required" placeholder="Enter Mobile Number" tabindex="7" name="txtPhoneNo" id="txtPhoneNo">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2 txtR">Address1<span style="color:red"> *</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control required" placeholder="Enter Address1" tabindex="2" name="txtAddress1" id="txtAddress1">
+                            </div>
+                            <label class="control-label col-sm-2 txtR">Email<span style="color:red"> *</span></label>
+                            <div class="col-sm-4">
+                                <input type="email" class="form-control email required" placeholder="Enter EmailId" tabindex="8" name="txtEmailId" id="txtEmailId">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2 txtR">Address2</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="Enter Address2" tabindex="3" name="txtAddress2" id="txtAddress2">
+                            </div>
+                            <label class="control-label col-sm-2 txtR">Pincode<span style="color:red"> *</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control required" maxlength="6" minLength="6" placeholder="Enter Pincode" tabindex="9" name="txtPincode" id="txtPincode">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2 txtR">Address3</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="Enter Address3" tabindex="4" name="txtAddress3" id="txtAddress3">
+                            </div>
+                            <label class="control-label col-sm-2 txtR">Is Active</label>
+                            <div class="col-sm-4">
+                                <input type="checkbox" name="txtIsActive" checked class="icheckminimal" tabindex="10" />
+                            </div>
+                            <input type="text" id="hdnBranchId" hidden />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2 txtR">City<span style="color:red"> *</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control required" tabindex="5" name="ddlCity" id="ddlCity"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2 txtR">Voucher Prefix<span style="color:red"> *</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control uppercase required" tabindex="6" name="txtVoucherPrefix" id="txtVoucherPrefix" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                    {
+                        <button type="button" id="btnSaveBranchMaster" class="btn btn-success btnSave" tabindex="11"><span class="fa fa-floppy-o"></span> Save</button>
+                    }
+                    <button name="CancelBranchMaster" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Add/Edit form modal -->
+    <!-- Delete form modal -->
+    <div id="panelBranchMasterDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Branch Master</h5>
+                </div>
+                <form class="form-horizontal" id="frmCommon_CountryMaster" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Branch Name: </dt>
+                                <dd id="delblBranchName"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @if (Model.ISDELETE == 1)
+                        {
+                            <button type="button" id="btnDeleteBranchMaster" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                        }
+                        <button name="CancelBranchMaster" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /Delete form modal -->
+
+    <div class="panel" id="panelBranchMasterList" style="display: block; margin-bottom: 0px;">
+        <div class="row panel-heading pb-0">
+            <div class="col-lg-7 pt-5 pl-0">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">Branch Master</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 pr-0">
+                <div class="col-sm-8 txtR">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="txtsearchbox" class="form-control searchbox" placeholder="Search Here..." autofocus>
+                        <div class="form-control-feedback">
+                            <i class="icon-search4 text-size-base"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 pr-0 txtR">
+                    @if (Model.ISADD == 1)
+                    {
+                        <button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddBranchMaster" style="font-weight:600!important"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>
+                    }
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5 pull-right" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="jqGrid_wrapper" id="jqGrid_BranchMaster">
+                    <table id="table_BranchMaster"></table>
+                    <div id="pager_BranchMaster"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/MasterScripts/Master/BranchMaster.js"></script>
+    <script type="text/x-jsrender" id="CompanyDropdownList">
+        <option value="{{>companyid}}">{{>companyname}}</option>
+    </script>
+
+}

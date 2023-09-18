@@ -1,0 +1,477 @@
+@{
+    //Layout = "~/Views/Shared/_Layout_New.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "CustomerMaster";
+}
+
+
+@*<div class="as_tbl_wrapper">
+        <table id="CustomerMasterTable" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="tbl_info as_d_flex as_justify_between as_align_center tbl_srch_mob">
+                            <p class="as_d_inline_block">Account Name</p>
+                            <svg class="as_pointer tbl_srch_trg" data-search-own="tbl_srch_mob" data-search-tar="mob_index" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10 1C5.02944 1 1 5.02944 1 10C1 14.9706 5.02944 19 10 19C12.125 19 14.078 18.2635 15.6177 17.0319L20.2929 21.7071C20.6834 22.0976 21.3166 22.0976 21.7071 21.7071C22.0976 21.3166 22.0976 20.6834 21.7071 20.2929L17.0319 15.6177C18.2635 14.078 19 12.125 19 10C19 5.02944 14.9706 1 10 1ZM3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10Z" fill="#000000" />
+                            </svg>
+                        </div>
+                        <div class="tbl_col_search as_d_flex mob_index">
+                            <p class="tbl_input">Account Name</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="srch_index" data-search-own="mob_index" data-search-tar="tbl_srch_mob" viewBox="0 0 24 24" fill="none">
+                                <path d="M17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289Z" fill="#000000" />
+                            </svg>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="tbl_info as_d_flex as_justify_between as_align_center tbl_srch_date">
+                            <p class="as_d_inline_block">Active</p>
+                            <svg class="as_pointer tbl_srch_trg" data-search-own="tbl_srch_date" data-search-tar="date_index" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10 1C5.02944 1 1 5.02944 1 10C1 14.9706 5.02944 19 10 19C12.125 19 14.078 18.2635 15.6177 17.0319L20.2929 21.7071C20.6834 22.0976 21.3166 22.0976 21.7071 21.7071C22.0976 21.3166 22.0976 20.6834 21.7071 20.2929L17.0319 15.6177C18.2635 14.078 19 12.125 19 10C19 5.02944 14.9706 1 10 1ZM3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10Z" fill="#000000" />
+                            </svg>
+                        </div>
+                        <div class="tbl_col_search as_d_flex date_index">
+                            <p class="tbl_input">Active</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="srch_index" data-search-own="date_index" data-search-tar="tbl_srch_date" viewBox="0 0 24 24" fill="none">
+                                <path d="M17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289Z" fill="#000000" />
+                            </svg>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="tbl_info as_d_flex as_justify_between as_align_center tbl_srch_date">
+                            <p class="as_d_inline_block">Address</p>
+                            <svg class="as_pointer tbl_srch_trg" data-search-own="tbl_srch_date" data-search-tar="date_index" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10 1C5.02944 1 1 5.02944 1 10C1 14.9706 5.02944 19 10 19C12.125 19 14.078 18.2635 15.6177 17.0319L20.2929 21.7071C20.6834 22.0976 21.3166 22.0976 21.7071 21.7071C22.0976 21.3166 22.0976 20.6834 21.7071 20.2929L17.0319 15.6177C18.2635 14.078 19 12.125 19 10C19 5.02944 14.9706 1 10 1ZM3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10Z" fill="#000000" />
+                            </svg>
+                        </div>
+                        <div class="tbl_col_search as_d_flex date_index">
+                            <p class="tbl_input">Address</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="srch_index" data-search-own="date_index" data-search-tar="tbl_srch_date" viewBox="0 0 24 24" fill="none">
+                                <path d="M17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289Z" fill="#000000" />
+                            </svg>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="tbl_info as_d_flex as_justify_between as_align_center tbl_srch_date">
+                            <p class="as_d_inline_block">BS Group</p>
+                            <svg class="as_pointer tbl_srch_trg" data-search-own="tbl_srch_date" data-search-tar="date_index" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10 1C5.02944 1 1 5.02944 1 10C1 14.9706 5.02944 19 10 19C12.125 19 14.078 18.2635 15.6177 17.0319L20.2929 21.7071C20.6834 22.0976 21.3166 22.0976 21.7071 21.7071C22.0976 21.3166 22.0976 20.6834 21.7071 20.2929L17.0319 15.6177C18.2635 14.078 19 12.125 19 10C19 5.02944 14.9706 1 10 1ZM3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10Z" fill="#000000" />
+                            </svg>
+                        </div>
+                        <div class="tbl_col_search as_d_flex date_index">
+                            <p class="tbl_input">BS Group</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="srch_index" data-search-own="date_index" data-search-tar="tbl_srch_date" viewBox="0 0 24 24" fill="none">
+                                <path d="M17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289Z" fill="#000000" />
+                            </svg>
+                        </div>
+                    </th>
+
+                    <th>
+                        <div class="tbl_info as_d_flex as_justify_between as_align_center tbl_srch_quot">
+                            <p class="as_d_inline_block">CustomerAccId</p>
+                            <svg class="as_pointer tbl_srch_trg" data-search-own="tbl_srch_quot" data-search-tar="quot_index" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10 1C5.02944 1 1 5.02944 1 10C1 14.9706 5.02944 19 10 19C12.125 19 14.078 18.2635 15.6177 17.0319L20.2929 21.7071C20.6834 22.0976 21.3166 22.0976 21.7071 21.7071C22.0976 21.3166 22.0976 20.6834 21.7071 20.2929L17.0319 15.6177C18.2635 14.078 19 12.125 19 10C19 5.02944 14.9706 1 10 1ZM3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10Z" fill="#000000" />
+                            </svg>
+                        </div>
+                        <div class="tbl_col_search as_d_flex quot_index">
+                            <p class="tbl_input">CustomerAccId</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="srch_index" data-search-own="quot_index" data-search-tar="tbl_srch_quot" viewBox="0 0 24 24" fill="none">
+                                <path d="M17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289Z" fill="#000000" />
+                            </svg>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="tbl_info as_d_flex as_justify_between as_align_center">
+                            <p class="as_d_inline_block">Print</p>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="tbl_info as_d_flex as_justify_between as_align_center">
+                            <p class="as_d_inline_block">Action</p>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>*@
+
+<style>
+    input.masked,
+    .shell span {
+        font-size: 16px;
+        font-family: monospace;
+        padding-right: 10px;
+        background-color: transparent;
+        text-transform: uppercase;
+    }
+
+    .shell {
+        position: relative;
+        line-height: 1;
+    }
+
+        .shell span {
+            position: absolute;
+            left: 15px;
+            top: 8px;
+            color: #b9b6b6;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+            .shell span i {
+                color: transparent;
+                opacity: 0;
+                visibility: hidden;
+            }
+
+    select {
+        padding: 5px 5px !important;
+    }
+
+    #imgCustomer {
+        height: 107px;
+        border: 2px solid #eaeaea;
+        /*padding: 0;*/
+        margin-bottom: 8px;
+        /*margin-left: 12px;*/
+    }
+</style>
+
+<!-- Page container -->
+<div class="page-container">
+    <input id="hdn_Customermasterid" type="hidden" />
+
+    <div class="panel" id="panelCustomerMaster" style="display: block; margin-bottom: 0px;">
+        <div class="row panel-heading">
+            <div class="col-md-5 pt-5 pl-0">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">Customer Master</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7 pr-0">
+                <div class="col-sm-5 txtR">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="txtsearchbox" class="form-control searchbox" placeholder="Search Here..." autofocus>
+                        <div class="form-control-feedback">
+                            <i class="icon-search4 text-size-base"></i>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <label class="control-label" for="chkisAddress" style="">Is Address</label>
+                    <input id="chkisAddress" type="checkbox" name="chk_address" onclick="CustomerMasterView.Bind_IsAddress()" tabindex="2" unchecked class="chkisAddress" style="margin-left:10px" />
+                </div>
+                <div class="col-sm-5 pr-0 txtR">
+
+                    @if (Model.ISADD == 1)
+                    {
+                        <button class="formstylebutton  btn  waves-effect waves-light m-t-10 btnAlladdress" type="button" id="btnAlladdress" style="font-weight: 600 !important; background-color: #008CBA;color:white"><i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Update Address</button>
+                        <button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddNewCustomer" style="font-weight:600!important"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>
+                    }
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5 pull-right" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="jqGrid_wrapper" id="jqgrid_CustomerMaster">
+                    <table id="table_CustomerMaster"></table>
+                    <div id="pager_CustomerMaster"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="Panel_CustomerMasterEdit" class="modal fade" role="dialog">
+        <div class="modal-dialog" style="width:90% !important">
+
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form class="row form-horizontal" id="formCustomerMaster" validate="validate">
+                        <div class="col-md-8">
+                            <fieldset class="content-group">
+                                <legend class="text-bold">Customer Info</legend>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-2 text-right">Account Name<span style="color:red"> *</span></label>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control required uppercase" placeholder="Enter Account Name" tabindex="1" name="accname" id="txtaccname">
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <input id="chkDNDActive" type="checkbox" name="txtdndactive" tabindex="2" unchecked class="icheckminimal" />
+                                        <label class="control-label" for="chkShowInRateMast" style="padding-left:25px;padding-top:6px;display:inline-flex;">DND Activate</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-2 text-right">Bal. Sheet Group<span style="color:red"> *</span></label>
+                                    <div class="col-lg-3">
+                                        <select class="form-control required" name="BalnceSheetGroup" id="ddlBalnceSheetGroup" tabindex="3"></select>
+                                    </div>
+                                    <div class="col-lg-3 col-lg-offset-3" id="divaddress1" style="display:none">
+                                        <input id="chkaddress" type="checkbox" name="chkaddress" tabindex="4" unchecked class="icheckminimal" />
+                                        <label class="control-label" for="chkShowInRateMast" style="padding-left:25px;padding-top:6px;display:inline-flex;">Address</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 txtR">City<span style="color:red"> *</span></label>
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control txtAutocomplete required" placeholder="Search City" name="CityName" tabindex="4" id="ddlCity" onkeyup="CustomerMasterView.CityAutoComplete()" />
+                                        <input type="hidden" id="hdnCityId" />
+                                    </div>
+                                    <label class="control-label col-md-3 txtR">Pincode</label>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control pincodemask" placeholder="XXXXXX" tabindex="5" id="txt_pincode">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 txtR">Mobile1</label>
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control mobilenomask" placeholder="Mobile1" tabindex="6" name="txt_Mobile" id="txt_Mobile">
+                                    </div>
+                                    <label class="control-label col-md-3 txtR">Mobile2</label>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control mobilenomask" placeholder="Mobile2" tabindex="7" name="txt_Mobile1" id="txt_Mobile1">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-lg-2">EmailId</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" placeholder="Enter EmailId" name="EmailId" id="txt_EmailId" tabindex="8" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div id="divaccid" style="display:none">
+                                        <label class="control-label col-lg-2 text-right">Account Id</label>
+                                        <div class="col-lg-2">
+                                            <input type="text" class="form-control" value="" name="accid" id="txtaccoutid" disabled>
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-lg-2 text-right">Membership Type</label>
+                                    <div class="col-lg-4">
+                                        <div class="input-group">
+                                            <select name="customertype" class="form-control" id="ddlcustomertype" tabindex="9"></select>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button" onclick="commondetailadd('Customer Type', 'ddlcustomertype')"><i class="icon-plus2"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-lg-2 text-right">Cust. Card No.</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control" name="custcardno" tabindex="10" placeholder="Enter Card Number" id="txtcustcardno">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-lg-2 text-right">Category</label>
+                                    <div class="col-lg-4">
+                                        <div class="input-group">
+                                            <select name="custcategory" class="form-control" id="ddlcategory" tabindex="11"></select>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button" onclick="commondetailadd('Customer Category', 'ddlcategory')"><i class="icon-plus2"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 txtR">Address1</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" style="text-transform:capitalize;" onblur="CustomerMasterView.askpopup()" placeholder="House/Flate Number" tabindex="12" id="txt_address1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 txtR">Address2</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" style="text-transform:capitalize;" placeholder="Street Name" tabindex="13" id="txt_address2">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 txtR">Address3</label>
+                                    <div class="col-md-10   ">
+                                        <input type="text" class="form-control" style="text-transform:capitalize;" placeholder="Landmark" tabindex="14" id="txt_address3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label class="control-label col-md-2 txtR">GST No</label>
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control masked gstnomask" onfocusout="CustomerMasterView.OnChangeGST()" tabindex="15" id="txt_gstno">
+                                            <span class="input-group-addon gstcheck" style="background-color: #4caf50;color: white;">Chk</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 txtR">Adhaar No</label>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control adhaarnomask" placeholder="XXXX XXXX XXXX" tabindex="16" id="txt_adhaar">
+                                    </div>
+                                    <label class="control-label col-md-2 txtR">PAN No</label>
+                                    <div class="col-md-4 pl-0 pr-0">
+                                        <input type="text" class="form-control masked pannomask" tabindex="17" id="txt_panno">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 txtR">Phone</label>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" tabindex="18" id="txt_phone">
+                                    </div>
+                                    <div class="col-lg-2 col-lg-offset-2">
+                                        <input id="chkActive" type="checkbox" name="active" tabindex="19" checked class="icheckminimal" />
+                                        <label class="control-label" for="chkActive" style="padding-left:25px;padding-top:6px;display:inline-flex;">Active</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-lg-offset-3">
+                                    <input id="chkBillNotAccept" type="checkbox" name="billnotaccept" tabindex="20" unchecked class="icheckminimal" />
+                                    <label class="control-label" for="chkBillNotAccept" style="padding-left:25px;padding-top:6px;display:inline-flex;">O/S Bill Accept</label>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-4">
+                            <fieldset class="text-center">
+                                <legend class="text-bold">PAN Image</legend>
+                                <div class="form-group" style="margin-bottom:10px;">
+                                    <div class="col-md-12">
+                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["domainpath"]/Content/assets/images/default-user.png" id="imgCustomer" style="width: 100px; height: 100px;" class="img-rounded" alt="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label title="Upload image file" for="BtnImageUpload" class="btn border-slate text-slate-800 btn-flat" style="box-shadow: 0 0 0 100px rgba(0, 0, 0, .05) inset">
+                                            <input type="file" accept="image/*" name="ImageUpload" id="BtnImageUpload" class="hide">
+                                            <i class="icon-upload4 position-left"></i>&nbsp;Upload Photo
+                                        </label>
+                                        <input id="hdnimg" value="" hidden />
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer txtC">
+                    <button type="button" id="btnSaveCustomerMaster" class="btn btn-success btnSave" tabindex="21"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Save</button>
+                    <button type="button" id="btnCancelCustomerMaster" name="CancelCustomerMaster" class="btn bg-slate-400 btnCancel"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="Modal_CustomerMasterDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Customer Master</h5>
+                </div>
+                <form class="form-horizontal" id="frmDeleteCustomerMaster" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Customer Name: </dt>
+                                <dd id="dellblCustomername"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnDeleteCancelCustomerMaster" name="CancelCustomerMaster" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                        <button type="button" id="btnDeleteCustomerMaster" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="ModelProfileImage" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h5 class="modal-title">Upload Photo</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="frmUploadImage" method="get">
+                        <div class="row" style="margin:0px 5px;">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="image-cropper-container content-group" style="width:400px;background:gray !important;">
+                                    <img src="" id="CustomerimgCrop" alt="" class="cropper">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="col-md-12 col-md-12 col-xs-6 pl0 pr0">
+                                    <div class="content-group">
+                                        <div class="eg-preview">
+                                            <div class="preview preview-lg"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-6 pl0 pr0 MarginDesktop">
+                                    <div class="docs-buttons1">
+                                        <div class="btn-group btn-group-crop">
+                                            <button type="button" class="btn bg-blue btn-icon legitRipple" data-method="getCroppedCanvas" data-option="{ &quot;width&quot;: 2506, &quot;height&quot;: 1200 }">
+                                                <span id="pictursetbtn" class="docs-tooltip" title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 1200, height: 300 })">
+                                                    Set Photo
+                                                </span>
+                                            </button>
+                                            <button type="button" class="btn bg-blue btn-icon legitRipple" data-method="rotate" data-option="-45" title="Rotate Left">
+                                                <span class="icon-rotate-ccw3"></span>
+                                            </button>
+                                            <button type="button" class="btn bg-blue btn-icon legitRipple" data-method="rotate" data-option="45" title="Rotate Right">
+                                                <span class="icon-rotate-cw3"></span>
+                                            </button>
+                                        </div>
+                                        <div style="display:none;" id="divLoaderDP">
+                                            <img src="~/Content/assets/images/Loader.gif" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin:0px 5px;">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div id="dpCropCanvas">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Address Modal -->
+<div class="modal" tabindex="-1" role="dialog" id="divaddress" style="display:none;position:absolute" flag="0">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #e5986673">
+                <h5 style="text-align:center" class="modal-title">NOTIFICATION <i class="fa fa-bell" aria-hidden="true"></i></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to select address box ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSaveaddress">YES</button>
+                <button type="button" class="btn btn-secondary" id="btncloseaddress" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Address Modal -->
+<!-- /page container -->
+
+@section Scripts{
+    <script src="~/Content/assets/plugin/Cropper/cropper.min.js"></script>
+    <script src="~/Scripts/MasterScripts/Master/CustomerMaster.js?v=@DateTime.UtcNow"></script>
+
+    <script id="BalnceSheetGroupList" type="text/x-jsrender">
+        <option value="{{>balancesheetgroupid}}">{{>bsgroupname}}</option>
+    </script>
+}

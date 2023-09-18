@@ -1,0 +1,726 @@
+@{
+    ViewBag.Title = "PartyMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    input.masked,
+    .shell span {
+        font-size: 16px;
+        font-family: monospace;
+        padding-right: 10px;
+        background-color: transparent;
+        text-transform: uppercase;
+    }
+
+    .shell {
+        position: relative;
+        line-height: 1;
+    }
+
+        .shell span {
+            position: absolute;
+            left: 15px;
+            top: 8px;
+            color: #b9b6b6;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+            .shell span i {
+                color: transparent;
+                opacity: 0;
+                visibility: hidden;
+            }
+
+    select {
+        padding: 5px 5px !important;
+    }
+
+    .panel {
+        margin-bottom: -1px !important;
+    }
+
+    .panel-body {
+        padding: 10px 0 0 0 !important;
+        background: #efefef !important;
+    }
+
+    legend {
+        border: none;
+        font-weight: 900 !important;
+    }
+
+    input.masked, .shell span {
+        background-color: #fff !important;
+    }
+
+    .acto_frmItemlist table tbody tr td:first-child::before {
+        padding: 5px !important;
+    }
+
+    .showBank, .showTDS {
+        display: none;
+    }
+
+    .icheckbox_minimal-blue {
+        background-position: -20px 0;
+    }
+</style>
+
+<!-- Page container -->
+<div class="page-container pt-10">
+    <input id="hdnpartymasterid" type="hidden" />
+    <select id="hdnMasterLabourCodes" class="hidden"></select>
+    <div id="panelEdit" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog" style="width:95%">
+            <div class="modal-content">
+                <div class="modal-body" style="padding: 10px 0 0 0 !important;">
+                    <form class="form-horizontal" action="#" id="formacc">
+
+                        <div class="row m-0">
+                            <div class="col-lg-12">
+                                <div class="panel panel-flat">
+                                    <div class="panel-body">
+                                        <div class="col-lg-8">
+                                            <fieldset>
+                                                <legend class="text-bold">
+                                                    <span style="position:relative;top:10px;">Account Information</span>
+                                                    <div class="txtR pull-right pr-20" style="height:35px">
+                                                        Master Type:
+                                                        <select onchange="Partydetailview.ValueChangeMasterType()" name="mastertype" tabindex="1" style="height:29px; margin-bottom:15px" id="ddlmastertype">
+                                                            @*<option value="PartyMaster" selected>Supplier</option>
+                                                                <option value="OtherAccountMaster">Other Account</option>
+                                                                <option value="Supplier">Artist</option>*@
+                                                            <option value="PartyMaster" selected>Party</option>
+                                                            <option value="Supplier">Supplier</option>  <!-- Artist -->
+                                                            @*<option value="Artist">Artist</option>*@
+                                                            <option value="OtherAccountMaster">Other Account</option>
+                                                        </select>
+                                                    </div>
+                                                </legend>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-2 txtR">Party Name<span style="color:red"> *</span></label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control required uppercase" placeholder="Enter the Name" tabindex="2" name="PartyName" id="txt_partyname" onkeyup="Autocompleteperson()" onkeydown="Autocompleteperson()">
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <input type="text" class="form-control uppercase" name="shortcode" placeholder="Short Name" tabindex="3" id="txtshortcode">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">City<span class="removerequired" style="color:red"> *</span></label>
+                                                    <div class="col-lg-3">
+                                                        <input type="text" class="form-control required re_equired" name="CityName" tabindex="4" id="ddlCity" />
+                                                        <input type="hidden" id="hdnCityId" />
+                                                    </div>
+                                                    <label class="control-label col-lg-2 text-right">Pincode</label>
+                                                    <div class="col-lg-3">
+                                                        <input type="text" class="form-control pincodemask" name="pincode" id="txtpincode" tabindex="15">
+                                                    </div>
+
+
+                                                    @*<label class="control-label col-lg-1 text-right">Acc. Type</label>
+                                                        <div class="col-lg-2">
+                                                            <select class="form-control" name="OtherAccType" id="OtherAccType" tabindex="6">
+                                                                <option value="">-- Select Other Account --</option>
+                                                                <option value="TDS">TDS</option>
+                                                                <option value="TCS">TCS</option>
+                                                                <option value="GST">GST</option>
+                                                                <option value="Discount">Discount</option>
+                                                                <option value="Bank">Bank</option>
+                                                            </select>
+                                                        </div>*@
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">Bal. Sheet Group<span style="color:red"> *</span></label>
+                                                    <div class="col-lg-3">
+                                                        <select class="form-control required" name="BalnceSheetGroup" id="ddlBalnceSheetGroup" tabindex="8"></select>
+                                                    </div>
+                                                    <label class="control-label col-lg-2 text-right">Supply</label>
+                                                    <div class="col-lg-3">
+                                                        <input type="text" class="form-control" placeholder="Place Of Supply" name="ddlSupplyCity" id="ddlSupplyCity" tabindex="5">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">Mobile No1<span class="removerequired" style="color:red"> *</span></label>
+                                                    <div class="col-lg-3">
+                                                        <input type="text" class="form-control required mobilenomask re_equired" name="mobileno1" id="txtmobileno1" tabindex="6">
+                                                    </div>
+
+                                                    <label class="control-label col-lg-2 text-right">Mobile No2 </label>
+                                                    <div class="col-lg-3">
+                                                        <input type="text" class="form-control mobilenomask" name="mobileno2" id="txtmobileno2" tabindex="7">
+                                                    </div>
+
+                                                    @*<label class="control-label col-lg-1 text-right showTDS">TDS Type</label>
+                                                        <div class="col-lg-3 showTDS">
+                                                            <select class="form-control" name="TDSType" id="txtTDSType" tabindex="8"></select>
+                                                        </div>*@
+
+                                                    @*<label class="control-label col-lg-1 text-right pr-0 pl-0 showBank">Bank Name</label>
+                                                        <div class="col-lg-2 showBank">
+                                                            <select class="form-control" name="BankName" id="ddlBankName" tabindex="9"></select>
+                                                        </div>*@
+                                                </div>
+                                                <div class="form-group">
+
+                                                    <label class="control-label col-lg-2 text-right" for="chkIsRcm">Is RCM</label>
+                                                    <div class="col-lg-1">
+                                                        <input id="chkIsRcm" type="checkbox" name="chkIsRcm" tabindex="9" class="icheckminimal" />
+                                                    </div>
+                                                    <div class="isaddress" style="display:none">
+                                                        <label class="control-label col-lg-2 text-right" for="chkaddress">Is Address</label>
+                                                        <div class="col-lg-1">
+                                                            <input id="chkaddress" type="checkbox" name="chkaddress" tabindex="10" class="icheckminimal" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-2 txtR hidden">Reference Type</label>
+                                                    <div class="col-md-3 hidden">
+                                                        <select name="ReferenceType" class="form-control" id="ddlType">
+                                                            <option value="">-- Select Reference Type --</option>
+                                                            <option value="Party">Party</option>
+                                                            <option value="Customer">Customer</option>
+                                                            <option value="Employee/SalesPerson">Employee/SalesPerson</option>
+                                                        </select>
+                                                    </div>
+                                                    @*<label class="control-label col-md-2 txtR">Reference By</label>
+                                                        <div class="col-md-4">
+                                                            <input name="RefBy" tabindex="7" class="form-control" id="txt_RefBy" ReferenceById="" />
+                                                        </div>*@
+                                                </div>
+                                            </fieldset>
+                                        </div>
+
+                                        <div class="col-lg-2" style="border-left: 1px solid #dddddd;border-right: 1px solid #dddddd;">
+                                            <fieldset class="text-center">
+                                                <legend class="text-bold">Account</legend>
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <div class="col-lg-12">
+                                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["domainpath"]/Content/assets/images/default-user.png" id="imgAccount" style="width: 100px; height: 100px;" class="img-rounded" alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-lg-12">
+                                                        <label title="Upload image file" for="BtnImageUpload" class="btn border-slate text-slate-800 btn-flat" style="box-shadow: 0 0 0 100px rgba(0, 0, 0, .05) inset">
+                                                            <input type="file" accept="image/*" name="ImageUpload" id="BtnImageUpload" class="hide">
+                                                            <i class="icon-upload4 position-left"></i>&nbsp;Upload Photo
+                                                        </label>
+                                                        <input id="hdnpartyimg" value="" hidden />
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+
+                                        <div class="col-lg-2">
+                                            <fieldset class="text-center">
+                                                <legend class="text-bold">Pan</legend>
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <div class="col-lg-12">
+                                                        <img src="@System.Configuration.ConfigurationManager.AppSettings["domainpath"]/Content/assets/PANCARD.png" id="imgPan" style="width: 100px; height: 100px;" class="img-rounded" alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-lg-12">
+                                                        <label title="Upload image file" for="BtnImagePanUpload" class="btn border-slate text-slate-800 btn-flat" style="box-shadow: 0 0 0 100px rgba(0, 0, 0, .05) inset">
+                                                            <input type="file" accept="image/*" name="ImagePanUpload" id="BtnImagePanUpload" class="hide">
+                                                            <i class="icon-upload4 position-left"></i>&nbsp;Upload Photo
+                                                        </label>
+                                                        <input id="hdnPanimg" value="" hidden />
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <!-- Marketing campaigns -->
+                                <div class="panel panel-flat">
+                                    <div class="panel-body">
+                                        <div class="col-lg-6">
+                                            <fieldset>
+                                                <legend class="text-bold">Address Information</legend>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-3 text-right">Contact Person</label>
+                                                    <div class="col-lg-9">
+                                                        <input type="text" class="form-control text-capitalize" name="contactname" placeholder="Enter Contact Name" id="txtcontactname" tabindex="10">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-3 text-right">Address1</label>
+                                                    <div class="col-lg-9">
+                                                        <input rows="3" cols="5" class="form-control" onblur="Partydetailview.askpopup()" style="text-transform: capitalize;" name="address1" placeholder="Address1" id="txtaddress1" tabindex="11">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-3 text-right">Address2</label>
+                                                    <div class="col-lg-9">
+                                                        <input rows="3" cols="5" class="form-control" style="text-transform: capitalize;" name="address2" placeholder="Address2" id="txtaddress2" tabindex="12">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-3 text-right">Address3</label>
+                                                    <div class="col-lg-9">
+                                                        <input rows="3" cols="5" class="form-control" style="text-transform: capitalize;" name="address3" placeholder="Address3" id="txtaddress3" tabindex="13">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-3 text-right">Landmark Area</label>
+                                                    <div class="col-lg-9">
+                                                        <input rows="3" cols="5" class="form-control" name="landmarkarea" placeholder="Landmark Area" id="txtLandmarkArea" tabindex="14">
+                                                    </div>
+                                                </div>
+                                                @*<div class="form-group">
+                                                        <label class="control-label col-lg-3 text-right">Pincode</label>
+                                                        <div class="col-lg-3">
+                                                            <input type="text" class="form-control pincodemask" name="pincode" id="txtpincode" tabindex="15">
+                                                        </div>
+                                                    </div>*@
+
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-6" style="border-left: 1px solid #dddddd;">
+                                            <fieldset>
+                                                <legend class="text-bold">Contact Information</legend>
+
+                                                @*<div class="form-group">
+                                                        <label class="control-label col-lg-2 text-right">Mobile No2 </label>
+                                                        <div class="col-lg-3">
+                                                            <input type="text" class="form-control mobilenomask" name="mobileno2" id="txtmobileno2" tabindex="18">
+                                                        </div>
+                                                    </div>*@
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">Phone</label>
+                                                    <div class="col-lg-10">
+                                                        <input type="text" class="form-control" name="phoneno" id="txtphonenum" tabindex="16">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">Birth Date</label>
+                                                    <div class="col-lg-3">
+                                                        <input type="date" class="form-control" name="birthdate" placeholder="" id="txtbirthdate" tabindex="17">
+                                                    </div>
+
+                                                    <label class="control-label col-lg-3 text-right">Anniversary Date</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="date" class="form-control" name="anniversarydate" placeholder="" id="txtanniversarydate" tabindex="18">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">Email</label>
+                                                    <div class="col-lg-10">
+                                                        <input type="email" placeholder="example@123.com" class="form-control" name="emailid" id="txtemail" tabindex="19">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">Website</label>
+                                                    <div class="col-lg-10">
+                                                        <input type="text" class="form-control" placeholder="www.example.com" name="website" id="txtwebsite" tabindex="20">
+                                                    </div>
+                                                </div>
+
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="panel panel-flat">
+                                    <div class="panel-body">
+                                        <div class="col-lg-6">
+                                            <fieldset>
+                                                <legend class="text-bold text-left">Tax Information</legend>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">GST No<span style="color:red" class="removerequired"> *</span></label>
+                                                    <div class="col-lg-5 pr-0">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control upparcase masked gstnomask required" onfocusout="Partydetailview.OnChangeGST()" name="GSTno" id="txtGSTno" tabindex="21">
+                                                            @*re_equired*@
+                                                            <span class="input-group-addon gstcheck" style="background-color: #4caf50;color: white;">chek</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">Pan No</label>
+                                                    <div class="col-lg-4 pr-0">
+                                                        <input type="text" class="form-control upparcase masked pannomask" name="panno" id="txtpanno" tabindex="22">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">Passport No</label>
+                                                    <div class="col-lg-4 pr-0">
+                                                        <input type="number" class="form-control" name="passportno" id="txtpassportno" tabindex="23">
+                                                    </div>
+                                                    <label class="control-label col-lg-2 text-right">Adhar/UIN No</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="text" class="form-control adhaarnomask" name="adharcardno" id="txtadharcardno" tabindex="24">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right" for="chkTDSDeduct">TDS Deduct</label>
+                                                    <div class="col-lg-1">
+                                                        <input id="chkTDSDeduct" type="checkbox" name="TDSDeduct" tabindex="25" class="icheckminimal" />
+                                                    </div>
+
+                                                    <label class="control-label col-lg-offset-3 col-lg-2 text-right" for="chkIsForm60">Form 60</label>
+                                                    <div class="col-lg-1">
+                                                        <input id="chkIsForm60" type="checkbox" name="chkIsForm60" tabindex="26" class="icheckminimal" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div id="tdscode" style="display:none">
+                                                        <label class="control-label col-lg-2 text-right">TDS Code</label>
+                                                        <div class="col-lg-4">
+                                                            <select type="text" style="width:100%;" class="form-control" name="tdsaccountcode" id="ddltdsaccountcode" tabindex="27"></select>
+                                                        </div>
+                                                    </div>
+
+                                                    <label class="control-label col-lg-2 text-right">Trading TDS A/C</label>
+                                                    <div class="col-lg-4">
+                                                        <select type="text" style="width:100%;" class="form-control " name="TradingTDSCode" id="ddlTradingTDSCode" tabindex="28"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">TIN No.</label>
+                                                    <div class="col-lg-4">
+                                                        <input id="txtTINNo" type="text" name="TINNo" tabindex="29" class="form-control" />
+                                                    </div>
+                                                    <div style="display:none;">
+                                                        <label class="control-label col-lg-2 text-right">CST No.</label>
+                                                        <div class="col-lg-4">
+                                                            <input id="txtCSTNo" type="text" name="CSTNo" tabindex="30" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-6" style="border-left: 1px solid #dddddd;">
+                                            <fieldset>
+                                                <legend class="text-bold text-left">Bank Information</legend>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">Bank Name</label>
+                                                    <div class="col-lg-4">
+                                                        @*<select type="text" style="width:100%;" class="form-control upparcase" name="bankname" id="ddlBankName" tabindex="28"></select>*@
+                                                        <input type="text" class="form-control" name="bankname" id="txtBankName" tabindex="31">
+                                                    </div>
+                                                    <label class="control-label col-lg-2 text-right">A/C No</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="text" class="form-control" name="accno" id="txtbankacno" tabindex="32" style="font-size: 16px; font-family: monospace;">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right pl-0 pr-0">IFSC/Swift Code</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="text" class="form-control" style="text-transform: uppercase;font-size: 16px;font-family: monospace;" name="swiftcode" id="txtswiftcode" tabindex="33">
+                                                    </div>
+                                                    <label class="control-label col-lg-2 text-right">Branch Name</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="text" class="form-control" name="branchname" id="txtbranchnamebank" tabindex="34">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2 text-right">Address</label>
+                                                    <div class="col-lg-10">
+                                                        <input type="text" class="form-control" style="text-transform: capitalize;" name="bankinfoaddress" id="txtbankinfoaddress" tabindex="35">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--<div class="row m-0">
+                            <div class="col-lg-12">-->
+                        <!-- Marketing campaigns -->
+                        <!--<div class="panel panel-flat">
+                                    <div class="panel-body">
+                                        <fieldset style="padding: 0px 10px 0 10px;">
+                                            <legend class="text-bold">Other Information</legend>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-1 text-right">Credit Days</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text" class="form-control" name="creditdays" id="txtcreditdays" tabindex="38">
+                                                </div>
+                                                <label class="control-label col-lg-1 text-right">Interest (%)</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text" class="form-control" name="interestvalue" id="txtinterestvalue" tabindex="39">
+                                                </div>
+                                                <label class="control-label col-lg-1 text-right">Interest A/C</label>
+                                                <div class="col-lg-5">
+                                                    <input type="text" class="form-control" name="interestacc" id="txtinterestacc" tabindex="40">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-1 text-right">Account Limit</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text" class="form-control" name="accountlimit" id="txtaccountlimit" tabindex="41">
+                                                </div>
+                                                <label class="control-label col-lg-1 text-right">Labour Dis.</label>
+                                                <div class="col-lg-2">
+                                                    <input type="text" class="form-control" name="labourdiscount" id="txtlabourdiscount" tabindex="42">
+                                                </div>
+                                                <label class="control-label col-lg-1 text-right">Remark</label>
+                                                <div class="col-lg-5">
+                                                    <input type="text" class="form-control" onkeyup="AutosuggestRemark(this)" name="txtRemarks" id="txtRemarks" tabindex="43">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                        @*----------------------------------------Labour Per---------------------------------------------*@
+                        <div class="row m-0" id="LabourPer">
+                            <div class="col-lg-12">
+                                <!-- Marketing campaigns -->
+                                <div class="panel panel-flat">
+                                    <div class="panel-body">
+                                        <fieldset style="padding: 0px 10px 15px 10px;" class="acto_frmItemlist">
+                                            <legend class="text-bold">Item Markup</legend>
+                                            <table style="width:50%">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:2%;">No.</th>
+                                                        <th style="width:5%;">Item</th>
+                                                        <th style="width:4%;">OtherItem</th>
+                                                        <th style="width:3%;">Purchase Labour Rate / Wst &nbsp;<input id="SameData" type="checkbox" name="SameData" class="icheckminimal" style="background-position: -20px 0 !important" /></th>
+                                                        <th style="width:6%;">Sales Rate</th>
+                                                        @*<th style="width:5%;">Wst</th>*@
+                                                        <th style="width:2%;">Remove</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="LabourBody"></tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th colspan="6">
+                                                            <a class="pull-left" onclick="ItemAddNewRowModal()">+ Add New Line</a>
+                                                        </th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m-0">
+                            <div class="col-lg-12 text-center" style="margin-bottom: 10px;">
+                                <!-- Marketing campaigns -->
+                                <div class="panel panel-flat mulPanel" id="pnl_btns">
+                                    <div class="panel-body text-center" style="padding-top:10px!important;padding-bottom:10px!important">
+                                        @if (Model.ISADD == 1 && Model.ISUPDATE == 1)
+                                        {
+                                            <button type="button" id="btnsaveparty" class="btn btn-success btn-lg btnSave" tabindex="36"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Save</button>
+                                        }
+                                        <button type="button" id="btncancelparty" class="btn btn-warning btn-lg btnCancel"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancel</button>
+                                        @if (Model.ISDELETE == 1)
+                                        {
+                                            <button type="button" id="btndelete" class="btn btn-danger btn-lg btnDelete" style="display:none"><i class="fa fa-trash"></i>&nbsp;&nbsp;Delete</button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="panel" id="panelView">
+        <div class="row panel-heading" style="padding: 15px 10px 15px 19px;">
+            <div class="col-lg-4 pt-5 pl-0">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">Party Creditor Master</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 pr-0">
+                <div class="col-sm-3 col-lg-offset-2">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="txtsearchbox" autofocus class="form-control searchbox" placeholder="Search Here...">
+                        <div class="form-control-feedback">
+                            <i class="icon-search4 text-size-base"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <label class="control-label" for="chkisAddress" style="">Is Address</label>
+                    <input id="chkisAddress" type="checkbox" name="chk_address" onclick="Partydetailview.Bind_IsAddress()" tabindex="2" unchecked class="chkisAddress" style="margin-left:10px" />
+                </div>
+                <div class="col-sm-5" style="text-align:right;">
+                    @if (Model.ISADD == 1)
+                    {
+                        <button class="formstylebutton  btn  waves-effect waves-light m-t-10 btnAlladdress" type="button" id="btnAlladdress" style="font-weight: 600 !important; background-color: #008CBA;color:white"><i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Update Address</button>
+                        <button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddnewparty" style="font-weight:600!important"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New Party</button>
+                    }
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5 pull-right" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important;background:#fff !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="jqGrid_wrapper" id="jqgrid_Partydetail">
+                    <table id="table_list_Partydetail"></table>
+                    <div id="pager_list_Partydetail"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Modal_PartyMasterDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Party Master</h5>
+                </div>
+                <form class="form-horizontal" id="frm_PartyMaster" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Party Name: </dt>
+                                <dd id="dellblpartyname"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnDeletePartyMaster" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                        <button id="btnDeleteCancelPartyMaster" name="DeleteCancelPartyMaster" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="ModelProfileImage" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h5 class="modal-title">Upload Photo</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="frmUploadImage" method="get">
+                        <div class="row" style="margin:0px 5px;">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="image-cropper-container content-group" style="width:400px;background:gray !important;">
+                                    <img src="" id="partyimgcrop" alt="" class="cropper">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="col-md-12 col-md-12 col-xs-6 pl0 pr0">
+                                    <div class="content-group">
+                                        <div class="eg-preview">
+                                            <div class="preview preview-lg"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-6 pl0 pr0 MarginDesktop">
+                                    <div class="docs-buttons1">
+                                        <div class="btn-group btn-group-crop">
+                                            <button type="button" class="btn bg-blue btn-icon legitRipple" data-method="getCroppedCanvas" data-option="{ &quot;width&quot;: 2506, &quot;height&quot;: 1200 }">
+                                                <span id="pictursetbtn" class="docs-tooltip" title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 1200, height: 300 })">
+                                                    Set Photo
+                                                </span>
+                                            </button>
+                                            <button type="button" class="btn bg-blue btn-icon legitRipple" data-method="rotate" data-option="-45" title="Rotate Left">
+                                                <span class="icon-rotate-ccw3"></span>
+                                            </button>
+                                            <button type="button" class="btn bg-blue btn-icon legitRipple" data-method="rotate" data-option="45" title="Rotate Right">
+                                                <span class="icon-rotate-cw3"></span>
+                                            </button>
+                                        </div>
+                                        <div style="display:none;" id="divLoaderDP">
+                                            <img src="~/Content/assets/images/Loader.gif" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin:0px 5px;">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div id="dpCropCanvas">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*for store labourcode first time*@
+
+    <input type="hidden" id="partyid" />
+</div>
+
+
+<!-- Address Modal -->
+<div class="modal" tabindex="-1" role="dialog" id="divaddress" style="display:none;position:absolute" flag="0">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #e5986673">
+                <h5 style="text-align:center" class="modal-title">NOTIFICATION <i class="fa fa-bell" aria-hidden="true"></i></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to select address box ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSaveaddress">YES</button>
+                <button type="button" class="btn btn-secondary" id="btncloseaddress" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Address Modal -->
+
+@section Scripts{
+    <script src="~/Content/assets/plugin/Cropper/cropper.min.js"></script>
+    <script src="~/Scripts/MasterScripts/Master/PartyMaster.js?v=@DateTime.UtcNow"></script>       @*?v=@DateTime.UtcNow*@
+    <script id="BankSwiftCodeList" type="text/x-jsrender">
+        <option value="{{>partymasterid}}">{{>swiftcode}}</option>
+    </script>
+    <script id="BalnceSheetGroupList" type="text/x-jsrender">
+        <option value="{{>balancesheetgroupid}}">{{>bsgroupname.replaceAll('&amp;','&')}}</option>
+    </script>
+    <script id="TDSCodeList" type="text/x-jsrender">
+        <option value="{{>tdsid}}" tradingtds="{{>istdstrading}}">{{>code }} - {{>description.replaceAll('&amp;','&')}}</option>
+    </script>
+    <script id="TradingTDSCodeList" type="text/x-jsrender">
+        <option value="{{>tdsid}}" tradingtds="{{>istdstrading}}">{{>code }} - {{>description.replaceAll('&amp;','&')}}</option>
+    </script>
+    <script id="TDSTypeSelect" type="text/x-jsrender">
+        <option value="{{>tdsid}}" tradingtds="{{>istdstrading}}">{{>code }} - {{>description.replaceAll('&amp;','&')}}</option>
+    </script>
+    <script id="BankNameSelect" type="text/x-jsrender">
+        <option value="{{>bankmasterid}}">{{>bankname}}</option>
+    </script>
+    <script type="text/x-jsrender" id="CommonMasterDetailDropdownList">
+        <option value="{{>commonmasterdetailid}}">{{>commonmasterdetailname}}</option>
+    </script>
+
+    <script type="text/x-jsrender" id="LabourCodeList">
+        <option value="{{>labourid}}">{{>labourcode}}</option>
+    </script>
+}
+

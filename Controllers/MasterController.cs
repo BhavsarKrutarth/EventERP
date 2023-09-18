@@ -46,5 +46,25 @@ namespace EventERP.Controllers
         {
             return View(FormPermissionHelper.GetFormPermission("User_Account", "Master"));
         }
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult BranchMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("BranchMaster", "Master"));
+        }
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult HSNCodeMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("HSNCodeMaster", "Master"));
+        }
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult CustomerMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("CustomerMaster", "Master"));
+        }
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult PartyMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("PartyMaster", "Master"));
+        }
     }
 }
