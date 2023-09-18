@@ -1,0 +1,349 @@
+
+@{
+    ViewBag.Title = "BankMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .OtherCheck:focus {
+        border: 35px solid #ffa5004a !important;
+        background: #fff;
+        box-shadow: 0 0 5px 0px #ffa500e8;
+    }
+
+    .orangebackcolor {
+        /*background: rgba(255, 165, 0, 0.29);*/
+        background-color: rgb(57, 132, 198) !important;
+        color: #fff;
+    }
+
+    #tablelist tbody tr td {
+        padding: 5px;
+    }
+
+    #chequemasterissuelistbody tr {
+        cursor: pointer;
+    }
+
+    .icheckbox_minimal-blue {
+        position: relative !important;
+    }
+</style>
+
+<!-- Page container -->
+<input id="hdnBankMasterId" type="hidden" />
+<div class="page-container">
+    <div class="panel" id="panelBankMasterList" style="display: block; margin-bottom: 0px;">
+        <div class="row panel-heading">
+            <div class="col-lg-7 pt-5 pl-0">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">Bank Master</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 pr-0">
+                <div class="col-sm-8 txtR">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="txtsearchbox" class="form-control searchbox" placeholder="Search Here..." autofocus>
+                        <div class="form-control-feedback">
+                            <i class="icon-search4 text-size-base"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 pr-0 txtR">
+                    @if (Model.ISADD == 1)
+                    {
+                        <button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddBankMaster" style="font-weight:600!important"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>
+                    }
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5 pull-right" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="jqGrid_wrapper" id="jqgrid_BankMaster">
+                    <table id="table_BankMaster"></table>
+                    <div id="pager_BankMaster"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Modal_BankMasterEdit" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="col-sm-2">
+                        <h5 class="modal-title">Bank Master</h5>
+                    </div>
+                    <div class="col-sm-10 txtR">
+                        <span class="modal-title">Selected Store Branch Name : </span>
+                        <label id="lblbranchnameid"><b>@EventERP.CommonClasses.SessionFacade.UserSession.EMPBRANCHNAME</b></label>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="#" id="frmBankMaster">
+                        <fieldset class="content-group">
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Bank Title<span style="color:red"> *</span></label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control required uppercase" tabindex="1" name="BankName" id="txtBankName">
+                                </div>
+                                <label class="control-label col-lg-3 txtR">Branch Name<span style="color:red"> *</span></label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control required" name="BranchName" tabindex="7" id="txtBranchName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Short Name<span style="color:red"> *</span></label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control required uppercase" name="ShortName" tabindex="2" id="txtShortName">
+                                </div>
+                                <label class="control-label col-lg-3 txtR">Bank Name</label>
+                                <div class="col-lg-3">
+                                    <select class="form-control" name="ddlBankNameId" tabindex="8" id="ddlBankNameId"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Balance Sheet Group<span style="color:red"> *</span></label>
+                                <div class="col-lg-3">
+                                    <select class="form-control required" name="BalanceSheetGroup" tabindex="3" id="ddlBalanceSheetGroupId"></select>
+                                </div>
+                                <label class="control-label col-lg-3 txtR">Phone</label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control mobilenomask" name="Phone" tabindex="9" id="txtPhone">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Account No<span style="color:red"> *</span></label>
+                                <div class="col-lg-3">
+                                    <input type="number" class="form-control required" name="AccountNo" tabindex="4" id="txtAccountNo">
+                                </div>
+                                <label class="control-label col-lg-3 txtR">GST No</label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control masked gstnomask" name="GSTNo" tabindex="10" id="txtGSTNo">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">IFSC/Swift Code</label>
+                                <div class="col-lg-3">
+                                    <input type="text" name="SwiftCode" class="form-control " tabindex="5" id="txtSwiftCode">
+                                </div>
+                                <label class="control-label col-lg-3 txtR">RPT File Name<span style="color:red"> *</span></label>
+                                <div class="col-lg-3">
+                                    <select id="ddlRPTfile" name="ddlRPTfile" tabindex="11" class="form-control required"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Bank Link</label>
+                                <div class="col-lg-3">
+                                    <input type="text" name="txtBankLink" class="form-control " tabindex="6" id="txtBankLink">
+                                </div>
+                                @*<label class="control-label col-lg-3 txtR">Opening Amount<span style="color:red"> *</span></label>
+                                    <div class="col-lg-3">
+                                        <input type="text" name="txtOpeningAmount" class="form-control " tabindex="12" id="txtOpeningAmount">
+                                    </div>*@
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Active</label>
+                                <div class="col-lg-32">
+                                    <input id="chkIsActive" type="checkbox" name="txtIsActive" tabindex="12" checked class="icheckminimal" />
+                                </div>
+                            </div>
+
+                            @*-----------------ChequeBookMaster-------------------*@
+                            <div class="form-group">
+                                <label class="control-label col-sm-2 pr-0">Cheque Book<span style="color:red"> *</span></label>
+                                <div class="col-sm-10 FrmCommom">
+                                    <table style="border:1px solid #ccc" border="1" id="distablecolumndiv">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10%;">No.</th>
+                                                <th style="width:20%;">Start Cheque No.</th>
+                                                <th style="width:20%;">End Cheque No.</th>
+                                                <th style="width:10%;">Total Cheque</th>
+                                                <th style="width:20%;">Issue Date</th>
+                                                <th style="width:10%;">Active</th>
+                                                <th style="width:10%;">Remove</th>
+                                                <th style="display:none"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="chequemasterbody">
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="7">
+                                                    <a class="pull-left" id="addnewcommomLine" onclick="ItemAddNewRowModal()">+ Add New Line</a>
+                                                </th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            @*-----------------/ChequeBookMaster-------------------*@
+
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                    {
+                        <button type="button" id="btnSaveBankMaster" class="btn btn-success btnSave" tabindex="12"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Save</button>
+                    }
+                    <button type="button" name="CancelBankMaster" class="btn bg-slate-400 btnCancel"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Modal_BankMasterDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Item Group</h5>
+                </div>
+                <form class="form-horizontal" id="frmBankMasterDelete" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Bank Name: </dt>
+                                <dd id="delBankName"></dd>
+                                <dt>Account No: </dt>
+                                <dd id="delAccountNo"></dd>
+                                <dt>Brnach Name: </dt>
+                                <dd id="delBrnachName"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="CancelBankMaster" class="btn bg-slate-400 " type="button"><i class="fa fa-times"></i> Cancel</button>
+                        <button type="button" id="btnDeleteBankMaster" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Cheque Book Master View Details-->
+    <div class="mt-10" id="panelChequeBookIssueList" style="display:none;">
+        <div class="col-sm-12">
+            <div class="col-sm-5 pl-0 pr-0">
+                <div class="panel" id="" style="display: block; margin-bottom: 0px;">
+                    <div class="row panel-heading">
+                        <div class="col-lg-7 pt-5 pl-0">
+                            <div class="clearfix">
+                                <div class="caption">
+                                    <i class="fa fa-th-list"></i>
+                                    <span class="caption-subject font-common-sharp bold"> Cheque Book List</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-5 txtR">
+                            <button id="backissuelist" name="CancelChequeMaster" class="btn bg-slate-400 btnCancel" type="button"><i class="icon-arrow-left8"></i> Back</button>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 0px 29px 15px;">
+                        <span class="">Bank Name : </span><span class="" id="showbankname"></span>
+                    </div>
+                    <div class="panel-body" style="padding: 3px 10px 18px 7px !important">
+                        <div class="col-sm-12 FrmCommom" style="overflow-x:auto; overflow-y:hidden; ">
+                            <table style="border:1px solid #ccc" border="1" id="tablelist">
+                                <thead>
+                                    <tr>
+                                        <th style="width:10%;">No.</th>
+                                        <th style="width:20%;">Start Cheque No.</th>
+                                        <th style="width:20%;">End Cheque No.</th>
+                                        <th style="width:10%;">Total Cheque</th>
+                                        <th style="width:10%;">Issue Qty</th>
+                                        <th style="width:10%;">Cancel Qty</th>
+                                        <th style="width:20%;">Issue Date</th>
+                                        <th style="width:10%;">Active</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="chequemasterissuelistbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7 pr-0">
+                <div class="panel" id="" style="display: block; margin-bottom: 0px;">
+                    <div class="row panel-heading">
+                        <div class="col-lg-7 pt-5 pl-0">
+                            <div class="clearfix">
+                                <div class="caption">
+                                    <i class="fa fa-th-list"></i>
+                                    <span class="caption-subject font-common-sharp bold"> Cheque Issue List</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-5 txtR">
+                            <div class="form-group has-feedback">
+                                <input type="text" id="txtissuesearchbox" class="form-control searchbox" placeholder="Search Here...">
+                                <div class="form-control-feedback">
+                                    <i class="icon-search4 text-size-base"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="padding: 3px 10px 18px 7px !important">
+                        <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                            <div class="jqGrid_wrapper" id="jqGrid_ChequeBookMasterList">
+                                <table id="table_ChequeBookMasterList"></table>
+                                <div id="pager_ChequeBookMasterList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ModalChequeDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Item Group</h5>
+                </div>
+                <form class="form-horizontal" id="frmChequeDelete" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Cheque Name: </dt>
+                                <dd id="delChequeName"></dd>
+                                <dt>Cheque No: </dt>
+                                <dd id="delChequeNo"></dd>
+                                <dt>Amount: </dt>
+                                <dd id="delAmount"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="CancelCheque" name="CancelCheque" class="btn bg-slate-400"><i class="fa fa-times"></i> Cancel</button>
+                        <button type="button" id="btnDeleteCheque" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /page container -->
+@section Scripts{
+    <script src="~/Scripts/MasterScripts/Master/BankMaster.js?v=@DateTime.UtcNow"></script>
+    <script id="BSGroupNameList" type="text/x-jsrender">
+        <option value="{{>balancesheetgroupid}}">{{>bsgroupname}}</option>
+    </script>
+    @*<script id="BankNameList" type="text/x-jsrender">
+            <option value="{{>bankmasterid}}">{{>bankname}}</option>
+        </script>*@
+    <script id="CommonMasterDetailDropdownList" type="text/x-jsrender">
+        <option value="{{>commonmasterdetailid}}">{{>commonmasterdetailname}}</option>
+    </script>
+
+}
+

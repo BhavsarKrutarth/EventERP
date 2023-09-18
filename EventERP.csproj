@@ -148,6 +148,7 @@
     <Compile Include="Helpers\HMTLHelperExtensions.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\MasterScripts\Master\BankMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\BranchMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\City_State_Country\City.js" />
     <Content Include="Scripts\MasterScripts\Master\City_State_Country\Country.js" />
@@ -158,6 +159,7 @@
     <Content Include="Scripts\MasterScripts\Master\EmployeeMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\HSNCodeMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\PartyMaster.js" />
+    <Content Include="Scripts\MasterScripts\Master\TDSMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\UserAccount.js" />
     <Content Include="Views\Master\AccountYearMaster.cshtml" />
     <Content Include="Views\Master\City_State_Country\_City.cshtml" />
@@ -175,6 +177,8 @@
     <Content Include="Views\Master\HSNCodeMaster.cshtml" />
     <Content Include="Views\Master\CustomerMaster.cshtml" />
     <Content Include="Views\Master\PartyMaster.cshtml" />
+    <Content Include="Views\Master\BankMaster.cshtml" />
+    <Content Include="Views\Master\TDSMaster.cshtml" />
     <None Include="Views\Master\User_Groups.cshtml" />
   </ItemGroup>
   <ItemGroup>

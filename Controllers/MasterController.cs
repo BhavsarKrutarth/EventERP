@@ -66,5 +66,16 @@ namespace EventERP.Controllers
         {
             return View(FormPermissionHelper.GetFormPermission("PartyMaster", "Master"));
         }
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult BankMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("BankMaster", "Master"));
+        }
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult TDSMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("TDSMaster", "Master"));
+        }
+
     }
 }
