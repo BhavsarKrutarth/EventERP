@@ -35,5 +35,16 @@ namespace EventERP.Controllers
         {
             return View(FormPermissionHelper.GetFormPermission("CommonMaster", "Master"));
         }
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult EmployeeMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("EmployeeMaster", "Master"));
+        }
+
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult User_Account()
+        {
+            return View(FormPermissionHelper.GetFormPermission("User_Account", "Master"));
+        }
     }
 }

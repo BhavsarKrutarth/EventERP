@@ -142,6 +142,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Handler\FileUploadHandler.ashx.cs">
+      <DependentUpon>FileUploadHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\HMTLHelperExtensions.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Scripts\MasterScripts\Master\City_State_Country\City.js" />
@@ -149,6 +153,8 @@
     <Content Include="Scripts\MasterScripts\Master\City_State_Country\State.js" />
     <Content Include="Scripts\MasterScripts\Master\CommonMaster\CommonMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\CommonMaster\CommonMasterDetails.js" />
+    <Content Include="Scripts\MasterScripts\Master\EmployeeMaster.js" />
+    <Content Include="Scripts\MasterScripts\Master\UserAccount.js" />
     <Content Include="Views\Master\AccountYearMaster.cshtml" />
     <Content Include="Views\Master\City_State_Country\_City.cshtml" />
     <Content Include="Views\Master\City_State_Country\_Country.cshtml" />
@@ -158,6 +164,9 @@
     <Content Include="Views\Master\City_State_Country.cshtml" />
     <Content Include="Views\Master\CommonMaster\_CommonMas.cshtml" />
     <Content Include="Views\Master\CommonMaster\_CommonMasDetail.cshtml" />
+    <Content Include="Views\Master\EmployeeMaster.cshtml" />
+    <Content Include="Helpers\Handler\FileUploadHandler.ashx" />
+    <Content Include="Views\Master\User_Account.cshtml" />
     <None Include="Views\Master\User_Groups.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,96 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "User_Account";
+}
+
+
+<div class="page-container">
+    <div class="panel" id="panelUserAccount" style="display: block; margin-bottom: 0px;">
+        <div class="row panel-heading">
+            <div class="col-md-10 col-sm-6 pt-10 pl-0">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">User Account Master</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 pr-0">
+                <div class="col-lg-7 pull-right">
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5 pull-right" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <form id="frmUserAccount" method="get" autocomplete="off" class="form-horizontal">
+
+                <div class="form-group" style="margin-right: 0px; margin-left: 0px;">
+                    <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                        <div class="jqGrid_wrapper" id="jqGrid_UserAccount">
+                            <table id="table_UserAccount"></table>
+                            <div id="pager_UserAccount"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">&nbsp;</div>
+                <div class="form-group" style="margin-right: 0px; margin-left: 0px;">
+                    <div class="col-sm-2">
+                        <input type="checkbox" id="ChkAssignUser" class="icheck" name="UserAccountCheckbox">
+                        <label for="ChkAssignUser" class=""> <span class="pl-30"> Assign User Group </span> </label>
+                    </div>
+                    <div class="col-sm-5 mob-mt5">
+                        <select id="UserAssignChildOf" class="js-example-tags form-control select2-hidden-accessible" multiple="multiple" style="width: 100%"></select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-right: 0px; margin-left: 0px;margin-top:10px;">
+                    <div class="col-sm-2">
+                        <input type="checkbox" id="ChkChangeAccount" class="icheck" name="UserAccountCheckbox">
+                        <label for="ChkChangeAccount" class=""><span class="pl-30">Account status</span></label>
+                    </div>
+                    <div class="col-sm-2 mob-mt5">
+                        <input type="checkbox" name="my-checkbox" id="AccountStatusSwitch" class="switch">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-right: 0px; margin-left: 0px;margin-top:10px;">
+                    <div class="col-sm-2">
+                        <input type="checkbox" id="ResetPassword" class="icheck" name="UserAccountCheckbox">
+                        <label for="ResetPassword" class=""><span class="pl-30">Reset Password as per</span></label>
+                    </div>
+                    <div class="col-sm-5 mob-mt5">
+                        <input name="userName" type="password" class="form-control" id="txtCustomPass" placeholder="Custom password">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-right: 0px; margin-left: 0px;margin-top:10px;">
+                    <div class="col-sm-5 mob-mt5 col-sm-offset-2">
+                        @*<input type="text" class="form-control" name="remark" id="txtRemark">*@
+                        <textarea maxlength="200" class="form-control" name="remark" id="txtRemark" rows="1" placeholder="Enter the remark..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 txtR pr-20" style="margin-bottom: 33px;">
+                        @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                        {
+                            <button class="btn btn-success btnSave" type="button" id="btnSaveUserAccount"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Save</button>
+                        }
+                        <button id="btnCancelUserAccount" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-eraser"></i>&nbsp;&nbsp;Clear</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Scripts/MasterScripts/Master/UserAccount.js?v=@DateTime.UtcNow"></script>
+
+    <script id="childoption" type="text/x-jsrender">
+        <option value="{{>usergroupname}}">{{>usergroupname}}</option>
+    </script>
+}
