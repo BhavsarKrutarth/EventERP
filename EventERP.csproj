@@ -136,6 +136,7 @@
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Filters\DefaultAccessMethodlist.cs" />
     <Compile Include="Filters\SessionExpireFilter.cs" />
     <Compile Include="Global.asax.cs">
@@ -143,6 +144,21 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\MasterScripts\Master\City_State_Country\City.js" />
+    <Content Include="Scripts\MasterScripts\Master\City_State_Country\Country.js" />
+    <Content Include="Scripts\MasterScripts\Master\City_State_Country\State.js" />
+    <Content Include="Scripts\MasterScripts\Master\CommonMaster\CommonMaster.js" />
+    <Content Include="Scripts\MasterScripts\Master\CommonMaster\CommonMasterDetails.js" />
+    <Content Include="Views\Master\AccountYearMaster.cshtml" />
+    <Content Include="Views\Master\City_State_Country\_City.cshtml" />
+    <Content Include="Views\Master\City_State_Country\_Country.cshtml" />
+    <Content Include="Views\Master\City_State_Country\_State.cshtml" />
+    <Content Include="Views\Login\City_State_Country.cshtml" />
+    <Content Include="Views\Master\CommonMaster.cshtml" />
+    <Content Include="Views\Master\City_State_Country.cshtml" />
+    <Content Include="Views\Master\CommonMaster\_CommonMas.cshtml" />
+    <Content Include="Views\Master\CommonMaster\_CommonMasDetail.cshtml" />
+    <None Include="Views\Master\User_Groups.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\EventERPReference\Event_Service.disco" />
@@ -631,6 +647,8 @@
     <Content Include="Scripts\MasterScripts\Home\dashboard.js" />
     <Content Include="Scripts\MasterScripts\Home\DashboardDetails.js" />
     <Content Include="Scripts\MasterScripts\Home\dashboard_emp.js" />
+    <Content Include="Scripts\MasterScripts\Master\AccountYearMaster.js" />
+    <Content Include="Scripts\MasterScripts\Master\UserGroups.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -1,0 +1,173 @@
+﻿<div class="row">
+    <!-- add edit form modal-->
+    <div id="panelCommonMasterEdit" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="spanopertype">Common Master</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="frmCommon" method="post">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label addstar">Common Master Name</label>
+                            <div class="col-sm-6">
+                                <input type="text" placeholder="Enter Name" class="form-control" name="CMName" tabindex="1" maxlength="500" id="txtCMName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label addstar">Description</label>
+                            <div class="col-sm-6">
+                                <input type="text" placeholder="Enter Description" class="form-control" maxlength="500" name="CMDescription" tabindex="2" id="txtCMDescription">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label addstar">Display Order</label>
+                            <div class="col-sm-6">
+                                <input type="number" placeholder="Display order" class="form-control" maxlength="9" tabindex="3" id="txtCMDisplayOrder">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Icon</label>
+                            <div class="col-sm-6">
+                                <div class="input-group m-b-sm">
+                                    <input type="text" placeholder="Enter icon name" class="form-control" maxlength="50" name="Icon" tabindex="4" id="txtIcon" />
+                                    <span class="input-group-addon" onclick="javascript: window.open('@System.Configuration.ConfigurationManager.AppSettings["domainPath"]/Content/assets/css/icons/icomoon/icons_icomoon.html', '_blank')">
+                                        Help!
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Add Column</label>
+                            <div class="col-sm-8" id="FrmCommomItemList">
+                                <table style="border:1px solid #ccc" border="1" id="distablecolumndiv">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:10%;">No.</th>
+                                            <th style="display:none"></th>
+                                            <th style="width:40%;">Column Name</th>
+                                            <th style="width:40%;">Data Type</th>
+                                            <th style="width:10%;">Remove</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="distablecolumnbody">
+                                        @*<tr>
+                                                <td style="text-align: center;"></td>
+                                                <td>
+                                                    <input type="text" class="form-control txtcolumnname" name="txtcolumnname1" id="txtcolumnname1">
+                                                </td>
+                                                <td>
+                                                    <select class="form-control txtdatatype" name="txtdatatype1" id="txtdatatype1">
+                                                        <option value="int">int</option>
+                                                        <option value="varchar(100)">varchar(100)</option>
+                                                        <option value="varchar(MAX)">varchar(MAX)</option>
+                                                        <option value="decimal(18,2)">decimal(18,2)</option>
+                                                        <option value="decimal(18,4)">decimal(18,4)</option>
+                                                    </select>
+                                                </td>
+                                                <td class="btnAddcommomRemove">
+                                                    <div>
+                                                        <i class="icon-cancel-circle2" onclick="ItemRemoveRow(this)"></i>
+                                                    </div>
+                                                </td>
+                                            </tr>*@
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="5">
+                                                <a class="pull-left" id="addnewcommomLine" onclick="ItemAddNewRowModal()">+ Add New Line</a>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                    {
+                        <button class="btn btn-success btnSave" type="button" id="btnSubmit"><i class="fa fa-floppy-o"></i> Save</button>
+                    }
+                    <button class="btn bg-slate-400 btnCancel" type="button" id="btnCancel" name="Cancel"><i class="fa fa-times"></i> Cancel</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- End add edit form modal-->
+    <!-- Delete form modal -->
+    <div id="panelCommonMasterDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Common Master</h5>
+                </div>
+                <form class="form-horizontal" id="frmBSGroupMaster" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Common Master Name: </dt>
+                                <dd id="delblCMName"></dd>
+                            </dl>
+                        </div>
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Description: </dt>
+                                <dd id="delblCMDescription"></dd>
+                            </dl>
+                        </div>
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Display Order: </dt>
+                                <dd id="delblCMDisplayOrder"></dd>
+                            </dl>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+
+                        @if (Model.ISDELETE == 1)
+                        {
+                            <button class="btn btn-danger btnDelete" type="button" id="btnDelete"><i class="fa fa-trash-o"></i>Delete</button>
+                        }
+                        <button class="btn bg-slate-400 btnCancel" id="btnBack" type="button" name="Cancel"><i class="fa fa-times"></i>Cancel</button>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!-- End Delete form modal -->
+    <div class="panel" id="panelList" style="display: block; margin-bottom: 0px; border: unset">
+
+        <div class="col-md-5 col-md-offset-7 No-m-display pb-10">
+            <div class="col-sm-9 txtR">
+                <div class="form-group has-feedback">
+                    <input type="text" id="txtsearchbox" class="form-control searchbox" placeholder="Search Here..." autofocus>
+                    <div class="form-control-feedback">
+                        <i class="icon-search4 text-size-base"></i>
+                    </div>
+                </div>
+            </div>
+            @if (Model.ISADD == 1)
+            {
+                <div class="col-sm-3 pr-0 txtR">
+                    <button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAdd" style="font-weight:600!important"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>
+                </div>
+            }
+        </div>
+        <div class="col-sm-12 table-responsive">
+            <div class="jqGrid_wrapper" id="jqGrid_list_CommonMas">
+                <table id="table_CommonMas"></table>
+                <div id="pager_CommonMas"></div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="hdnCMId" value="" />
+</div>
+

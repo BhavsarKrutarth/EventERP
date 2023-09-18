@@ -1,0 +1,97 @@
+﻿<div class="row">
+    <!-- Add/Edit form modal -->
+    <div id="panelCommon_StateMasterEdit" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">State Master</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="frmCommon_StateMaster" method="get">
+                        <div class="form-group">
+                            <label class="control-label col-sm-4">Country Name<span style="color:red"> *</span></label>
+                            <div class="col-sm-8">
+                                <select name="CountryName" id="ddlCountryName" class="form-control required" tabindex="3"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-4">State Name<span style="color:red"> *</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" placeholder="Enter State Name" tabindex="4" name="StateName" id="txtStateName" class="form-control required">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                    <div class="modal-footer">
+                        @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                        {
+                            <button type="button" id="btnSaveCommon_StateMaster" class="btn btn-success btnSave" tabindex="5"><span class="fa fa-floppy-o"></span> Save</button>
+                        }
+                        <button name="CancelCommon_StateMaster" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+    <input id="hdnStateId" value="" hidden />
+    <!-- Add/Edit form modal -->
+    <!-- Delete form modal -->
+    <div id="panelCommon_StateMasterDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">State Master</h5>
+                </div>
+                <form class="form-horizontal" id="frmCommon_CountryMaster" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>State Name: </dt>
+                                <dd id="delblStateName"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @if (Model.ISDELETE == 1)
+                            {
+                        <button type="button" id="btnDeleteCommon_StateMaster" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                        }
+                        <button name="CancelCommon_StateMaster" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /Delete form modal -->
+
+    <div class="panel" id="panelCommon_StateMasterList" style="display: block; margin-bottom: 0px; border:unset">
+            <div class="col-md-5 col-md-offset-7 pb-10">
+                <div class="col-sm-9 txtR">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="txtsearchboxstate" autofocus class="form-control searchbox" placeholder="Search Here...">
+                        <div class="form-control-feedback">
+                            <i class="icon-search4 text-size-base"></i>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.ISADD == 1)
+                {
+                    <div class="col-sm-3 pr-0 txtR">
+                        <button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddCommon_StateMaster" style="font-weight:600!important"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>
+                    </div>
+                }
+            </div>
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="jqGrid_wrapper" id="jqGrid_Common_StateMaster">
+                    <table id="table_Common_StateMaster"></table>
+                    <div id="pager_Common_StateMaster"></div>
+                </div>
+            </div>
+        <input id="hdnCountryId" hidden />
+    </div>
+
+
+</div>
+<script id="CountryDropdownList" type="text/x-jsrender">
+    <option value="{{>countryid}}">{{>countryname}}</option>
+</script>

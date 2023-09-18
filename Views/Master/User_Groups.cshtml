@@ -1,0 +1,270 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "User_Groups";
+}
+
+<style>
+    #mpUserGroup {
+        font-size: 16px;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        vertical-align: unset;
+    }
+
+    #panelMenuRights .icheckbox_minimal-blue {
+        margin: 0px !important;
+    }
+</style>
+
+<!-- Page container -->
+<input id="hdn_usergroupid" type="hidden" />
+<div class="page-container">
+    <div class="panel" id="panelUserGroup" style="display: block; margin-bottom: 0px;">
+        <div class="row panel-heading">
+            <div class="col-lg-7 pt-5 pl-0">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">User Group Master</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 pr-0">
+                <div class="col-sm-8 txtR">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="txtsearchbox" class="form-control searchbox" placeholder="Search Here..." autofocus>
+                        <div class="form-control-feedback">
+                            <i class="icon-search4 text-size-base"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 pr-0 txtR">
+                    @if (Model.ISADD == 1)
+                    {
+                        <button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddNewUserGroup" style="font-weight:600!important"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>
+                    }
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5 pull-right" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 3px 10px 18px 7px !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="jqGrid_wrapper" id="jqgrid_UserGroupdetail">
+                    <table id="table_list_UserGroupdetail"></table>
+                    <div id="pager_list_UserGroupdetail"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Modal_UserGroupEdit" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Group Master</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="#" id="formUserGroup">
+                        <fieldset class="content-group">
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">User Group Name<span style="color:red"> *</span></label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control required" tabindex="1" name="UserGroupName" id="txt_usergroup_name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Allow IP Range</label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control" tabindex="2" id="txt_usergroup_iprangefrom" placeholder="From">
+                                </div>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control" tabindex="3" id="txt_usergroup_iprangeto" placeholder="To">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Allow Individual IP</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control" tabindex="4" id="txt_usergroup_individualip">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Is Voucehr Edit</label>
+                                <div class="col-lg-2">
+                                    <input id="IsVoucehrEdit" name="IsVoucehrEdit" type="checkbox" checked class="icheckminimal" tabindex="5" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Display Order<span style="color:red"> *</span></label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control number required" tabindex="6" id="txt_usergroup_order">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Is Active</label>
+                                <div class="col-lg-2">
+                                    <input id="chkUGIsActive" name="chkUGIsActive" type="checkbox" checked class="icheckminimal" tabindex="7" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSaveUserGroup" class="btn btn-success btnSave" tabindex="7"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Save</button>
+                    <button type="button" id="btnCancelUserGroup" class="btn bg-slate-400 btnCancel" tabindex="8"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="Modal_UserGroupDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Group</h5>
+                </div>
+                <form class="form-horizontal" id="frmCommon_CountryMaster" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>User Group Name: </dt>
+                                <dd id="dellblusergroupname"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnDeleteUserGroupMaster" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                        <button id="btnDeleteCancelUserGroup" name="CancelCommon_CityMaster" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="panel" id="panelMenuRights" style="display: none; margin-bottom: 0px;">
+        <div class="row panel-heading">
+            <div class="col-md-8 col-sm-6 pt-10 pl-0">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">Edit Menu Rights: <span id="mpUserGroup"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 No-m-display pr-0">
+                <div class="btn-group mt7 clearfix pt-10">
+                    <button type="button" class="pull-right formstylebutton btn btn-success waves-effect waves-light m-t-10 btnBack" id="btnBackMenuPermission"><i class="fa fa-arrow-left faa-horizontal"></i>&nbsp;Back</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 3px 10px 18px 7px !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs nav-tabs-highlight" id="tabheader_menupermissions"></ul>
+                </div>
+                <div class="tab-content" id="tabcontent_menupermissions">
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer txtR p-10" style="margin-bottom: 40px;">
+            @if (Model.ISADD == 1)
+            {
+                <button type="button" id="btnSaveMenuPermissions" class="btn btn-success btnSave" tabindex="7"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Save</button>
+            }
+            <button type="button" id="btnCancelMenuPermissions" class="btn bg-slate-400 " tabindex="8"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancel</button>
+        </div>
+    </div>
+</div>
+<!-- /page container -->
+@section Scripts{
+    <script src="~/Scripts/MasterScripts/Master/UserGroups.js?v=@DateTime.UtcNow"></script>
+
+    <script id="JSRMenuPermissionTabsHeader" type="text/x-jsrender">
+        <li class="" role="presentation"><a data-toggle="tab" role="tab" aria-expanded="true" href="#tab-{{>rowno}}" id="tabhead-{{>rowno}}"><i class="{{>icon}}"></i>&nbsp;&nbsp;{{>modulename}}</a></li>
+    </script>
+    <script id="JSRMenuPermissionTabsContent" type="text/x-jsrender">
+        <div id="tab-{{>rowno}}" class="tab-pane" role="tabpanel">
+            <div class="col-sm-3 col-md-2 pull-right">
+                <select id="ddlRight{{>modulename}}" onchange="UserGroupDetailView.setRights('{{>modulename}}');" class="form-control drop-bg">
+                    <option value>Select Right</option>
+                    <option value="0">None</option>
+                    <option value="1">Full Right</option>
+                    <option value="2">Only View</option>
+                    <option value="3">View &amp; Add</option>
+                    <option value="4">View/Add/Update</option>
+                    <option value="5">View/Add/Delete</option>
+                </select>
+            </div>
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row">
+                    <div class="col-sm-12 ipad-scroll ">
+                        <table class="table ipad_width895">
+                            <thead class="l-app-manue">
+                                <tr>
+                                    <th>Menu Name</th>
+                                    <th>Controller</th>
+                                    <th>Action</th>
+                                    <th class="text-center">
+                                        View
+                                        <div style="height: 15px;">
+                                            <input name="chkHead" data-oper="View" data-module="tb{{>modulename}}" type="checkbox" class="icheckminimal" />
+                                        </div>
+                                    </th>
+                                    <th class="text-center">
+                                        Add
+                                        <div style="height: 15px;">
+                                            <input name="chkHead" type="checkbox" data-oper="Add" data-module="tb{{>modulename}}" class="icheckminimal" />
+                                        </div>
+                                    </th>
+                                    <th class="col-md-1 text-center">
+                                        Update<div style="height: 15px;">
+                                            <input name="chkHead" type="checkbox" data-oper="Update" data-module="tb{{>modulename}}" class="icheckminimal" />
+                                        </div>
+                                    </th>
+                                    <th class="col-md-1 text-center">
+                                        Delete<div style="height: 15px;">
+                                            <input name="chkHead" type="checkbox" data-oper="Delete" data-module="tb{{>modulename}}" class="icheckminimal" />
+                                        </div>
+                                    </th>
+                                    <th class="col-md-1 text-center">
+                                        Download<div style="height: 15px;">
+                                            <input name="chkHead" type="checkbox" data-oper="Download" data-module="tb{{>modulename}}" class="icheckminimal" />
+                                        </div>
+                                    </th>
+                                    <th class="text-center">
+                                        Disable IP Lock<div style="height: 15px;">
+                                            <input name="chkHead" type="checkbox" data-oper="DisableIPLock" data-module="tb{{>modulename}}" class="icheckminimal" />
+                                        </div>
+                                    </th>
+                                    <th class="text-center">
+                                        Same Day Lock<div style="height: 15px;">
+                                            <input name="chkHead" type="checkbox" data-oper="SameDayLock" data-module="tb{{>modulename}}" class="icheckminimal" />
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="tb{{>modulename}}">
+                                {{if menulist}}
+                                {{for menulist.menu}}
+                                <tr data-id="{{>menuid}}">
+                                    <td>{{>menuname}}</td>
+                                    <td>{{>controller}}</td>
+                                    <td>{{>action}}</td>
+                                    <td class="text-center"><input id="chkView{{>menuid}}" data-oper="View" name="{{>modulename}}View" type="checkbox" {{if isview == 1}} checked{{/if}} class="icheckminimal" /></td>
+                                    <td class="text-center"><input id="chkAdd{{>menuid}}" data-oper="Add" name="{{>modulename}}Add" type="checkbox" {{if isadd == 1}} checked{{/if}} class="icheckminimal" /></td>
+                                    <td class="text-center"><input id="chkUpdate{{>menuid}}" data-oper="Update" name="{{>modulename}}Update" type="checkbox" {{if isupdate == 1}} checked{{/if}} class="icheckminimal" /></td>
+                                    <td class="text-center"><input id="chkDelete{{>menuid}}" data-oper="Delete" name="{{>modulename}}Delete" type="checkbox" {{if isdelete == 1}} checked{{/if}} class="icheckminimal" /></td>
+                                    <td class="text-center"><input id="chkDownload{{>menuid}}" data-oper="Download" name="{{>modulename}}Download" type="checkbox" {{if isdownload == 1}} checked{{/if}} class="icheckminimal" /></td>
+                                    <td class="text-center"><input id="chkLock{{>menuid}}" data-oper="DisableIPLock" name="{{>modulename}}DisableIPLock" type="checkbox" {{if isdisableiplock == 1}} checked{{/if}} class="icheckminimal" /></td>
+                                    <td class="text-center"><input id="chkSameDayLock{{>menuid}}" data-oper="SameDayLock" name="{{>modulename}}SameDayLock" type="checkbox" {{if issamedaylock == 1}} checked{{/if}} class="icheckminimal" /></td>
+                                </tr>
+                                {{/for}}
+                                {{/if}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+}

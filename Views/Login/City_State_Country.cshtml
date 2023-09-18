@@ -1,0 +1,41 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .tabbable {
+        background: #fff;
+        padding: 20px;
+    }
+</style>
+<div class="page-container">
+    <div class="tabbable custom_tabs">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-expanded="true" onclick="Common_CountryMasterView.triggerInitialClick();" href="#Country">Country</a></li>
+            <li class="" role="presentation"><a data-toggle="tab" role="tab" aria-expanded="true" onclick="Common_StateMasterView.triggerInitialClick();" href="#State">State</a></li>
+            <li class="" role="presentation"><a data-toggle="tab" role="tab" aria-expanded="true" onclick="Common_CityMasterView.triggerInitialClick();" href="#City">City</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="Country">
+                @Html.Partial("~/Views/Master/City_State_Country/_Country.cshtml")
+            </div>
+            <div class="tab-pane" id="State">
+                @Html.Partial("~/Views/Master/City_State_Country/_State.cshtml")
+            </div>
+            <div class="tab-pane" id="City">
+                @Html.Partial("~/Views/Master/City_State_Country/_City.cshtml")
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/MasterScripts/Master/City_State_Country/Country.js?v=@DateTime.UtcNow"></script>
+    <script src="~/Scripts/MasterScripts/Master/City_State_Country/State.js?v=@DateTime.UtcNow"></script>
+    <script src="~/Scripts/MasterScripts/Master/City_State_Country/City.js?v=@DateTime.UtcNow"></script>
+    <script type="text/x-jsrender" id="CountryDropdownList">
+        <option value="{{>countryid}}">{{>countryname}}</option>
+    </script>
+    <script type="text/x-jsrender" id="SateDropdownList">
+        <option value="{{>stateid}}">{{>statename}}</option>
+    </script>
+}

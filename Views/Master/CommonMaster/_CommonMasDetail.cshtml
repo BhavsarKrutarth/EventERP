@@ -1,0 +1,162 @@
+﻿<style>
+    .icheckbox_minimal-blue {
+        margin: 7px 0px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-white">
+            <div class="panel-heading clearfix">
+                <h6 class="panel-title">Common Masters</h6>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="col-md-12 p-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control" style="height: 44px;" placeholder="Search..." id="txtSearchCommonMaster" onkeyup="CommonMasterDetailsView.searchCommonMaster('search');">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" onclick="CommonMasterDetailsView.searchCommonMaster('refresh');" style="padding: 11px 12px 10px 12px !important;"> <i class="icon-reset"></i> </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 p-0" style="margin-top:10px;">
+                            <ul id="MasterContents" class="dropdown-menu" style="display: block; position: static; width: 100%; margin-top: 0; float: none;height: 330px; overflow-y: scroll;"></ul>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <!--add edit form modal-->
+        <div id="panelCommonMasterDetailEdit" class="modal fade" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Common Master Details</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" id="frmCommonDetail" method="post">
+                            <div class="form-group">
+                                <label id="lblCommonMasterName" class="col-sm-3 control-label addstar">Common Master Name<span style="color:red"> *</span></label>
+                                <div class="col-sm-7">
+                                    <input type="text" id="txtCMDName" name="CMDName" maxlength="500" tabindex="1" placeholder="Enter Name" class="form-control required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Display Order</label>
+                                <div class="col-sm-3">
+                                    <input type="number" placeholder="Display order" class="form-control" tabindex="2" maxlength="9" id="txtCMDDisplayOrder">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Is Active</label>
+                                <div class="col-md-1 ">
+                                    <input id="chkIsActive" type="checkbox" name="txtIsActive" tabindex="3" checked class="icheckminimal" />
+                                </div>
+                            </div>
+                            <div id="commondetaildiv">
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                        {
+                            <button class="btn btn-success btnSave" type="button" id="btnDSubmit"><i class="fa fa-floppy-o"></i> Save</button>
+                        }
+                        <button class="btn bg-slate-400 btnCancel" type="button" id="btnDCancel" name="Cancel"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End add edit form modal-->
+        <!--Delete form modal-->
+        <div id="panelDDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="caption">
+                            <i class="fa fa-trash-o font-danger-sharp"></i>
+                            <span class="caption-subject font-danger-sharp bold" id="spandelete">Delete</span>
+                            <span class="caption-subject font-danger-sharp bold" id="spandelHeader"></span>
+                            <span class="caption-helper">removing common master details...</span>
+                        </div>
+                    </div>
+                    <form class="form-horizontal" id="frmBSGroupMaster" method="get">
+                        <div class="modal-body">
+                            <h4 class="text-danger DeleteMsg"></h4>
+                            <div class="form-group">
+                                <dl class="dl-horizontal">
+                                    <dt><span id="spandelLabel"></span> :</dt>
+                                    <dd id="delblCMDName"></dd>
+                                </dl>
+                            </div>
+                            <div class="form-group">
+                                <dl class="dl-horizontal">
+                                    <dt>Display Order: </dt>
+                                    <dd id="delblCMDDisplayOrder"></dd>
+                                </dl>
+                            </div>
+                            <div class="form-group">
+                                <dl class="dl-horizontal">
+                                    <dt>Active: </dt>
+                                    <dd id="delblActive"></dd>
+                                </dl>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-12 col-sm-offset-3 no-pad">
+                                    @if (Model.ISDELETE == 1)
+                                    {
+                                        <button class="btn btn-danger btnDelete" type="button" id="btnDDelete"><i class="fa fa-trash-o"></i>&nbsp;</button>
+                                    }
+                                <button class="btn bg-slate-400 btnCancel" id="btnDBack" type="button" name="Cancel"><i class="fa fa-times"></i>&nbsp;Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--End Delete form modal-->
+        <div class="panel mulPanel" id="panelDList" style="display: none; margin-bottom: 0px;">
+            <div class="row panel-heading">
+                <div class="col-md-8 col-sm-6 pt-10 pl-0">
+                    <div class="clearfix">
+                        <div class="caption">
+                            <i class="fa fa-th-list"></i>
+                            <span class="caption-subject font-common-sharp bold" id="spanListHeader">Common Master Details</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 No-m-display pr-0">
+                    <div class="btn-group mt7 clearfix pull-right">
+                        @if (Model.ISADD == 1)
+                        {
+                            <button class="formstylebutton btn btn-success waves-effect waves-light m-t-10 pull-right btnAddNew" type="button" id="btnDAdd"><i class="fa fa-plus"></i>&nbsp;Add New</button>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body" style="padding: 3px 10px 18px 7px !important">
+                <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden;">
+                    <div class="jqGrid_wrapper1" id="jqgrid_cmd">
+                        <table id="table_CommonMasDetail"></table>
+                        <div id="pager_CommonMasDetail"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="hdnCMDId" value="" />
+        <input type="hidden" id="hdnCommonMasterId" value="" />
+    </div>
+</div>
+<script id="MasterDetailsMenu" type="text/x-jsrender">
+    <li id="li{{>commonmasterid}}"><a href="javascript:void(0)" onclick="javascript:CommonMasterDetailsView.fillGridDetails({{>commonmasterid}});"><i class="{{>icon}}"></i> {{>commonmastername}}</a></li>
+</script>
+
+

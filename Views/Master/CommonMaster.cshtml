@@ -1,0 +1,34 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .tabbable {
+        background: #fff;
+        padding: 20px;
+    }
+</style>
+<div class="page-container">
+    <div class="tabbable custom_tabs">
+        <ul class="nav nav-tabs nav-tabs-highlight">
+            <li class="active" role="presentation">
+                <a data-toggle="tab" role="tab" aria-expanded="true" onclick="MasterView.triggerInitialClick();" href="#tab-1">Common Master</a>
+            </li>
+            <li class="" role="presentation">
+                <a data-toggle="tab" role="tab" aria-expanded="true" onclick="CommonMasterDetailsView.triggerInitialClick();" href="#tab-2">Common Master Detail</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab-1">
+                @Html.Partial("~/Views/Master/CommonMaster/_CommonMas.cshtml")
+            </div>
+            <div class="tab-pane" id="tab-2">
+                @Html.Partial("~/Views/Master/CommonMaster/_CommonMasDetail.cshtml")
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/MasterScripts/Master/CommonMaster/CommonMaster.js"></script>
+    <script src="~/Scripts/MasterScripts/Master/CommonMaster/CommonMasterDetails.js"></script>
+}
