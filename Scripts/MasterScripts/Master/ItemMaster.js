@@ -17,7 +17,7 @@ var ItemMasterView = {
     },
 
     initializeJqgrid: function (url) {
-        var colNames = ['ItemId', 'Item Name', 'Short Name', 'ItemGroup', 'Item Group Name', 'ITEMTYPE', 'HSNID', 'Size Maintain','Auto MRP In Tag','Is Active','HSN Code','Item Type'];
+        var colNames = ['ItemId', 'Item Name', 'Short Name', 'ItemGroup', 'Item Group Name', 'ITEMTYPE', 'HSNID', 'Size Maintain', 'Auto MRP In Tag', 'Is Active', 'HSN Code', 'Item Type','Price'];
         var colModel = [
             { name: "ITEMID", index: "ITEMID", xmlmap: xmlvars.common_colmap + "ITEMID", stype: 'int', sortable: true, hidden: true, search: false },
             { name: "ITEMNAME", width: 15, index: "ITEMNAME", xmlmap: xmlvars.common_colmap + "ITEMNAME", stype: 'text', sortable: true, searchoptions: jqGridVariables.stringSearchOption },
@@ -31,6 +31,7 @@ var ItemMasterView = {
             { name: "ISACTIVE", hidden: true, index: "ISACTIVE", xmlmap: xmlvars.common_colmap + "ISACTIVE", stype: 'int', sortable: true, searchoptions: jqGridVariables.stringSearchOption },
             { name: "HSNCODE", width: 15, index: "HSNCODE", xmlmap: xmlvars.common_colmap + "HSNCODE", stype: 'int', sortable: true, searchoptions: jqGridVariables.stringSearchOption },
             { name: "ITEMTYPE_COMMON", width: 15, index: "ITEMTYPE_COMMON", xmlmap: xmlvars.common_colmap + "ITEMTYPE_COMMON", stype: 'int', sortable: true, searchoptions: jqGridVariables.stringSearchOption },
+            { name: "PRICE", width: 15, index: "PRICE", xmlmap: xmlvars.common_colmap + "PRICE", stype: 'int', sortable: true, searchoptions: jqGridVariables.stringSearchOption },
            
             
 
@@ -137,6 +138,7 @@ var ItemMasterView = {
             $("#ddlItemGroup").val(rowData['ITEMGROUP']);
             $("#ddlItemType").val(rowData['ITEMTYPE']);
             $("#ddlHsnCode").val(rowData['HSNID']);
+            $("#txtPrice").val(rowData['PRICE']);
 
             
             if (rowData['SIZEMANTAIN'] == 1) {
@@ -263,6 +265,7 @@ var ItemMasterView = {
                 "SIZEMANTAIN": (($('input[name="txtSizemantain"]').prop("checked") == true) ? 1 : 0),
                 "AUTOMRPINTAG": (($('input[name="txtAutoMRPInTag"]').prop("checked") == true) ? 1 : 0),
                 "ISACTIVE": (($('input[name="txtIsActive"]').prop("checked") == true) ? 1 : 0),
+                "PRICE": $("#txtPrice").val(),
                 "oper": ItemMasterView.variables.Oper,
                 "ITEMID": ItemMasterView.variables.Masterid
             }
