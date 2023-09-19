@@ -76,6 +76,19 @@ namespace EventERP.Controllers
         {
             return View(FormPermissionHelper.GetFormPermission("TDSMaster", "Master"));
         }
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult ItemGroupMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("ItemGroupMaster", "Master"));
+        }
+
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult ItemMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("ItemMaster", "Master"));
+        }
+        
+
 
     }
 }

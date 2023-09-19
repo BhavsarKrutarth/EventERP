@@ -158,6 +158,8 @@
     <Content Include="Scripts\MasterScripts\Master\CustomerMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\EmployeeMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\HSNCodeMaster.js" />
+    <Content Include="Scripts\MasterScripts\Master\ItemGroupMaster.js" />
+    <Content Include="Scripts\MasterScripts\Master\ItemMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\PartyMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\TDSMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\UserAccount.js" />
@@ -179,6 +181,8 @@
     <Content Include="Views\Master\PartyMaster.cshtml" />
     <Content Include="Views\Master\BankMaster.cshtml" />
     <Content Include="Views\Master\TDSMaster.cshtml" />
+    <Content Include="Views\Master\ItemGroupMaster.cshtml" />
+    <Content Include="Views\Master\ItemMaster.cshtml" />
     <None Include="Views\Master\User_Groups.cshtml" />
   </ItemGroup>
   <ItemGroup>

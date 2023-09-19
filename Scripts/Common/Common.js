@@ -1689,6 +1689,8 @@ function BindDropdown(ddl, optionList, url, selectText) {
                 else
                     $("#" + ddl).html("");
                 var JsonObject = xml2json.parser(data);
+                console.log(ddl)
+                console.log(JsonObject)
                 if (JsonObject.serviceresponse.detailslist != undefined) {
                     $("#" + ddl).append($("#" + optionList).render(JsonObject.serviceresponse.detailslist.details));
                 }

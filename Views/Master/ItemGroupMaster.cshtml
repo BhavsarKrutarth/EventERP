@@ -1,0 +1,126 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Page container -->
+<input id="hdnItemGroupId" type="hidden" />
+<div class="page-container">
+    <div class="panel" id="panelItemGroupMasterList" style="display: block; margin-bottom: 0px;">
+        <div class="row panel-heading">
+            <div class="col-lg-7 pt-5 pl-0">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">Item Group Master</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 pr-0">
+                <div class="col-sm-8 txtR">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="txtsearchbox" class="form-control searchbox" placeholder="Search Here..." autofocus>
+                        <div class="form-control-feedback">
+                            <i class="icon-search4 text-size-base"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 pr-0 txtR">
+                    @if (Model.ISADD == 1)
+                    {
+                        <button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddItemGroupMaster" style="font-weight:600!important"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>
+                    }
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="jqGrid_wrapper" id="jqgrid_ItemGroupdetail">
+                    <table id="table_ItemGroupMaster"></table>
+                    <div id="pager_ItemGroupMaster"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Modal_ItemGroupMasterEdit" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Item Group Master</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="#" id="frmItemGroupMaster">
+                        <fieldset class="content-group">
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Item Group Name<span style="color:red"> *</span></label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control required uppercase" tabindex="1" name="ItemGroupName" id="txtItemGroupName">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Short Name<span style="color:red"> *</span></label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control required uppercase" name="ShortName" tabindex="2" id="txtShortName">
+                                </div>
+                            </div>
+                            
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                    {
+                        <button type="button" id="btnSaveItemGroupMaster" class="btn btn-success btnSave" tabindex="10"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Save</button>
+                    }
+                    <button type="button" name="CancelItemGroupMaster" tabindex="11" class="btn bg-slate-400 btnCancel"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Modal_ItemGroupDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Item Group</h5>
+                </div>
+                <form class="form-horizontal" id="frmCommon_CountryMaster" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Item Group Name: </dt>
+                                <dd id="delblItemGroupName"></dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="btnDeleteItemGroupMaster" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                        <button name="CancelItemGroupMaster" class="btn bg-slate-400 " type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- /page container -->
+@section Scripts{
+    <script src="~/Scripts/MasterScripts/Master/ItemGroupMaster.js?v=@DateTime.UtcNow"></script>
+    <script id="CommonMasterDetailDropdownList" type="text/x-jsrender">
+        <option value="{{>commonmasterdetailid}}">{{>commonmasterdetailname}}</option>
+    </script>
+    <script id="SameItemGroupList" type="text/x-jsrender">
+        <option value="{{>itemgroupid}}">{{>itemgroupname}}</option>
+    </script>
+    <script id="SalesTaxCodeList" type="text/x-jsrender">
+        <option value="{{>hsnid}}">{{>hsncode}}</option>
+    </script>
+}
