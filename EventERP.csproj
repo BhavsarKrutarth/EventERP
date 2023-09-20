@@ -137,6 +137,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
+    <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Filters\DefaultAccessMethodlist.cs" />
     <Compile Include="Filters\SessionExpireFilter.cs" />
     <Compile Include="Global.asax.cs">
@@ -163,6 +164,7 @@
     <Content Include="Scripts\MasterScripts\Master\PartyMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\TDSMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\UserAccount.js" />
+    <Content Include="Scripts\MasterScripts\Transaction\Purchase.js" />
     <Content Include="Views\Master\AccountYearMaster.cshtml" />
     <Content Include="Views\Master\City_State_Country\_City.cshtml" />
     <Content Include="Views\Master\City_State_Country\_Country.cshtml" />
@@ -184,6 +186,7 @@
     <Content Include="Views\Master\ItemGroupMaster.cshtml" />
     <Content Include="Views\Master\ItemMaster.cshtml" />
     <None Include="Views\Master\User_Groups.cshtml" />
+    <Content Include="Views\Transaction\Purchase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\EventERPReference\Event_Service.disco" />

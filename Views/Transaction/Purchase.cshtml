@@ -1,0 +1,254 @@
+@{
+    //Layout = "~/Views/Shared/_Layout_New.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Purchase Quotation";
+}
+
+<div class="page-container">
+    <div class="panel" id="panelView">
+        <div class="panel-heading row">
+            <div class="col-lg-12 pr-0" style="margin-top: 4px;text-align: right;">
+                <div class="col-sm-6" style="float:right;padding-right:5px">
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>&nbsp;&nbsp;
+                    <button class="formstylebutton divflotR btn alpha-green text-green-800 border-green-800" data-toggle="tooltip" data-placement="bottom" title="Excel Print" type="button" id="btnExcelPrint"><i class="fa fa-table"></i></button>
+                    <button class="formstylebutton divflotR btn alpha-danger text-danger-800 border-danger-800" data-toggle="tooltip" data-placement="bottom" title="Pdf" type="button" id="btnPdfPrint"><i class="fa fa-file-pdf-o"></i></button>
+                    @if (Model.ISADD == 1)
+                    {
+                        <button class="divflotR formstylebutton btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddnewQuotation" style='font-weight:600!important'><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>
+                    }
+                    <div class="btn btn-sm btn-default pull-right" id="refreshgrid"><span class="fa fa-refresh" style="color: #617dcf;"></span></div>
+                    <div class="col-sm-6 pull-right">
+                        <div class="form-group has-feedback">
+                            <input type="text" id="txtsearchbox" tabindex="3" class="form-control searchbox" placeholder="Search Here..." autofocus>
+                            <div class="form-control-feedback">
+                                <i class="icon-search4 text-size-large"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden;">
+                <div class="jqGrid_wrapper" id="jqgrid_Quotation">
+                    <table id="table_list_Quotation"></table>
+                    <div id="pager_list_Quotation"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="panelEdit" class="panel_container" style="display:none;">
+        <div class="panel panel-white" id="Billpanel">
+            <div class="row panel-heading" style="padding:0;">
+                <fieldset class="acto-bg">
+                    <form class="form-horizontal col-md-12" id="FrmDetails">
+                        <div class="form-group">
+                            <label id="lblPurchaseCode" class="col-md-1" style="display: none; text-align: end; margin-top:7px"></label>
+                            <label class="control-label col-md-1">A/C Name<span style="color:red"> *</span></label>
+                            <div class="col-md-2">
+                                @*<input tabindex="1" class="form-control mobilenomask keyboard" name="txtMobileNo" id="txtMobileNo" />*@
+                                <input type="text" style="text-transform: uppercase;" class="form-control required txtAutocomplete acto-accountsuggest" onfocusout="Velidation(0,this)" onblur="RemoveEmptyRow()" partymasterid="" placeholder="Search Name/Mobile" id="txtAccount" tabindex="5" onkeyup="PurchaseView.AccountNameAutoComplete(this)" />
+                            </div>
+                            <lable class="control-label col-md-1" style="padding-left: 0;">Date<span style="color:red"> *</span></lable>
+                            <div class="col-md-2">
+                                <input type="date" tabindex="2" class="form-control" name="txtBillDate" id="txtBillDate" onchange="VoucehrDateValidation(this)">
+                                <div class="form-control-feedback">
+                                    <i class="icon-calendar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-3" style="float:right;padding-right:5px">
+                                <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnNext"><i class="fa fa-angle-double-right"></i></button>
+                                <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnViewList"><i class="fa fa-th-list"></i>&nbsp;&nbsp;View List</button>
+                                <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnPrevious"><i class="fa fa-angle-double-left"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
+            <div class="panel-body">
+
+                @*<div class="row mt-15">*@
+                <form class="form-horizontal row acto_frmItemlist" style="padding: 0px;" id="FrmItemList">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:2%;">No.</th>
+                                <th style="width:8%;">Item Group</th>
+                                <th style="width:8%;">Item Name</th>
+                                <th style="width:2%;">Pcs</th>
+                                <th style="width:2%;">HSN</th>
+                                <th style="width:4%;">Rate</th>
+                                <th style="width:4%;">Amount </th>
+                                <th style="width:4%;">Tax Amt </th>
+                                <th style="width:2%;">Amt(Tax)</th>
+                                <th style="width:2%;">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="Quotationitem_tbody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">
+                                    <a class="pull-left" id="addnewPurchLine" onclick="ItemAddNewRow()">+ Add New Line</a>
+                                    Total
+                                </th>
+                                <th id="totalpcs">0</th>
+                                <th></th>
+                                <th></th>
+                                <th id="totalamt">0.000</th>
+                                <th id="totaltaxamt">0.000</th>
+                                <th id="totalamtteax32423">0.000</th>
+                                
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </form>
+                @*</div>*@
+            <div class="col-md-12 mt-15">
+                @*<form class="col-md-9">
+                    <label class="control-label col-md-1">Remark</label>
+                    <div class="col-md-4">
+                        <textarea type="text" onkeyup="AutosuggestRemark(this)" class="form-control keyboard" name="txtRemark" id="txtRemark"></textarea>
+                    </div>
+                </form>*@
+                @*<div class="col-sm-3 divflotR" style="padding-right:0px;">
+            <div class="acto-card">
+                <p class="mb-3 text-muted g-label">Grand Total :</p>
+                <h3 class="mb-0 font-weight-semibold text-right"><span class="g-icon"><i class="fa fa-inr"></i></span> <span id="lblTotl"></span></h3>
+                <p class="mb-3 text-muted wordng" id="lblTotalText"></p>
+            </div>
+        </div>*@
+                <div class="col-md-6 col-lg-offset-6 p-0">
+                    <div class="col-md-12 pl-10 pr-10" style="border-right: 1px solid #dddddd;">
+                        <fieldset>
+                            <legend class="text-semibold">Bill Info</legend>
+                            <form class="form-horizontal col-md-12" id="FrmBillInfo">
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-6">Total Net Amt</label>
+                                    <div class="col-md-6">
+                                        <input type="text" onfocusout="Velidation(0, this)" onblur="CalculateBill_PaymentInfo()" class="form-control txtR numbers fixed pl-0" tabindex="6" name="TotalNetAmt" id="txtTotalNetAmt">
+                                    </div>
+                                </div>
+                                <div class="form-group taxDetails">
+                                    <div class="col-md-2" style="z-index: 999;margin-top: 10%;">
+                                        <input type="checkbox" tabindex="7" class="icheckminimal" name="chkROF" id="chkROF">
+                                        ROF
+                                    </div>
+                                    <div class="col-md-10 pl-0" style="border-left: 1px solid #ddd;">
+                                        <div class="col-md-12 pl-0 pr-0">
+                                            <label class="control-label col-md-5">SGST (<span id="sgstPer">0.00%</span>)</label>
+                                            <div class="col-md-7 pr-0">
+                                                <input type="text" tabindex="8" class="form-control txtR numbers pl-0 fixed" onblur="CalculateBill_PaymentInfo()" name="SGSTTaxAmt" id="txtSGSTTaxAmt">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pl-0 pr-0">
+                                            <label class="control-label col-md-5">CGST (<span id="cgstPer">0.00%</span>)</label>
+                                            <div class="col-md-7 pr-0">
+                                                <input type="text" tabindex="9" class="form-control txtR numbers pl-0 fixed" onblur="CalculateBill_PaymentInfo()" name="CGSTTaxAmt" id="txtCGSTTaxAmt">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pl-0 pr-0">
+                                            <label class="control-label col-md-5">IGST (<span id="igstPer">0.00%</span>)</label>
+                                            <div class="col-md-7 pr-0">
+                                                <input type="text" tabindex="10" class="form-control txtR numbers pl-0 fixed" onblur="CalculateBill_PaymentInfo()" name="IGSTTaxAmt" id="txtIGSTTaxAmt">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-6" id="lblamtwithtax">Amt With Tax</label>
+                                    <div class="col-md-6">
+                                        <input type="text" tabindex="11" onblur="CalculateBill_PaymentInfo()" onfocusout="Velidation(0, this)" class="form-control txtR numbers fixed pl-0" name="TotalWithTaxAmt" id="txtTotalWithTaxAmt">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-6">ROF Amt</label>
+
+                                    <div class="col-md-6">
+                                        <input type="text" tabindex="12" onblur="CalculateBill_PaymentInfo()" onfocusout="RoundOffLive()" class="form-control txtR negative fixed pl-0" name="ROFAmt" id="txtROFAmt">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-6">Total Amt</label>
+                                    <div class="col-md-6">
+                                        @*onblur="OnBlurTotalAmt()"*@
+                                        <input type="text" tabindex="13" onfocusout="Velidation(0, this)" class="form-control txtR numbers fixed pl-0" name="TotalAmt" id="txtTotalAmt">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 pr-0">
+                                    <button type="button" class="pull-right" name="btnReCalculate" id="btnReCalculate">
+                                        <i class="fa fa-refresh"></i> Refresh
+                                    </button>
+                                </div>
+                            </form>
+                        </fieldset>
+                    </div>
+
+             
+                </div>
+            </div>
+
+            </div>
+            <div class="panel-footer p-10 txtC">
+                <button type="button" class="btn btn-info btn-labeled-left btn-sm" id="btnPrint" style="display:none;"><i class="fa fa-print"></i>&nbsp;&nbsp;Print</button>
+                @if (Model.ISADD == 1)
+                {
+                    @*<button type="button" id="btnSavePrint" class="btn btn-info btn-labeled btn-labeled-left btn-sm"><b><i class="fa fa-print"></i></b> Save & Print</button>*@
+                    <button type="button" id="btnSaveQuotation" class="btn btn-success btn-labeled btn-labeled-left btn-sm btnSave"><b><i class="fa fa-save"></i></b> Save</button>
+                }
+                <button type="button" id="btncancelQuotation" class="btn btn-warning btn-labeled btn-labeled-left btn-sm btnCancel"><b><i class="fa fa-times"></i></b> Cancel</button>
+                <button type="button" class="formstylebutton ExitWindow btn btn-labeled btn-labeled-left btn-sm btn-danger"><b><i class="fa fa-close"></i></b>Exit</button>
+            </div>
+        </div>
+    </div>
+    <!-- Delete form modal -->
+    <div id="ModalQuotationDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Purchase Quotation</h5>
+                </div>
+                <form class="form-horizontal" id="frmQuotationDelete" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Code: </dt>
+                                <dd id="delCode"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @if (Model.ISDELETE == 1)
+                        {
+                            <button type="button" id="btnDeleteQuotation" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                        }
+                        <button id="btnCancelDelete" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- /Delete form modal -->
+</div>
+<!------ /old Design ------>
+
+<input type="hidden" id="hdnQuotationId" />
+<input id="hdnVenderStateId" type="hidden" />
+
+
+@section scripts{
+    <script type="text/x-jsrender" id="HSNDropdownList">
+        <option gst="{{>gst}}" value="{{>hsnid}}">{{>hsncode}} - Gst({{>gst}} %)</option>
+    </script>
+    <script src="~/Scripts/MasterScripts/Transaction/Purchase.js?v=@DateTime.UtcNow"></script>
+    @*<script src="~/Content/assets/plugin/export-table/libs/base64.js"></script>
+        <script src="~/Content/assets/plugin/export-table/libs/sprintf.js"></script>
+        <script src="~/Content/assets/plugin/export-table/jspdf.js"></script>
+        <script src="~/Content/assets/plugin/export-table/tableExport.js"></script>*@
+}
+
