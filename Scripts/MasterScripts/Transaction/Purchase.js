@@ -186,6 +186,9 @@ var PurchaseView = {
                                         '<input  value="' + innerjsonDetails.pcs +'" type="text" class="txtPcs form-control txtR number pcs required" onkeyup="PurchaseView.Calculation(this,' + PurchaseView.variables.ListId + ')" name="txtPcs' + PurchaseView.variables.ListId + '" id="txtPcs' + PurchaseView.variables.ListId + '">' +
                                         '</td>' +
                                         '<td>' +
+                                        '<input value="' + innerjsonDetails.itemtype +'" disabled type="text" class="txtitemtype form-control txtR number pcs required"  name="txtitemtype' + PurchaseView.variables.ListId + '" id="txtitemtype' + PurchaseView.variables.ListId + '">' +
+                                        '</td>' +
+                                        '<td>' +
                                         '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="ValueChange(' + PurchaseView.variables.ListId + ')" name="HsnCode' + PurchaseView.variables.ListId + '" id="txtHsnCode' + PurchaseView.variables.ListId + '"></select>' +
                                         '</td>' +
                                         '<td>' +
@@ -341,27 +344,26 @@ var PurchaseView = {
 
     SaveData: function (IsPrint) {
         try {
-            PurchaseView.VoucherDateCheck();
-          
-            var ItemName = $(".txtItemName");
-            var i = 1;
-            if ($("#Quotationitem_tbody tr").length > 1) {
-                for (i; ItemName.length > i; i++) {
-                    if ($("#" + ItemName[i].id).val() == '') {
-                        $(ItemName[i]).parent().parent().remove();
-                    }
-                }
-            }
+            debugger
             if ($("#Quotationitem_tbody tr:first td:nth-child(2) input").val() == "") {
                 $("#Quotationitem_tbody tr:first td:nth-child(2) input").addClass('table-input-error');
             } else {
                 $("#Quotationitem_tbody tr:first td:nth-child(2) input").removeClass('table-input-error');
             }
-            if ($("#txtBillDate").val() == '') {
-                $("#txtBillDate").addClass('table-input-error');
+
+            if ($("#Quotationitem_tbody tr:first td:nth-child(3) input").val() == "") {
+                $("#Quotationitem_tbody tr:first td:nth-child(3) input").addClass('table-input-error');
             } else {
-                $("#txtBillDate").removeClass('table-input-error');
+                $("#Quotationitem_tbody tr:first td:nth-child(3) input").removeClass('table-input-error');
             }
+
+            if ($("#Quotationitem_tbody tr:first td:nth-child(4) input").val() == "") {
+                $("#Quotationitem_tbody tr:first td:nth-child(4) input").addClass('table-input-error');
+            } else {
+                $("#Quotationitem_tbody tr:first td:nth-child(4) input").removeClass('table-input-error');
+            }
+
+            
             error = $(".table-input-error")
             if (error.length > 0) {
                 notificationTost('warning', 'Fields with red lines are required.');
@@ -1302,6 +1304,7 @@ function AutosuggestSubitemName(id) {
                                                     HSNID: item.hsnid,
                                                     HSNCODE: item.hsncode,
                                                     PRICE: item.price,
+                                                    ITEMTYPE_COMMON: item.itemtype_common,
                                                 }
                                             }
                                             else {
@@ -1314,6 +1317,7 @@ function AutosuggestSubitemName(id) {
                                                     HSNID: item.hsnid,
                                                     HSNCODE: item.hsncode,
                                                     PRICE: item.price,
+                                                    ITEMTYPE_COMMON: item.itemtype_common,
                                                 }
                                             }
                                         }))
@@ -1349,6 +1353,7 @@ function AutosuggestSubitemName(id) {
                         $("#txtSubitemName" + append).attr('itemid', ui.item.Id);
                         $("#txtHsnCode" + append).val(ui.item.HSNID)
                         $("#txtRate" + append).val(ui.item.PRICE)
+                        $("#txtitemtype" + append).val(ui.item.ITEMTYPE_COMMON)
                         PurchaseView.Calculation()
                     } else {
                         setTimeout(function () {
@@ -1390,14 +1395,18 @@ function ItemAddNewRow() {
         $("#Quotationitem_tbody").append('<tr>' +
             '<td style="text-align: center;"></td>' +
             '<td>' +
-            '<input  tabindex="1" type="text" onkeyup="AutosuggestItemName(this)" class="form-control txtItemName txtAutocomplete" onfocusout="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtItemName' + PurchaseView.variables.ListId + '" id="txtItemName' + PurchaseView.variables.ListId + '">' +
+            '<input type="text" onkeyup="AutosuggestItemName(this)" class="form-control txtItemName txtAutocomplete" onfocusout="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtItemName' + PurchaseView.variables.ListId + '" id="txtItemName' + PurchaseView.variables.ListId + '">' +
             '</td>' +
             '<td>' +
-            '<input  tabindex="2" type="text" onkeyup="AutosuggestSubitemName(this)" class="form-control txtAutocomplete txtSubitemName" name="txtSubitemName' + PurchaseView.variables.ListId + '" id="txtSubitemName' + PurchaseView.variables.ListId + '">' +
+            '<input  type="text" onkeyup="AutosuggestSubitemName(this)" class="form-control txtAutocomplete txtSubitemName" name="txtSubitemName' + PurchaseView.variables.ListId + '" id="txtSubitemName' + PurchaseView.variables.ListId + '">' +
             '</td>' +
             '<td>' +
-            '<input  tabindex="3" type="text" class="txtPcs form-control txtR number pcs required" onkeyup="PurchaseView.Calculation(this,' + PurchaseView.variables.ListId + ')" name="txtPcs' + PurchaseView.variables.ListId + '" id="txtPcs' + PurchaseView.variables.ListId + '">' +
+            '<input  type="text" class="txtPcs form-control txtR number pcs required" onkeyup="PurchaseView.Calculation(this,' + PurchaseView.variables.ListId + ')" name="txtPcs' + PurchaseView.variables.ListId + '" id="txtPcs' + PurchaseView.variables.ListId + '">' +
             '</td>' +
+            '<td>' +
+            '<input disabled type="text" class="txtitemtype form-control txtR number pcs required"  name="txtitemtype' + PurchaseView.variables.ListId + '" id="txtitemtype' + PurchaseView.variables.ListId + '">' +
+            '</td>' +
+
             '<td>' +
             '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="ValueChange(' + PurchaseView.variables.ListId + ')" name="HsnCode' + PurchaseView.variables.ListId + '" id="txtHsnCode' + PurchaseView.variables.ListId + '"></select>' +
             '</td>' +
@@ -1450,6 +1459,7 @@ function makeFileXml(saveDiv) {
             xmlsaveFiles += '<ITEMGROUPMASTERID>' + $(obj).find('.txtItemName').attr('itemgroupmasterid') + '</ITEMGROUPMASTERID>';
             xmlsaveFiles += '<ITEMID>' + $(obj).find('.txtSubitemName').attr('itemid') + '</ITEMID>';
             xmlsaveFiles += '<PCS>' + $(obj).find('.txtPcs').val() + '</PCS>';
+            xmlsaveFiles += '<ITEMTYPE>' + $(obj).find('.txtitemtype').val() + '</ITEMTYPE>';
             xmlsaveFiles += '<HSNID>' + ($(obj).find('.txtHsnCode').val() || 0) + '</HSNID>';
             xmlsaveFiles += '<GST>' + ($(obj).find(".txtHsnCode").find('option:selected').attr('gst') || 0) + '</GST>';
             xmlsaveFiles += '<RATE>' + ($(obj).find('.txtRate').val() || 0) + '</RATE>';
