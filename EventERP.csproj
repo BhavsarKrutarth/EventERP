@@ -162,6 +162,7 @@
     <Content Include="Scripts\MasterScripts\Master\ItemGroupMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\ItemMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\PartyMaster.js" />
+    <Content Include="Scripts\MasterScripts\Master\TCSMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\TDSMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\UserAccount.js" />
     <Content Include="Scripts\MasterScripts\Transaction\Purchase.js" />
@@ -185,6 +186,7 @@
     <Content Include="Views\Master\TDSMaster.cshtml" />
     <Content Include="Views\Master\ItemGroupMaster.cshtml" />
     <Content Include="Views\Master\ItemMaster.cshtml" />
+    <Content Include="Views\Master\TCSMaster.cshtml" />
     <None Include="Views\Master\User_Groups.cshtml" />
     <Content Include="Views\Transaction\Purchase.cshtml" />
   </ItemGroup>
