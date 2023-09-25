@@ -94,5 +94,11 @@ namespace EventERP.Controllers
             return View(FormPermissionHelper.GetFormPermission("TCSMaster", "Master"));
         }
 
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult GSTMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("GSTMaster", "Master"));
+        }
+
     }
 }
