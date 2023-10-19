@@ -100,5 +100,11 @@ namespace EventERP.Controllers
             return View(FormPermissionHelper.GetFormPermission("GSTMaster", "Master"));
         }
 
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult EventMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("EventMaster", "Master"));
+        }
+
     }
 }

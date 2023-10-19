@@ -158,6 +158,7 @@
     <Content Include="Scripts\MasterScripts\Master\CommonMaster\CommonMasterDetails.js" />
     <Content Include="Scripts\MasterScripts\Master\CustomerMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\EmployeeMaster.js" />
+    <Content Include="Scripts\MasterScripts\Master\EventMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\GSTMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\HSNCodeMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\ItemGroupMaster.js" />
@@ -189,6 +190,7 @@
     <Content Include="Views\Master\ItemMaster.cshtml" />
     <Content Include="Views\Master\TCSMaster.cshtml" />
     <Content Include="Views\Master\GSTMaster.cshtml" />
+    <Content Include="Views\Master\EventMaster.cshtml" />
     <None Include="Views\Master\User_Groups.cshtml" />
     <Content Include="Views\Transaction\Purchase.cshtml" />
   </ItemGroup>
