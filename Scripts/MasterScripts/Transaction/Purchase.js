@@ -822,6 +822,7 @@ var PurchaseView = {
 
                                 if ($("#ddlSeries").val() != 'URDPurchase') {
                                     response(
+                                        
                                         $.map(List, function (item) {
                                             if (jQuery.type(item) == "object") {
                                                 return {
@@ -975,8 +976,16 @@ var PurchaseView = {
                 noResults: "No Results Found"
             },
             select: function (event, ui) {
-                $("#txtAccount").attr("partymasterid", ui.item.venderid)
-                $("#hdnVenderStateId").val(ui.item.StateId)
+                console.log(ui)
+                $("#txtAccount").attr("partymasterid", ui.item.venderid);
+                $("#hdnVenderStateId").val(ui.item.StateId);
+                $("#txtMobile").val(ui.item.mobile != '' ? ui.item.mobile : '');
+                $("#txtPhone").val(ui.item.phoneno != '' ? ui.item.phoneno : '');
+                if (ui.item.cityid) {
+                    $("#ddlCity").attr("cityid", ui.item.cityid);
+                    $("#ddlCity").val(ui.item.cityname)
+                }
+                    
             },
             minLength: 3,
             autoFocus: true
@@ -1011,10 +1020,82 @@ var PurchaseView = {
             ErrorDetails(e, PurchaseView.variables.File);
         }
     },
+    GetVenderDetails: function (id, type) {
+        var myfilter;
+        myfilter = {
+            rules: []
+        };
+        myfilter.rules.push({ field: "ID", op: "eq", data: id });
+        myfilter.rules.push({ field: "ACCOUNTTYPE", op: "eq", data: type });
+        var url = getDomain() + "/Common/BindMastersDetails?ServiceName=CUSTOMERPARTY_GET&myfilters=" + JSON.stringify(myfilter);
+        $.ajax({
+            url: url,
+            type: "POST",
+            async: false,
+            cache: false,
+            success: function (data) {
+                if ($(data).find('RESPONSECODE').text() == "0") {
+                    var JsonObject = xml2json.parser(data);
+
+                    if (JsonObject.serviceresponse.detailslist != undefined) {
+                        List = JsonObject.serviceresponse.detailslist.details;
+
+                        $("#txtAccount").val(List.accountname);
+                        $("#txtAccount").attr('AccountId', List.accid);
+                        $("#txtAccount").attr('AccountType', List.accounttype);
+                        $("#hdnVenderStateId").val(List.stateid);
+                        $("#VenderId").val(List.accountid);
+                        $("#VenderAccId").val(List.accid);
+                        $("#txtMobile").val(List.contact);
+                        $("#txtPhone").val(List.contact1);
+                        $("#txtAddress1").val(List.address);
+                        $("#txtAddress2").val(List.address1);
+                        $("#txtAddress3").val(List.address2);
+                        $("#ddlCity").val(List.cityname);
+                        $("#txtPin").val(List.pincode);
+                        $("#txtPanNo").val(List.panno);
+                        $("#txtGstNo").val(List.gstno);
+                        $("#txtAdhhar").val(List.adharcardno);
+                        $("#txtAccount").removeClass('table-input-error');
+                        if (List.accounttype == 'CUSTOMER') {
+                            if (List.isformoros)
+                                $("#chkIsOSBillNotAccept").iCheck('check');
+                            else
+                                $("#chkIsOSBillNotAccept").iCheck('uncheck');
+
+                            $("#chkform60").iCheck('uncheck');
+                        } else if (List.accounttype == 'PARTY') {
+                            if (List.isformoros)
+                                $("#chkform60").iCheck('check');
+                            else
+                                $("#chkform60").iCheck('uncheck');
+
+                            $("#chkIsOSBillNotAccept").iCheck('uncheck');
+                        }
+                        setTimeout(function () {
+                            $("#purchaseitem_tbody .txtItemName:first").focus();
+                        }, 300);
+                        $("#hdnCommonNewPartyId").val('');
+                        $("#hdnCommonNewCustomerId").val('');
+                    }
+                }
+            }
+        });
+    },
 }
 
 $(document).ready(function () {
     try {
+        var myfilter;
+        myfilter = {
+            rules: []
+        };
+        myfilter.rules.push({ field: "CITY", op: "eq", data: $("#ddlPartyBranch").val() });
+        /*myfilter.rules.push({ field: "GROUP", op: "eq", data: 'Group' });*/
+        var url =  PurchaseView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter);
+
+        PurchaseView.initializeJqgrid(url);
+
         $("#btnReCalculate").click(function () {
             PurchaseView.Calculation();
         })
@@ -1022,7 +1103,8 @@ $(document).ready(function () {
             PurchaseView.Calculation();
         });
         PurchaseView.GetHSNCodeList();
-        PurchaseView.initializeJqgrid(PurchaseView.variables.BindGroupListUrl);
+
+        
 
         $("#txtMobileNo").focus();
         PurchaseView.ClearData();
@@ -1141,6 +1223,29 @@ $(document).ready(function () {
         } else {
             DateFilter();
         }
+
+        $("#CommonCityModal").on('hide.bs.modal', function () {
+            $("#ddlCity").val($("#txtCityAddCommon").val());
+            $("#ddlCity").attr('cityid', $("#hdnNewCityId").val());
+            $("#hdnVenderStateId").val($("#ddlCommonAddState").val());
+            $("#hdnNewCityId").val('');
+            $(".CommonCityAddForm").trigger("reset");
+        });
+
+        $("#AddEditPartyCusomerModal").on('hide.bs.modal', function () {
+            debugger
+            if ($("#hdnCommonNewPartyId").val() != '') {    //--------------- New Party Id for new record
+                Purchasedetailview.GetVenderDetails($("#hdnCommonNewPartyId").val(), 'PARTY');
+            } else if ($("#hdnCommonNewCustomerId").val() != '') {  //--------------- New Customer Id for new record
+                Purchasedetailview.GetVenderDetails($("#hdnCommonNewCustomerId").val(), 'CUSTOMER');
+            } else {
+                setTimeout(function () {
+                    $("#txtAccount").focus();
+                }, 500);
+            }
+        });
+
+      
     }
     catch (e) {
         ErrorDetails(e, PurchaseView.variables.File);
@@ -1526,9 +1631,11 @@ function DateFilter() {
         }
         myfilter = { rules: [] };
         myfilter.rules.push({ field: "FROMDATE", op: "eq", data: FromDate }, { field: "TODATE", op: "eq", data: Todate });
+        myfilter.rules.push({ field: "CITY", op: "eq", data: $("#ddlPartyBranch").val() });
         setTimeout(function () {
             if ($("#txtsearchbox").val().length > 1) {
                 myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#txtsearchbox").val() });
+                
             }
             url = PurchaseView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter);
             PurchaseView.initializeJqgrid(url);
@@ -1541,9 +1648,11 @@ function AllData() {
     try {
         if (!$("#txtToDate").val() && !$("#txtFromDate").val()) {
             myfilter = { rules: [] };
+            myfilter.rules.push({ field: "CITY", op: "eq", data: $("#ddlPartyBranch").val() });
             myfilter.rules.push({ field: "FROMDATE", op: "eq", data: $("#txtFromDate").val() }, { field: "TODATE", op: "eq", data: $("#txtToDate").val() });
             if ($("#txtsearchbox").val().length > 1) {
                 myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#txtsearchbox").val() });
+                
             }
             url = PurchaseView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter);
             PurchaseView.initializeJqgrid(url);

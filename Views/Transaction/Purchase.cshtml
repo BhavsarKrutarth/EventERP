@@ -45,11 +45,11 @@
                     <form class="form-horizontal col-md-12" id="FrmDetails">
                         <div class="form-group">
                             <label id="lblPurchaseCode" class="col-md-1" style="display: none; text-align: end; margin-top:7px"></label>
-                            <label class="control-label col-md-1">A/C Name<span style="color:red"> *</span></label>
-                            <div class="col-md-2">
+                            <!--<label class="control-label col-md-1">A/C Name<span style="color:red"> *</span></label>
+                            <div class="col-md-2">-->
                                 @*<input tabindex="1" class="form-control mobilenomask keyboard" name="txtMobileNo" id="txtMobileNo" />*@
-                                <input type="text" style="text-transform: uppercase;" class="form-control required txtAutocomplete acto-accountsuggest" onfocusout="Velidation(0,this)" onblur="RemoveEmptyRow()" partymasterid="" placeholder="Search Name/Mobile" id="txtAccount" tabindex="5" onkeyup="PurchaseView.AccountNameAutoComplete(this)" />
-                            </div>
+                                <!--<input type="text" style="text-transform: uppercase;" class="form-control required txtAutocomplete acto-accountsuggest" onfocusout="Velidation(0,this)" onblur="RemoveEmptyRow()" partymasterid="" placeholder="Search Name/Mobile" id="txtAccount" tabindex="5" onkeyup="PurchaseView.AccountNameAutoComplete(this)" />
+                            </div>-->
                             <lable class="control-label col-md-1" style="padding-left: 0;">Date<span style="color:red"> *</span></lable>
                             <div class="col-md-2">
                                 <input type="date" tabindex="2" class="form-control" name="txtBillDate" id="txtBillDate" onchange="VoucehrDateValidation(this)">
@@ -108,20 +108,106 @@
                 </form>
                 @*</div>*@
             <div class="col-md-12 mt-15">
-                @*<form class="col-md-9">
-                    <label class="control-label col-md-1">Remark</label>
-                    <div class="col-md-4">
-                        <textarea type="text" onkeyup="AutosuggestRemark(this)" class="form-control keyboard" name="txtRemark" id="txtRemark"></textarea>
-                    </div>
-                </form>*@
-                @*<div class="col-sm-3 divflotR" style="padding-right:0px;">
-            <div class="acto-card">
-                <p class="mb-3 text-muted g-label">Grand Total :</p>
-                <h3 class="mb-0 font-weight-semibold text-right"><span class="g-icon"><i class="fa fa-inr"></i></span> <span id="lblTotl"></span></h3>
-                <p class="mb-3 text-muted wordng" id="lblTotalText"></p>
-            </div>
-        </div>*@
-                <div class="col-md-6 col-lg-offset-6 p-0">
+                <div class="col-md-6" style="border-right: 1px solid #dddddd;">
+                    <fieldset>
+                        <legend class="text-semibold">Account Details</legend>
+                        <form class="form-horizontal col-md-12" style="padding-bottom: 15px;" id="FrmVenderDetails">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2" style="padding-left: 0;">A/C Name<span style="color:red"> *</span></label>
+                                    <div class="col-md-10">
+                                        <div class="input-group">
+                                            <input type="text" style="text-transform: uppercase;" class="form-control required txtAutocomplete acto-accountsuggest" onfocusout="Velidation(0,this)" onblur="PurchaseView.RemoveEmptyRow()" partymasterid="" placeholder="Search Name/Mobile" id="txtAccount" tabindex="5" onkeyup="PurchaseView.AccountNameAutoComplete(this)" />
+                                            <span class="input-group-addon CommonAddEditPartyCustomer" name="CommonAddEditPartyCustomer" style="background-color: #4caf50;color: white;"><i class="fa fa-plus"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 addstar" id="lblPurchaseMobile" style="padding-left: 0;">Mobile No.</label>
+                                    <div class="col-md-4">
+                                        <input type="text" tabindex="6" class="form-control mobilenomask required" onkeyup="Purchasedetailview.AccountNameAutoComplete(this)" name="txtMobile" id="txtMobile" placeholder="Mobile No">
+                                        <div class="form-control-feedback">
+                                            <i class="fa fa-phone"></i>
+                                        </div>
+                                    </div>
+                                    <label class="control-label col-md-2">Phone</label>
+                                    <div class="col-md-4">
+                                        <input type="text" tabindex="7" class="form-control mobilenomask disable" name="txtPhone" id="txtPhone" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">City<span style="color:red"> *</span></label>
+                                    <div class="col-md-4">
+                                        <div class="input-group">
+                                            <input type="text" tabindex="8" onfocusout="Velidation(0, this)" class="form-control required disable" name="City" id="ddlCity" disabled>
+                                            <span class="input-group-addon CommonAddCity" name="CommonAddCity" style="background-color: #4caf50;color: white;"><i class="fa fa-plus"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-2">Pincode</label>
+                                    <div class="col-md-4">
+                                        <input type="text" tabindex="9" class="form-control pincodemask disable" name="Pin" id="txtPin" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Address1</label>
+                                    <div class="col-md-10">
+                                        <input type="text" tabindex="10" class="form-control disable" name="Address1" id="txtAddress1" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Address2</label>
+                                    <div class="col-md-10">
+                                        <input type="text" tabindex="11" class="form-control disable" name="Address2" id="txtAddress2" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Address3</label>
+                                    <div class="col-md-10">
+                                        <input type="text" tabindex="12" class="form-control disable" name="Address3" id="txtAddress3" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 pr-5">GST No</label>
+                                    <div class="col-md-5 pr-0">
+                                        <div class="input-group">
+                                            <input type="text" tabindex="13" onfocusout="OnChangeGST('txtPanNo','txtGstNo')" style="text-transform:uppercase" class="form-control gstnomask disable" name="GstNo" id="txtGstNo" disabled>
+                                            <span class="input-group-addon gstcheck" style="background-color: #4caf50;color: white;">Chk</span>
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-md-1">Pan No</label>
+                                    <div class="col-md-4">
+                                        <input type="text" tabindex="14" style="text-transform:uppercase" class="form-control pannomask disable" name="PanNo" id="txtPanNo" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Adhaar</label>
+                                    <div class="col-md-4">
+                                        <input type="text" tabindex="15" class="form-control adhaarnomask disable" name="Adhhar" id="txtAdhhar" disabled>
+                                    </div>
+
+                                    <div class="col-md-4 col-md-offset-2 party">
+                                        <input type="checkbox" class="icheckminimal" tabindex="16" name="form60" id="chkform60" disabled>
+                                        <label class="control-label disable" style="margin-left: 5px;margin-top: 6px;" for="chkform60">Form 60 rec</label>
+                                    </div>
+
+                                    <div class="col-md-4 col-md-offset-2 customer" style="display: none;">
+                                        <input type="checkbox" class="icheckminimal disable" tabindex="16" name="chkIsOSBillNotAccept" id="chkIsOSBillNotAccept" disabled>
+                                        <label class="control-label" style="margin-left: 5px;margin-top: 6px;" for="chkIsOSBillNotAccept">OS Accept</label>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </form>
+                    </fieldset>
+                </div>
+                <div class="col-md-6">
                     <div class="col-md-12 pl-10 pr-10" style="border-right: 1px solid #dddddd;">
                         <fieldset>
                             <legend class="text-semibold">Bill Info</legend>
@@ -190,7 +276,7 @@
                         </fieldset>
                     </div>
 
-             
+
                 </div>
             </div>
 
