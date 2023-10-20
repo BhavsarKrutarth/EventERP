@@ -1410,6 +1410,8 @@ function AutosuggestSubitemName(id) {
                                                     HSNCODE: item.hsncode,
                                                     PRICE: item.price,
                                                     ITEMTYPE_COMMON: item.itemtype_common,
+                                                    LABOURRATE: item.labourrate,
+                                                    TOTALRATE: item.totalrate,
                                                 }
                                             }
                                             else {
@@ -1423,6 +1425,8 @@ function AutosuggestSubitemName(id) {
                                                     HSNCODE: item.hsncode,
                                                     PRICE: item.price,
                                                     ITEMTYPE_COMMON: item.itemtype_common,
+                                                    LABOURRATE: item.labourrate,
+                                                    TOTALRATE: item.totalrate,
                                                 }
                                             }
                                         }))
@@ -1457,7 +1461,7 @@ function AutosuggestSubitemName(id) {
                     if (ui.item.label != 'No Results Found') {
                         $("#txtSubitemName" + append).attr('itemid', ui.item.Id);
                         $("#txtHsnCode" + append).val(ui.item.HSNID)
-                        $("#txtRate" + append).val(ui.item.PRICE)
+                        $("#txtRate" + append).val(ui.item.TOTALRATE)
                         $("#txtitemtype" + append).val(ui.item.ITEMTYPE_COMMON)
                         PurchaseView.Calculation()
                     } else {
