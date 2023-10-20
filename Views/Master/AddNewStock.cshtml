@@ -1,0 +1,173 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Add New Stock";
+}
+
+<style>
+    .border {
+        border-bottom: 1px solid #ddd;
+        padding: 5px
+    }
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #f5f5f5;
+        color: white;
+        text-align: center;
+    }
+
+    .imgerror {
+        width: 95%;
+        text-align: center;
+    }
+
+    select.error {
+        color: #000 !important;
+    }
+
+    select {
+        padding: 5px 5px !important;
+    }
+
+    .select2-container {
+        width: 100% !important;
+    }
+
+    #profileimg {
+        height: 107px;
+        border: 2px solid #eaeaea;
+        /*padding: 0;*/
+        margin-bottom: 8px;
+        /*margin-left: 12px;*/
+    }
+
+    #btnlbl {
+        border: 2px solid #eaeaea;
+        width: 54%;
+    }
+
+    .addstar {
+        border: 1px solid #eaeaea;
+    }
+
+    .rdlbl {
+        padding-left: 27px;
+        padding-top: 2px;
+    }
+
+    #genderdiv {
+        padding-top: 7px;
+        padding-left: 9px;
+    }
+
+    #img-preview {
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+    }
+</style>
+
+<div class="page-container">
+    <div class="panel pt-10" id="panelEmployeeDetailMasEdit">
+        <form class="form-horizontal" id="frmEmployeeDetailMas" method="get">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="panel panel-flat">
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                @*<fieldset>
+                                    <legend class="text-bold">Item Group Detail</legend>*@
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Item Group</label>
+                                        <div class="col-md-4">
+                                            <select tabindex="1" name="ddlItemGroup" id="ddlItemGroup" class="form-control required"></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*</fieldset>*@
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-12">
+                    <div class="panel panel-flat">
+                        <div class="panel-body">
+                            <div class="col-lg-12">
+                                <fieldset>
+                                    <legend class="text-bold">Item Detail</legend>
+                                    <div class="col-lg-12 text-bold border">
+                                        <div class="col-lg-1" style="text-align:center">Row No</div>
+                                        <div class="col-lg-4" style="text-align:center">Item Name</div>
+                                        <div class="col-lg-2" style="text-align:center">Stock Qty</div>
+                                        <div class="col-lg-2" style="text-align:center">Rent Qty</div>
+                                        <div class="col-lg-2" style="text-align:center">Available Stock Qty</div>
+                                        <div class="col-lg-1" style="text-align:center">Price</div>
+                                    </div>
+                                   
+                                    <div class="col-lg-12" id="divItemDeatil" style="padding-left:0px !important;padding-right:0px !important">
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                        </div>
+
+                        <div class="mulPanel panel-footer txtC p-10 footer">
+                            @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                            {
+                                <button type="button" id="btnSaveStock" class="btn btn-success btnSaveStock" tabindex="33"><span class="fa fa-floppy-o"></span> Save</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <input type="text" id="hdnEmpId" hidden value="" />
+        </form>
+    </div>
+
+</div>
+
+
+
+@section scripts{
+    <script src="~/Scripts/MasterScripts/Master/AddNewStock.js?v=@DateTime.UtcNow"></script>
+    <script type="text/x-jsrender" id="GroupDropdownList">
+        <option value="{{>itemgroupmasterid}}">{{>itemgroupname}}</option>
+    </script>
+
+    <script type="text/x-jsrender" id="ItemDeatilList">
+
+        <div class="col-lg-12 border flage" id="flage{{:itemid}}" changeFlag="false">
+            <div class="col-lg-1" style="text-align:center">
+                <label class="control-label itemid" itemid1="{{:itemid}}">{{:rownum}}</label>
+            </div>
+            <div class="col-lg-4" style="text-align:center">
+                <label class="control-label">{{:itemname}}</label>
+            </div>
+            <div class="col-lg-2" style="text-align:center">
+                <input id="txtstockqty{{:itemid}}" onchange="AddNewStockView.chkStockQty('{{:itemid}}','{{:stockqty}}')" class="txtstockqty form-control" value="{{:stockqty}}" style="text-align: right; " />
+            </div>
+            <div class="col-lg-2" style="text-align:center">
+                <label id="txtrentstockqty{{:itemid}}" class="control-label txtrentstockqty">{{:rentstockqty}}</label>
+            </div>
+            <div class="col-lg-2" style="text-align:center">
+                <label id="txtavailablestockqty{{:itemid}}" class="control-label txtavailablestockqty">{{:availablestockqty}}</label>
+            </div>
+            <div class="col-lg-1" style="text-align:center">
+                <label class="control-label">{{:totalrate}}</label>
+            </div>
+        </div>
+    </script>
+}
+
+
+
+

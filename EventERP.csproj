@@ -149,6 +149,7 @@
     <Compile Include="Helpers\HMTLHelperExtensions.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\MasterScripts\Master\AddNewStock.js" />
     <Content Include="Scripts\MasterScripts\Master\BankMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\BranchMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\City_State_Country\City.js" />
@@ -191,6 +192,7 @@
     <Content Include="Views\Master\TCSMaster.cshtml" />
     <Content Include="Views\Master\GSTMaster.cshtml" />
     <Content Include="Views\Master\EventMaster.cshtml" />
+    <Content Include="Views\Master\AddNewStock.cshtml" />
     <None Include="Views\Master\User_Groups.cshtml" />
     <Content Include="Views\Transaction\Purchase.cshtml" />
   </ItemGroup>
