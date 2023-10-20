@@ -60,26 +60,40 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3">Price<span style="color:red"> *</span></label>
                             <div class="col-sm-4">
-                                <input type="text" tabindex="10" placeholder="Enter Price" name="txtPrice" id="txtPrice" class="form-control uppercase required">
+                                <input type="number" tabindex="10" placeholder="Enter Price" value="0" name="txtPrice" id="txtPrice" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-sm-3">Size Maintain</label>
-                            <div class="col-sm-1">
-                                <input type="checkbox" tabindex="10" name="txtSizemantain" id="txtSizemantain" class="icheckminimal">
-                            </div>
-                            <label class="control-label col-sm-2">Auto MRP In Tag</label>
-                            <div class="col-sm-1">
-                                <input type="checkbox" tabindex="12" name="txtAutoMRPInTag" id="txtAutoMRPInTag" class="icheckminimal">
-                            </div>
-                            <label class="control-label col-sm-1">Is Active</label>
-                            <div class="col-sm-1">
-                                <input type="checkbox" tabindex="13" name="txtIsActive" id="txtIsActive" checked class="icheckminimal">
+                            <label class="control-label col-sm-3">Labour Rate<span style="color:red"> *</span></label>
+                            <div class="col-sm-4">
+                                <input type="number" tabindex="11" value="0" placeholder="Enter Labour Rate" name="txtLabourRate" id="txtLabourRate" class="form-control">
                             </div>
                         </div>
 
-                    </form>
-                </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Total Rate<span style="color:red"> *</span></label>
+                            <div class="col-sm-4">
+                                <input type="number" disabled tabindex="12" value="0" placeholder="Enter Labour Rate" name="txtTotalRate" id="txtTotalRate" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Size Maintain</label>
+                            <div class="col-sm-1">
+                                <input type="checkbox" tabindex="13" name="txtSizemantain" id="txtSizemantain" class="icheckminimal">
+                            </div>
+                            <label class="control-label col-sm-2">Auto MRP In Tag</label>
+                            <div class="col-sm-1">
+                                <input type="checkbox" tabindex="14" name="txtAutoMRPInTag" id="txtAutoMRPInTag" class="icheckminimal">
+                            </div>
+                            <label class="control-label col-sm-1">Is Active</label>
+                            <div class="col-sm-1">
+                                <input type="checkbox" tabindex="15" name="txtIsActive" id="txtIsActive" checked class="icheckminimal">
+                            </div>
+                        </div>
+
+                </form>
+            </div>
                 <div class="modal-footer">
                     @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
                     {
