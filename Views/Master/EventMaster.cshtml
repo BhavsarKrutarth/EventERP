@@ -19,14 +19,14 @@
 </style>
 <div class="page-container">
     <!-- Add/Edit form modal -->
-    <div id="panelItemMasterEdit" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div id="panelEventMasterEdit" class="modal fade" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Event Master</h5>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" id="frmItemMaster" method="get">
+                    <form class="form-horizontal" id="frmEventMaster" method="get">
                         <div class="form-group">
                             <label class="control-label col-sm-3">Event Name<span style="color:red"> *</span></label>
                             <div class="col-sm-9">
@@ -48,7 +48,7 @@
     </div>
     <!-- Add/Edit form modal -->
     <!-- Delete form modal -->
-    <div id="panelItemMasterDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div id="panelEventMasterDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
@@ -58,8 +58,8 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <dl class="dl-horizontal">
-                                <dt>Item Name: </dt>
-                                <dd id="delblItemName"></dd>
+                                <dt>Event Name: </dt>
+                                <dd id="delblEventName"></dd>
                             </dl>
                         </div>
                     </div>
@@ -75,7 +75,7 @@
         </div>
     </div>
     <!-- /Delete form modal -->
-    <div class="panel" id="panelItemMasterList" style="display: block; margin-bottom: 0px;">
+    <div class="panel" id="panelEventMasterList" style="display: block; margin-bottom: 0px;">
         <div class="row panel-heading">
             <div class="col-lg-7 pt-5 pl-0">
                 <div class="clearfix">
@@ -106,14 +106,14 @@
         </div>
         <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
             <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
-                <div class="jqGrid_wrapper" id="jqGrid_ItemMaster">
-                    <table id="table_ItemMaster"></table>
-                    <div id="pager_ItemMaster"></div>
+                <div class="jqGrid_wrapper" id="jqGrid_EventMaster">
+                    <table id="table_EventMaster"></table>
+                    <div id="pager_EventMaster"></div>
                 </div>
             </div>
         </div>
     </div>
-    <input type="hidden" id="hdnItemId" value="" />
+    <input type="hidden" id="hdnEventMasterid" value="" />
 </div>
 
 @section scripts{
