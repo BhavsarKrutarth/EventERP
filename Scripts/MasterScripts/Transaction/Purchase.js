@@ -14,9 +14,22 @@ var PurchaseView = {
 
     initializeJqgrid: function (url) {
         try {
-            colNames = ['PURCHASEID', 'PURCHASECODE', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT'],
+            colNames = ['PURCHASEID', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO','ADHARCARDNO','PINCODE', 'PURCHASECODE', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT'],
                 colModel = [
                 { name: "PURCHASEID", index: "PURCHASEID", xmlmap: xmlvars.common_colmap + "PURCHASEID", sortable: true, search: false, hidden: true },
+                { name: "STATEID", index: "STATEID", xmlmap: xmlvars.common_colmap + "STATEID", sortable: true, search: false, hidden: true },
+                { name: "MOBILE1", index: "MOBILE1", xmlmap: xmlvars.common_colmap + "MOBILE1", sortable: true, search: false, hidden: true },
+                { name: "PHONENO", index: "PHONENO", xmlmap: xmlvars.common_colmap + "PHONENO", sortable: true, search: false, hidden: true },
+                { name: "CITYID", index: "CITYID", xmlmap: xmlvars.common_colmap + "CITYID", sortable: true, search: false, hidden: true },
+                { name: "CITYNAME", index: "CITYNAME", xmlmap: xmlvars.common_colmap + "CITYNAME", sortable: true, search: false, hidden: true },
+                { name: "PINCODE", index: "PINCODE", xmlmap: xmlvars.common_colmap + "PINCODE", sortable: true, search: false, hidden: true },
+                { name: "ADDRESS1", index: "ADDRESS1", xmlmap: xmlvars.common_colmap + "ADDRESS1", sortable: true, search: false, hidden: true },
+                { name: "ADDRESS2", index: "ADDRESS2", xmlmap: xmlvars.common_colmap + "ADDRESS2", sortable: true, search: false, hidden: true },
+                { name: "ADDRESS3", index: "ADDRESS3", xmlmap: xmlvars.common_colmap + "ADDRESS3", sortable: true, search: false, hidden: true },
+                { name: "GSTNO", index: "GSTNO", xmlmap: xmlvars.common_colmap + "GSTNO", sortable: true, search: false, hidden: true },
+                { name: "PANNO", index: "PANNO", xmlmap: xmlvars.common_colmap + "PANNO", sortable: true, search: false, hidden: true },
+                { name: "ADHARCARDNO", index: "ADHARCARDNO", xmlmap: xmlvars.common_colmap + "ADHARCARDNO", sortable: true, search: false, hidden: true },
+
                 { name: "PURCHASECODE", width: 10, index: "PURCHASECODE", xmlmap: xmlvars.common_colmap + "PURCHASECODE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
                 { name: "PARTYNAME", width: 10, index: "PARTYNAME", xmlmap: xmlvars.common_colmap + "PARTYNAME", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
                 { name: "PARTYMASTERID", width: 10, index: "PARTYMASTERID", xmlmap: xmlvars.common_colmap + "PARTYMASTERID", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
@@ -151,6 +164,19 @@ var PurchaseView = {
             $("#txtROFAmt").val(rowData['ROFAMT'] || 0);
             $("#txtTotalAmt").val(rowData['TOTALAMT'] || 0);
 
+            $("#hdnVenderStateId").val(rowData['STATEID']);
+            $("#txtMobile").val(rowData['MOBILE1']);
+            $("#txtPhone").val(rowData['PHONENO']);
+            $("#ddlCity").attr("cityid", rowData['CITYID']);
+            $("#ddlCity").val(rowData['CITYNAME']);
+            $("#txtPin").val(rowData['PINCODE']);
+            $("#txtAddress1").val(rowData['ADDRESS1']);
+            $("#txtAddress2").val(rowData['ADDRESS2']);
+            $("#txtAddress3").val(rowData['ADDRESS3']);
+            $("#txtGstNo").val(rowData['GSTNO']);
+            $("#txtPanNo").val(rowData['PANNO']);
+            $("#txtAdhhar").val(rowData['ADHARCARDNO']);  
+
            
 
             var myfilter,
@@ -284,13 +310,14 @@ var PurchaseView = {
                 var Rate = $(obj).find(".txtRate").val() || 0;
                 var Amount = PCS * Rate
                 /*$(".txtAmount").val(Amount || 0);*/
-                $(obj).find(".txtAmount").val(Amount || 0)
+                $(obj).find(".txtAmount").val((Amount).toFixed(2) || 0)
                 var gstper = $(obj).find(".txtHsnCode").find('option:selected').attr('gst');
                 var taxamount = (Amount * gstper) / 100;
 
 
-                $(obj).find(".txtteaxAmount").val(taxamount)
-                $(obj).find(".txtAmtTaxTotal").val(taxamount + Amount)
+                $(obj).find(".txtteaxAmount").val((taxamount).toFixed(2) || 0)
+                var TotalAmtTax = taxamount + Amount;
+                $(obj).find(".txtAmtTaxTotal").val((+TotalAmtTax).toFixed(2) || 0)
 
                 /*------ Total --------*/
 
@@ -344,7 +371,6 @@ var PurchaseView = {
 
     SaveData: function (IsPrint) {
         try {
-            debugger
             if ($("#Quotationitem_tbody tr:first td:nth-child(2) input").val() == "") {
                 $("#Quotationitem_tbody tr:first td:nth-child(2) input").addClass('table-input-error');
             } else {
@@ -392,7 +418,8 @@ var PurchaseView = {
                 "ROFAMT": $("#txtROFAmt").val(),
                 "TOTALAMT": $("#txtTotalAmt").val(),
                 "oper": PurchaseView.variables.oper,
-                "XMLPARAM": escape(xmlsaveFiles)
+                "XMLPARAM": escape(xmlsaveFiles),
+                "CITYID": $("#ddlPartyBranch").val()
             };
             $.ajax({
                 url: getDomain() + PurchaseView.variables.PerformMasterOperationUrl,
@@ -576,6 +603,20 @@ var PurchaseView = {
             $("#panelView").show();
             $("#panelEdit").hide();
             $("#txtMobileNo").focus();
+
+            $("#txtAccount").attr("partymasterid", "");
+            $("#hdnVenderStateId").val("");
+            $("#txtMobile").val("");
+            $("#txtPhone").val("");
+            $("#ddlCity").attr("cityid", "");
+            $("#ddlCity").val("");
+            $("#txtPin").val("");
+            $("#txtAddress1").val("");
+            $("#txtAddress2").val("");
+            $("#txtAddress3").val("");
+            $("#txtGstNo").val("");
+            $("#txtPanNo").val("");
+            $("#txtAdhhar").val("");  
 
             //------ New Code Add ------//
             //$('.as_add_data_wrap').hide();
@@ -985,7 +1026,14 @@ var PurchaseView = {
                     $("#ddlCity").attr("cityid", ui.item.cityid);
                     $("#ddlCity").val(ui.item.cityname)
                 }
-                    
+                $("#txtPin").val(ui.item.pincode);
+                $("#txtAddress1").val(ui.item.address1);
+                $("#txtAddress2").val(ui.item.address2);
+                $("#txtAddress3").val(ui.item.address3);
+                $("#txtGstNo").val(ui.item.gstno);
+                $("#txtPanNo").val(ui.item.panno);                    
+                $("#txtAdhhar").val(ui.item.panno);                    
+
             },
             minLength: 3,
             autoFocus: true
@@ -1233,11 +1281,11 @@ $(document).ready(function () {
         });
 
         $("#AddEditPartyCusomerModal").on('hide.bs.modal', function () {
-            debugger
+            
             if ($("#hdnCommonNewPartyId").val() != '') {    //--------------- New Party Id for new record
-                Purchasedetailview.GetVenderDetails($("#hdnCommonNewPartyId").val(), 'PARTY');
+                PurchaseView.GetVenderDetails($("#hdnCommonNewPartyId").val(), 'PARTY');
             } else if ($("#hdnCommonNewCustomerId").val() != '') {  //--------------- New Customer Id for new record
-                Purchasedetailview.GetVenderDetails($("#hdnCommonNewCustomerId").val(), 'CUSTOMER');
+                PurchaseView.GetVenderDetails($("#hdnCommonNewCustomerId").val(), 'CUSTOMER');
             } else {
                 setTimeout(function () {
                     $("#txtAccount").focus();
@@ -1289,7 +1337,7 @@ function AutosuggestItemName(id) {
                         success: function (data) {
                             if ($(data).find('RESPONSECODE').text() == "0") {
                                 var JsonObject = xml2json.parser(data);
-
+                                console.log(JsonObject)
                                 if (JsonObject.serviceresponse.detailslist != undefined) {
                                     var List;
                                     if (JsonObject.serviceresponse.detailslist.details.length > 1)
@@ -1303,7 +1351,7 @@ function AutosuggestItemName(id) {
                                                     label: item.itemgroupname,
                                                     value: item.itemgroupname,
                                                     Id: item.itemgroupmasterid,
-                                                    SHORTNAME: item.shortname
+                                                    SHORTNAME: item.shortname,
                                                 }
                                             }
                                             else {
