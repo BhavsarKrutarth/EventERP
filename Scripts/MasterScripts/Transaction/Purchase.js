@@ -14,7 +14,7 @@ var PurchaseView = {
 
     initializeJqgrid: function (url) {
         try {
-            colNames = ['PURCHASEID', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO','ADHARCARDNO','PINCODE', 'PURCHASECODE', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT'],
+            colNames = ['PURCHASEID', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'PURCHASECODE', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME','BANKNAME']
                 colModel = [
                 { name: "PURCHASEID", index: "PURCHASEID", xmlmap: xmlvars.common_colmap + "PURCHASEID", sortable: true, search: false, hidden: true },
                 { name: "STATEID", index: "STATEID", xmlmap: xmlvars.common_colmap + "STATEID", sortable: true, search: false, hidden: true },
@@ -42,6 +42,24 @@ var PurchaseView = {
                 { name: "AMTWITHTAX", width: 10, index: "AMTWITHTAX", xmlmap: xmlvars.common_colmap + "AMTWITHTAX", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
                 { name: "ROFAMT", width: 10, index: "ROFAMT", xmlmap: xmlvars.common_colmap + "ROFAMT", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
                 { name: "TOTALAMT", width: 10, index: "TOTALAMT", xmlmap: xmlvars.common_colmap + "TOTALAMT", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
+
+                { name: "TDSCHK", index: "TDSCHK", xmlmap: xmlvars.common_colmap + "TDSCHK", sortable: true, search: false, hidden: true },
+                { name: "TCSROF", index: "TCSROF", xmlmap: xmlvars.common_colmap + "TCSROF", sortable: true, search: false, hidden: true },
+                { name: "TDSROF", index: "TDSROF", xmlmap: xmlvars.common_colmap + "TDSROF", sortable: true, search: false, hidden: true },
+                { name: "TDSID", index: "TDSID", xmlmap: xmlvars.common_colmap + "TDSID", sortable: true, search: false, hidden: true },
+                { name: "TDSPER", index: "TDSPER", xmlmap: xmlvars.common_colmap + "TDSPER", sortable: true, search: false, hidden: true },
+                { name: "TDSONAMT", index: "TDSONAMT", xmlmap: xmlvars.common_colmap + "TDSONAMT", sortable: true, search: false, hidden: true },
+                { name: "TDSROFAMT", index: "TDSROFAMT", xmlmap: xmlvars.common_colmap + "TDSROFAMT", sortable: true, search: false, hidden: true },
+                { name: "TCSLIMT", index: "TCSLIMT", xmlmap: xmlvars.common_colmap + "TCSLIMT", sortable: true, search: false, hidden: true },
+                { name: "TCSPER", index: "TCSPER", xmlmap: xmlvars.common_colmap + "TCSPER", sortable: true, search: false, hidden: true },
+                { name: "TCSONAMT", index: "TCSONAMT", xmlmap: xmlvars.common_colmap + "TCSONAMT", sortable: true, search: false, hidden: true },
+                { name: "CASHPAYMENT", index: "CASHPAYMENT", xmlmap: xmlvars.common_colmap + "CASHPAYMENT", sortable: true, search: false, hidden: true },
+                { name: "CHEQUEPAYMENT", index: "CHEQUEPAYMENT", xmlmap: xmlvars.common_colmap + "CHEQUEPAYMENT", sortable: true, search: false, hidden: true },
+                { name: "BANKID", index: "BANKID", xmlmap: xmlvars.common_colmap + "BANKID", sortable: true, search: false, hidden: true },
+                { name: "CHEQUENO", index: "CHEQUENO", xmlmap: xmlvars.common_colmap + "CHEQUENO", sortable: true, search: false, hidden: true },
+                { name: "CHEQUEBOOKDETAILID", index: "CHEQUEBOOKDETAILID", xmlmap: xmlvars.common_colmap + "CHEQUEBOOKDETAILID", sortable: true, search: false, hidden: true },
+                    { name: "CHEQUENAME", index: "CHEQUENAME", xmlmap: xmlvars.common_colmap + "CHEQUENAME", sortable: true, search: false, hidden: true },
+                    { name: "BANKNAME", index: "BANKNAME", xmlmap: xmlvars.common_colmap + "BANKNAME", sortable: true, search: false, hidden: true },
                 
                 ];
             colNames.push('Action');
@@ -177,7 +195,51 @@ var PurchaseView = {
             $("#txtPanNo").val(rowData['PANNO']);
             $("#txtAdhhar").val(rowData['ADHARCARDNO']);  
 
-           
+
+            if (rowData['TDSCHK'] == 1) {
+                $("#toggleSwitch").bootstrapSwitch('state', true);
+                $(".TDSCalculate").show();
+                $(".TCSCalculate").hide();
+            } else {
+                $("#toggleSwitch").bootstrapSwitch('state', false);
+                $(".TDSCalculate").hide();
+                $(".TCSCalculate").show();
+            }
+
+            if (rowData['TCSROF'] == 1) {
+                $("#chkROFTCS").iCheck('check');
+            } else {
+                $("#chkROFTCS").iCheck('uncheck');
+            }
+            if (rowData['TDSROF'] == 1) {
+                $("#chkROFTDS").iCheck('check');
+            } else {
+                $("#chkROFTDS").iCheck('check')
+                $("#chkROFTDS").iCheck('uncheck');
+            }
+
+            $("#txtTCSApplicableLimit").val(rowData['TCSLIMIT']);
+            $("#txtTCSPer").val(rowData['TCSPER']);
+            $("#txtTCSAmt").val(rowData['TCSONAMT']);
+            $("#txtTCSModal").val(rowData['TCSAMT']);
+            $("#txtTCSTaxAmt").val(rowData['TCSAMT']);
+
+            $("#ddlTDS").val(rowData['TDSID']);
+            $("#txtTDSOnAmt").val(rowData['TDSONAMT']);
+            $("#txtTDSAmtModal").val(rowData['TDSAMT']);
+            $("#txtTDSAmt").val(rowData['TDSAMT']);
+            $("#txtTDSRofAmt").val(rowData['TDSROFAMT']);
+
+            $("#txtCashPayment").val(parseFloat(rowData['CASHPAYMENT'] || 0.00).toFixed(2));
+            $("#txtChequePayment").val(parseFloat(rowData['CHEQUEPAYMENT'] || 0.00).toFixed(2));
+
+            //if (parseInt(rowData['CHEQUEPAYMENT']) > 0) {
+            //    BankDetail(id);
+            //}
+            //$("#txtOsPayment").val(parseFloat(rowData['OSAMT'] || 0.00).toFixed(2));
+            //$("#txtRemarks").val(rowData['REMARK']);
+            $("#hdnbankId").val(rowData['BANKID']);
+            $("#txtBankAC").val(rowData['BANKNAME']);
 
             var myfilter,
                 myfilter = { rules: [] };
@@ -303,6 +365,7 @@ var PurchaseView = {
 
     Calculation: function (id, i) {
         try {
+            debugger
             var txtPcs = 0, totalamt = 0, totaltaxamt = 0, totalamtteax = 0
             $("#Quotationitem_tbody tr").each(function (key, obj) {
                 
@@ -329,6 +392,8 @@ var PurchaseView = {
 
             });
             
+            
+            
             $("#totalpcs").html(txtPcs.toFixed(2));
             $("#totalamt").html(totalamt.toFixed(2));
             $("#totaltaxamt").html(totaltaxamt.toFixed(2));
@@ -351,7 +416,7 @@ var PurchaseView = {
 
             $("#txtTotalWithTaxAmt").val(totalamtteax.toFixed(2))
             //$("#txtTotalAmt").val(totalamtteax.toFixed(2))
-            debugger
+            
             var ROF = 0
             if ($('#chkROF').is(":checked") == true) {
                 ROF = parseFloat(totalamtteax).toFixed() - totalamtteax;
@@ -361,6 +426,42 @@ var PurchaseView = {
             else {
                 $("#txtROFAmt").val(0);
                 $("#txtTotalAmt").val(totalamtteax.toFixed(2))
+            }
+            var txtCashPayment = +$("#txtCashPayment").val() || 0
+            var txtChequePayment = +$("#txtChequePayment").val() || 0
+            if ($("#toggleSwitch").bootstrapSwitch('state') == true) {
+
+                if ($("#ddlTDS").val()) {
+                    var temp_ddlTDS = $('#ddlTDS  option:selected').attr('percentage');
+                    var txtTDSAmt = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2);
+                    $("#txtTDSAmt").val(txtTDSAmt);
+
+                    var ROFTDS = 0
+                    ROFTDS = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2)
+                    if ($('#chkROFTDS').is(":checked") == true) {
+                        var ROFTDS1 = parseFloat(ROFTDS).toFixed()
+                        $("#txtTDSRofAmt").val(+ROFTDS1)
+                        $("#txtOsPayment").val((((+$("#txtTotalAmt").val() - (+ROFTDS1))) - txtCashPayment - txtChequePayment).toFixed(2))
+                    }
+                    else {
+                        $("#txtTDSRofAmt").val('')
+                        $("#txtOsPayment").val(((+((totalamtteax.toFixed(2)) - (ROFTDS.toFixed(2))).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2)) 
+                    }
+                }
+                else {
+                    $("#txtTDSAmt").val('');
+                    $("#txtTDSRofAmt").val('')
+                    $("#txtOsPayment").val((+(+$("#txtTotalAmt").val() - (+$("#txtTDSAmt").val())) - txtCashPayment - txtChequePayment).toFixed(2))
+                }
+            }
+            else {
+                debugger
+                var txtTCSApplicableLimit = +$("#txtTCSApplicableLimit").val();
+                var txtTotalNetAmt = +$("#txtTotalNetAmt").val();
+                var txtTCSPer = +$("#txtTCSPer").val();
+                var txtTCSTaxAmt = +((txtTotalNetAmt * txtTCSPer) / 100).toFixed(2)
+                $("#txtTCSTaxAmt").val(+txtTCSTaxAmt)
+                $("#txtOsPayment").val((+((totalamtteax.toFixed(2)) - (txtTCSTaxAmt).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2))
             }
 
         }
@@ -419,8 +520,33 @@ var PurchaseView = {
                 "TOTALAMT": $("#txtTotalAmt").val(),
                 "oper": PurchaseView.variables.oper,
                 "XMLPARAM": escape(xmlsaveFiles),
-                "CITYID": $("#ddlPartyBranch").val()
+                "CITYID": $("#ddlPartyBranch").val(),
+                "TDSCHK": ($("#toggleSwitch").bootstrapSwitch('state') == true ? 1 : 0),
+                "TCSLIMT": $("#txtTCSApplicableLimit").val(),
+                "TCSPER": $("#txtTCSPer").val(),
+                "TCSONAMT": $("#txtTCSTaxAmt").val() ? $("#txtTCSTaxAmt").val() : 0,
+                /*"TCSAMT": $("#txtTCSModal").val() ? $("#txtTCSModal").val() : 0,*/
+                "TDSPER": $("#ddlTDS option:selected").attr("percentage") ? $("#ddlTDS option:selected").attr("percentage") : 0,
+                "TDSONAMT": $("#txtTDSOnAmt").val() ? $("#txtTDSOnAmt").val() : 0,
+                "TDSAMT": $("#txtTDSAmt").val() ? $("#txtTDSAmt").val() : 0,
+                "TDSID": $("#ddlTDS").val(),
+                "TDSROFAMT": $("#txtTDSRofAmt").val(),
+                "CASHPAYMENT": $("#txtCashPayment").val() || 0,
+                "CHEQUEPAYMENT": $("#txtChequePayment").val() || 0,
+
+
             };
+            data.TCSROF = (($('#chkROFTCS').prop("checked") == true) ? 1 : 0);
+            data.TDSROF = (($('#chkROFTDS').prop("checked") == true) ? 1 : 0);
+            /*data.GSTCHK = (($('#chkROF').prop("checked") == true) ? 1 : 0);*/
+
+            if ($("#txtChequePayment").val() > 0) {
+                data.BANKID = $("#hdnbankId").val();
+                data.CHEQUENO = $("#txtChequeNo").val();
+                data.CHEQUEBOOKDETAILID = $("#hdnChequebookid").val();
+                /*data.CHEQUENAME = $("#txtAccount").val();*/
+            }
+
             $.ajax({
                 url: getDomain() + PurchaseView.variables.PerformMasterOperationUrl,
                 type: "POST",
@@ -653,6 +779,7 @@ var PurchaseView = {
             }
         });
     },
+    validation: function () { },
 
     GetVoucherDetails: function (VoucherId) {
         try {
@@ -1130,10 +1257,27 @@ var PurchaseView = {
             }
         });
     },
+
+    bindTDS: function () {
+        $("#ddlTDS").html("");
+        BindDropdown('ddlTDS', 'TDSDropdownList', getDomain() + "/Common/BindMastersDetails?ServiceName=TDSMASTER_GET&IsRecordAll=true&ISACTIVE=1&COLUMNREQUESTED=TDSID,CODE,PERCENTAGE", '-- TDS --', true);
+    },
+
+    TDSORTCSChange: function () {
+        PurchaseView.Calculation();
+    }
+
+
 }
 
 $(document).ready(function () {
     try {
+
+        $("#ddlTDS").change(function () {
+            PurchaseView.Calculation();
+        })
+        PurchaseView.bindTDS();
+
         var myfilter;
         myfilter = {
             rules: []
@@ -1150,6 +1294,11 @@ $(document).ready(function () {
         $('#chkROF').on('ifChanged', function (event) {
             PurchaseView.Calculation();
         });
+        $('#chkROFTDS').on('ifChanged', function (event) {
+            PurchaseView.Calculation();
+        });
+
+        
         PurchaseView.GetHSNCodeList();
 
         
@@ -1292,6 +1441,44 @@ $(document).ready(function () {
                 }, 500);
             }
         });
+
+
+        $("#toggleSwitch").bootstrapSwitch('state', true);
+        $("#toggleSwitch").on('switchChange.bootstrapSwitch', function (e) {
+            if ($("#toggleSwitch").bootstrapSwitch('state') == true) {
+                $(".TDSCalculate").show();
+                $(".TCSCalculate").hide();
+                /*CalculateBill_PaymentInfo()*/
+                //PurchaseView.bindtdspercentage()
+            } else {
+                $(".TDSCalculate").hide();
+                $(".TCSCalculate").show();
+                $("#txtTCSAmt").val($("#txtTotalNetAmt").val());
+
+                //------------------------------------Tcs Count-------------------------------------//
+                if ($("#chkROFTCS").prop('checked')) {
+                    var tcsamt = $("#txtTCSTaxAmt").val()
+                    $("#txtTCSTaxAmt").val(parseFloat(parseFloat(tcsamt).toFixed()).toFixed(2));
+                } else {
+                    var tcsper = $("#txtTCSPer").val();
+                    var totalAmtTax = parseFloat($("#txtTotalWithTaxAmt").val()).toFixed(2);
+                    var totalNetAmt = parseFloat($("#txtTotalNetAmt").val()).toFixed(2);
+                    var tcs = parseFloat(parseFloat(((totalNetAmt * tcsper) / 100)).toFixed(1)).toFixed(2);
+                    $("#txtTCSAmt").val(totalNetAmt);
+                    $("#txtTCSModal").val(tcs);
+                    $("#txtTCSTaxAmt").val(tcs);
+                }
+                //-----------------------------------/Tcs Count-------------------------------------//
+                /*CalculateBill_PaymentInfo()*/
+            }
+        });
+        if ($("#toggleSwitch").bootstrapSwitch('state') == true) {
+            $(".TDSCalculate").show();
+            $(".TCSCalculate").hide();
+        } else {
+            $(".TDSCalculate").hide();
+            $(".TCSCalculate").show();
+        }
 
       
     }
@@ -1722,3 +1909,285 @@ function DateAdd(input) {
     DateFilter();
 }
 
+function CalculateBill_PaymentInfo() {
+
+}
+
+function Velidation() {
+
+
+}
+
+//-------------------------------------- Bank Detail Hide/Show --------------------------------------//
+function BankDetail(id) {
+    try {
+        if (parseFloat($("#txtChequePayment").val()).toFixed(2) > 0) {
+            if (!$("#txtBankAC").val()) {
+                $("#BankDetailDiv").show();
+                var i = +$("#txtOsPayment").attr('tabindex') + 1;
+                var j = i + 1;
+                $("#BankDetailDiv").html(' <legend class="text-semibold">Bank Detail</legend>' +
+                    '<form class="form-horizontal col-md-12" id="FrmPaymentDetails" style="padding-right: 0;">' +
+                    '<div class="form-group">' +
+                    '<label class="control-label col-md-3">Bank A/C</label>' +
+                    '<div class="col-md-9">' +
+                    '<input type="text" tabindex="' + i + '" class="form-control" name="BankAC" id="txtBankAC">' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="form-group">' +
+                    '<label class="control-label col-md-3">Cheque No</label>' +
+                    '<div class="col-md-9">' +
+                    '<div class="input-group">' +
+                    '<input type="text" class="form-control txtAutocomplete" id="txtChequeNo" tabindex="' + j + '"  onkeyup="AutosuggestChequeNo(this)" />' +
+                    '<span class="input-group-btn" style="left: 1px;" onmousedown="PrintCheque()">' +
+                    '<button class="btn btn-default" type="button" id="PrintCheque" style="padding-bottom: 3px;"><i class="icon-printer2"></i></button>' +
+                    '</span>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</form>');
+                if (PurchaseView.variables.oper != 'edit' || $("#txtChequeNo").val() == '') {
+                    var myfilter,
+                        myfilter = { rules: [] };
+                    myfilter.rules.push({ field: "PURCHASESEARCH", op: "eq", data: 'DefaultBank' });
+                    var url = getDomain() + "/Common/BindMastersDetails?ServiceName=CHEQUEBOOKMASTER_GET" + "&myfilters=" + JSON.stringify(myfilter);
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        async: false,
+                        cache: false,
+                        success: function (data) {
+                            if ($(data).find('RESPONSECODE').text() == "0") {
+                                debugger
+                                var JsonObject = xml2json.parser(data);
+                                if (JsonObject.serviceresponse.detailslist != undefined) {
+                                    debugger
+                                    $("#txtBankAC").val(JsonObject.serviceresponse.detailslist.details.bankname);
+                                    $("#hdnChequeId").val(JsonObject.serviceresponse.detailslist.details.chequemasterid);
+                                    $("#hdnbankId").val(JsonObject.serviceresponse.detailslist.details.bankid);
+                                    $("#hdnRPTFileName").val(JsonObject.serviceresponse.detailslist.details.rptfilename);
+                                    $("#hdnChequebookid").val(JsonObject.serviceresponse.detailslist.details.chequebookdetailid);
+                                    $("#txtChequeNo").val($(data).find('cheque').text());
+                                }
+                            }
+                        }
+                    });
+                }
+                if (PurchaseView.variables.oper == 'edit' && rowData['BANKID'] > 0) {
+                    rowData = jQuery("#table_list_Purchase").getRowData(id);
+                    $("#txtBankAC").val(rowData['BANKNAME']);
+                    $("#hdnbankId").val(rowData['BANKID']);
+                    $("#hdnRPTFileName").val(rowData['RPTFILENAME']);
+                    $("#txtChequeNo").val(rowData['CHEQUENO']);
+                }
+                $("#txtBankAC").autocomplete({
+                    source: function (request, response) {
+                        var myfilter,
+                            myfilter = { rules: [] };
+                        myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#txtBankAC").val() });
+                        var url = getDomain() + "/Common/BindMastersDetails?ServiceName=CHEQUEBOOKMASTER_GET" + "&myfilters=" + JSON.stringify(myfilter);
+                        $.ajax({
+                            url: url,
+                            type: "POST",
+                            async: false,
+                            cache: false,
+                            success: function (data) {
+                                if ($(data).find('RESPONSECODE').text() == "0") {
+                                    var JsonObject = xml2json.parser(data);
+
+                                    if (JsonObject.serviceresponse.detailslist != undefined) {
+                                        var List;
+                                        if (JsonObject.serviceresponse.detailslist.details.length > 1)
+                                            List = JsonObject.serviceresponse.detailslist.details;
+                                        else
+                                            List = JsonObject.serviceresponse.detailslist;
+                                        response(
+                                            $.map(List, function (item) {
+                                                if (jQuery.type(item) == "object") {
+
+                                                    return {
+                                                        label: item.bankname,
+                                                        value: item.bankname,
+                                                        BankId: item.bankid,
+                                                        ChequeMasterId: item.chequemasterid,
+                                                        RPTName: item.rptfilename
+
+                                                    }
+                                                }
+                                                else {
+                                                    return {
+                                                        label: item.bankname,
+                                                        value: item.bankname,
+                                                        BankId: item.bankid,
+                                                        ChequeMasterId: item.chequemasterid,
+                                                        RPTName: item.rptfilename
+                                                    }
+                                                }
+                                            }))
+                                    }
+                                    else {
+                                        if ($("#" + id).val().length <= 1) {
+                                            $("#hdnChequeId").val('');
+                                            $("#hdnbankId").val('');
+                                            $("#hdnRPTFileName").val('');
+                                        }
+                                        var result = [
+                                            {
+                                                label: 'No Results Found',
+                                                value: ''
+                                            }
+                                        ];
+                                        response(result);
+                                    }
+                                }
+                                else {
+                                    if ($("#" + id).val().length <= 1) {
+                                        $("#hdnChequeId").val('');
+                                        $("#hdnbankId").val('');
+                                        $("#hdnRPTFileName").val('');
+                                    }
+                                    notificationMessage('Head Name', $(data).find('RESPONSEMESSAGE').text(), 'error');
+                                }
+                            }
+                        })
+                    },
+                    messages: {
+                        noResults: "No Results Found"
+                    },
+                    select: function (event, ui) {
+                        if (ui.item.label != 'No Results Found') {
+                            $("#hdnChequeId").val(ui.item.ChequeMasterId);
+                            $("#hdnbankId").val(ui.item.BankId);
+                            $("#hdnRPTFileName").val(ui.item.RPTName);
+
+                            var myfilter,
+                                myfilter = { rules: [] };
+                            myfilter.rules.push({ field: "PURCHASESEARCH", op: "eq", data: 'SelectBank' });
+                            myfilter.rules.push({ field: "BANKID", op: "eq", data: ui.item.BankId });
+                            var url = getDomain() + "/Common/BindMastersDetails?ServiceName=CHEQUEBOOKMASTER_GET" + "&myfilters=" + JSON.stringify(myfilter);
+                            $.ajax({
+                                url: url,
+                                type: "POST",
+                                async: false,
+                                cache: false,
+                                success: function (data) {
+                                    if ($(data).find('RESPONSECODE').text() == "0") {
+                                        $("#txtChequeNo").val($(data).find('CHEQUENO').text());
+                                        $("#hdnChequebookid").val($(data).find('CHEQUEBOOKDETAILID').text());
+                                    } else {
+                                        $("#txtChequeNo").val('');
+                                        $("#hdnChequebookid").val('');
+                                    }
+                                }
+                            });
+                        } else {
+                            setTimeout(function () {
+                                $("#txtBankAC").val('');
+                            }, 1)
+                        }
+                    },
+                    change: function (event, ui) {
+                        if (!ui.item) {
+                            //$("#hdnChequeId").val('');
+                            //$("#hdnbankId").val('');
+                            //$("#hdnRPTFileName").val('');
+                        }
+                    },
+                    focus: function (event, ui) {
+                        //$("#hdnChequeId").val('');
+                        //$("#hdnbankId").val('');
+                        //$("#hdnRPTFileName").val('');
+                    },
+                    minLength: 1,
+                    autoFocus: true
+                });
+            } else {
+                $("#BankDetailDiv").show();
+            }
+        } else {
+            $("#BankDetailDiv").hide();
+        }
+
+    } catch (e) {
+        ErrorDetails(e, PurchaseView.variables.File);
+    }
+}
+function AutosuggestChequeNo(obj) {
+    try {
+        if ($('#hdnbankId').val() == '') {
+            $("#txtBankAC").focus();
+            return;
+        }
+        var id = $(obj).attr('id');
+        $("#" + id).autocomplete({
+            source: function (request, response) {
+                var myfilter;
+                myfilter = { rules: [] };
+                myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#" + id).val() });
+                myfilter.rules.push({ field: "BANKID", op: "eq", data: $('#hdnbankId').val() });
+                var url = getDomain() + "/Common/BindMastersDetails?ServiceName=CHEQUE_LIST_GET&myfilters=" + JSON.stringify(myfilter);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        if ($(data).find('RESPONSECODE').text() == "0") {
+                            var JsonObject = xml2json.parser(data);
+                            if (JsonObject.serviceresponse.detailslist != undefined) {
+                                var List;
+                                if (JsonObject.serviceresponse.detailslist.details.length > 1)
+                                    List = JsonObject.serviceresponse.detailslist.details;
+                                else
+                                    List = JsonObject.serviceresponse.detailslist;
+                                response(
+                                    $.map(List, function (item) {
+                                        if (jQuery.type(item) == "object") {
+
+                                            return {
+                                                label: item.num.replace('-', ''),
+                                                value: item.num.replace('-', '')
+                                            }
+                                        }
+                                        else {
+                                            return {
+                                                label: item.num.replace('-', ''),
+                                                value: item.num.replace('-', '')
+                                            }
+                                        }
+                                    }))
+                            }
+                            else {
+                                var result = [
+                                    {
+                                        label: 'No Results Found',
+                                        value: ''
+                                    }
+                                ];
+                                response(result);
+                            }
+                        }
+                        else {
+                            notificationMessage('Head Name', $(data).find('RESPONSEMESSAGE').text(), 'error');
+                        }
+                    }
+                })
+            },
+            messages: {
+                noResults: "No Results Found"
+            },
+            select: function (event, ui) {
+                if (ui.item.label == 'No Results Found') {
+                    setTimeout(function () {
+                        $("#" + id).val('');
+                    }, 1)
+                }
+            },
+            minLength: 1,
+            autoFocus: true
+        });
+    } catch (e) {
+        ErrorDetails(e, PurchaseView.variables.File);
+    }
+}
+//-------------------------------------- /Bank Detail Hide/Show --------------------------------------//
