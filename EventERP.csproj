@@ -168,6 +168,7 @@
     <Content Include="Scripts\MasterScripts\Master\TCSMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\TDSMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\UserAccount.js" />
+    <Content Include="Scripts\MasterScripts\Transaction\Estimate.js" />
     <Content Include="Scripts\MasterScripts\Transaction\Purchase.js" />
     <Content Include="Views\Master\AccountYearMaster.cshtml" />
     <Content Include="Views\Master\City_State_Country\_City.cshtml" />
@@ -195,6 +196,7 @@
     <Content Include="Views\Master\AddNewStock.cshtml" />
     <None Include="Views\Master\User_Groups.cshtml" />
     <Content Include="Views\Transaction\Purchase.cshtml" />
+    <Content Include="Views\Transaction\Estimate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\EventERPReference\Event_Service.disco" />

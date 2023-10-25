@@ -18,5 +18,10 @@ namespace EventERP.Controllers
         {
             return View(FormPermissionHelper.GetFormPermission("Purchase", "Transaction"));
         }
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult Estimate()
+        {
+            return View(FormPermissionHelper.GetFormPermission("Estimate", "Transaction"));
+        }
     }
 }
