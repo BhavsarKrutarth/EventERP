@@ -14,7 +14,7 @@ var PurchaseView = {
 
     initializeJqgrid: function (url) {
         try {
-            colNames = ['PURCHASEID', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'PURCHASECODE', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME','BANKNAME']
+            colNames = ['PURCHASEID', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code' ,'EVENTMASTERID','Event Name','Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME','BANKNAME']
                 colModel = [
                 { name: "PURCHASEID", index: "PURCHASEID", xmlmap: xmlvars.common_colmap + "PURCHASEID", sortable: true, search: false, hidden: true },
                 { name: "STATEID", index: "STATEID", xmlmap: xmlvars.common_colmap + "STATEID", sortable: true, search: false, hidden: true },
@@ -29,20 +29,20 @@ var PurchaseView = {
                 { name: "GSTNO", index: "GSTNO", xmlmap: xmlvars.common_colmap + "GSTNO", sortable: true, search: false, hidden: true },
                 { name: "PANNO", index: "PANNO", xmlmap: xmlvars.common_colmap + "PANNO", sortable: true, search: false, hidden: true },
                 { name: "ADHARCARDNO", index: "ADHARCARDNO", xmlmap: xmlvars.common_colmap + "ADHARCARDNO", sortable: true, search: false, hidden: true },
-
                 { name: "PURCHASECODE", width: 10, index: "PURCHASECODE", xmlmap: xmlvars.common_colmap + "PURCHASECODE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
+                { name: "EVENTMASTERID", index: "EVENTMASTERID", xmlmap: xmlvars.common_colmap + "EVENTMASTERID", sortable: true, search: false, hidden: true },
+                { name: "EVENTMASTERNAME", width: 10, index: "EVENTMASTERNAME", xmlmap: xmlvars.common_colmap + "EVENTMASTERNAME", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
                 { name: "PARTYNAME", width: 10, index: "PARTYNAME", xmlmap: xmlvars.common_colmap + "PARTYNAME", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "PARTYMASTERID", width: 10, index: "PARTYMASTERID", xmlmap: xmlvars.common_colmap + "PARTYMASTERID", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
+                { name: "PARTYMASTERID", index: "PARTYMASTERID", xmlmap: xmlvars.common_colmap + "PARTYMASTERID", sortable: true, search: false, hidden: true },
                 { name: "PURCHASEDATE", width: 10, index: "PURCHASEDATE", xmlmap: xmlvars.common_colmap + "PURCHASEDATE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "ROF", width: 10, index: "ROF", xmlmap: xmlvars.common_colmap + "ROF", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "TOTALNETAMT", width: 10, index: "TOTALNETAMT", xmlmap: xmlvars.common_colmap + "TOTALNETAMT", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "CGST", width: 10, index: "CGST", xmlmap: xmlvars.common_colmap + "CGST", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "SGST", width: 10, index: "SGST", xmlmap: xmlvars.common_colmap + "SGST", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "IGST", width: 10, index: "IGST", xmlmap: xmlvars.common_colmap + "IGST", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "AMTWITHTAX", width: 10, index: "AMTWITHTAX", xmlmap: xmlvars.common_colmap + "AMTWITHTAX", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "ROFAMT", width: 10, index: "ROFAMT", xmlmap: xmlvars.common_colmap + "ROFAMT", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "TOTALAMT", width: 10, index: "TOTALAMT", xmlmap: xmlvars.common_colmap + "TOTALAMT", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-
+                { name: "ROF", index: "ROF", xmlmap: xmlvars.common_colmap + "ROF", sortable: true, search: false, hidden: true },
+                { name: "TOTALNETAMT", width: 10, index: "TOTALNETAMT", xmlmap: xmlvars.common_colmap + "TOTALNETAMT", sortable: false, search: false },
+                { name: "CGST", width: 10, index: "CGST", xmlmap: xmlvars.common_colmap + "CGST", sortable: false, search: false },
+                { name: "SGST", width: 10, index: "SGST", xmlmap: xmlvars.common_colmap + "SGST", sortable: false, search: false },
+                    { name: "IGST", width: 10, index: "IGST", xmlmap: xmlvars.common_colmap + "IGST", sortable: false, search: false },
+                    { name: "AMTWITHTAX", width: 10, index: "AMTWITHTAX", xmlmap: xmlvars.common_colmap + "AMTWITHTAX", sortable: false, search: false },
+                    { name: "ROFAMT", hidden: true, index: "ROFAMT", xmlmap: xmlvars.common_colmap + "ROFAMT", sortable: false, search: false },
+                    { name: "TOTALAMT", width: 10, index: "TOTALAMT", xmlmap: xmlvars.common_colmap + "TOTALAMT", sortable: false, search: false },
                 { name: "TDSCHK", index: "TDSCHK", xmlmap: xmlvars.common_colmap + "TDSCHK", sortable: true, search: false, hidden: true },
                 { name: "TCSROF", index: "TCSROF", xmlmap: xmlvars.common_colmap + "TCSROF", sortable: true, search: false, hidden: true },
                 { name: "TDSROF", index: "TDSROF", xmlmap: xmlvars.common_colmap + "TDSROF", sortable: true, search: false, hidden: true },
@@ -153,6 +153,7 @@ var PurchaseView = {
 
     triggerId: function (Id) {
         try {
+            
             PurchaseView.variables.AddNew = false;
             $("#panelEdit").show();
             $("#panelView").hide();
@@ -217,8 +218,8 @@ var PurchaseView = {
                 $("#chkROFTDS").iCheck('check')
                 $("#chkROFTDS").iCheck('uncheck');
             }
-
-            $("#txtTCSApplicableLimit").val(rowData['TCSLIMIT']);
+            
+            $("#txtTCSApplicableLimit").val(rowData['TCSLIMT'] || 0);
             $("#txtTCSPer").val(rowData['TCSPER']);
             $("#txtTCSAmt").val(rowData['TCSONAMT']);
             $("#txtTCSModal").val(rowData['TCSAMT']);
@@ -365,7 +366,7 @@ var PurchaseView = {
 
     Calculation: function (id, i) {
         try {
-            debugger
+            
             var txtPcs = 0, totalamt = 0, totaltaxamt = 0, totalamtteax = 0
             $("#Quotationitem_tbody tr").each(function (key, obj) {
                 
@@ -455,7 +456,7 @@ var PurchaseView = {
                 }
             }
             else {
-                debugger
+                
                 var txtTCSApplicableLimit = +$("#txtTCSApplicableLimit").val();
                 var txtTotalNetAmt = +$("#txtTotalNetAmt").val();
                 var txtTCSPer = +$("#txtTCSPer").val();
@@ -529,13 +530,16 @@ var PurchaseView = {
                 "TDSPER": $("#ddlTDS option:selected").attr("percentage") ? $("#ddlTDS option:selected").attr("percentage") : 0,
                 "TDSONAMT": $("#txtTDSOnAmt").val() ? $("#txtTDSOnAmt").val() : 0,
                 "TDSAMT": $("#txtTDSAmt").val() ? $("#txtTDSAmt").val() : 0,
-                "TDSID": $("#ddlTDS").val(),
-                "TDSROFAMT": $("#txtTDSRofAmt").val(),
                 "CASHPAYMENT": $("#txtCashPayment").val() || 0,
                 "CHEQUEPAYMENT": $("#txtChequePayment").val() || 0,
-
+                "EVENTMASTERID": $("#ddlevent").val(),
+                "ACCYEARID": $("#CurrentAccountYear").attr("accyearid")
 
             };
+            if ($("#ddlTDS").val()) {
+                data.TDSID = $("#ddlTDS").val()
+                data.TDSROFAMT = $("#txtTDSRofAmt").val()
+            }
             data.TCSROF = (($('#chkROFTCS').prop("checked") == true) ? 1 : 0);
             data.TDSROF = (($('#chkROFTDS').prop("checked") == true) ? 1 : 0);
             /*data.GSTCHK = (($('#chkROF').prop("checked") == true) ? 1 : 0);*/
@@ -743,6 +747,20 @@ var PurchaseView = {
             $("#txtGstNo").val("");
             $("#txtPanNo").val("");
             $("#txtAdhhar").val("");  
+            $("#toggleSwitch").bootstrapSwitch('state', true);
+            $("#txtTCSTaxAmt").val("");
+            $("#ddlTDS").val("");
+            $("#txtTDSOnAmt").val("")
+            $("#txtTDSAmt").val("")
+            $("#txtCashPayment").val("")
+            $("#txtChequePayment").val("")
+            $("#ddlTDS").val("")
+            $("#txtTDSRofAmt").val("")
+            $("#chkROFTCS").iCheck('uncheck');
+            $("#hdnbankId").val("");
+            $("#txtChequeNo").val("");
+            $("#hdnChequebookid").val("");
+            $("#txtOsPayment").val(0.00)
 
             //------ New Code Add ------//
             //$('.as_add_data_wrap').hide();
@@ -1263,6 +1281,11 @@ var PurchaseView = {
         BindDropdown('ddlTDS', 'TDSDropdownList', getDomain() + "/Common/BindMastersDetails?ServiceName=TDSMASTER_GET&IsRecordAll=true&ISACTIVE=1&COLUMNREQUESTED=TDSID,CODE,PERCENTAGE", '-- TDS --', true);
     },
 
+    bindEvent: function () {
+        $("#ddlevent").html("");
+        BindDropdown('ddlevent', 'EventList', getDomain() + "/Common/BindMastersDetails?ServiceName=EVENTMASTER_GET&IsRecordAll=true&ISACTIVE=1",'', true);
+    },
+
     TDSORTCSChange: function () {
         PurchaseView.Calculation();
     }
@@ -1272,7 +1295,7 @@ var PurchaseView = {
 
 $(document).ready(function () {
     try {
-
+        PurchaseView.bindEvent();
         $("#ddlTDS").change(function () {
             PurchaseView.Calculation();
         })
@@ -1958,10 +1981,10 @@ function BankDetail(id) {
                         cache: false,
                         success: function (data) {
                             if ($(data).find('RESPONSECODE').text() == "0") {
-                                debugger
+                                
                                 var JsonObject = xml2json.parser(data);
                                 if (JsonObject.serviceresponse.detailslist != undefined) {
-                                    debugger
+                                   
                                     $("#txtBankAC").val(JsonObject.serviceresponse.detailslist.details.bankname);
                                     $("#hdnChequeId").val(JsonObject.serviceresponse.detailslist.details.chequemasterid);
                                     $("#hdnbankId").val(JsonObject.serviceresponse.detailslist.details.bankid);

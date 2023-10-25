@@ -1,5 +1,5 @@
 var CommonName = '', Dropdownid = 0, rowsToColor = [], FromDateAL, ToDateAL;
-var ExportPdfDefaultTitle = "JewelleryERP";
+var ExportPdfDefaultTitle = "EventERP";
 var CommonjsView = {
     variables: {
         BindAccountListUrl: "/Common/BindMastersDetails?ServiceName=ACCOUNTMASTER_GET",
