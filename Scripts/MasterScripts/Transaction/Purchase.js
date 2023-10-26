@@ -7,6 +7,7 @@ var PurchaseView = {
         ListId: 1,
         BindGroupListUrl: "/Common/BindMastersDetails?ServiceName=PURCHASE_GET",
         QuotationDetailUrl: "/Common/BindMastersDetails?ServiceName=PURCHASE_DETAILS_GET",
+        QuotationEstimateDetailUrl: "/Common/BindMastersDetails?ServiceName=ESTIMATE_DETAILS_GET",
         PerformMasterOperationUrl: "/Common/OpeartionsOnMaster?ServiceName=PURCHASE_CRUD",
         //table: "",
         HSNCodeList: [],
@@ -534,8 +535,8 @@ var PurchaseView = {
                 "CASHPAYMENT": $("#txtCashPayment").val() || 0,
                 "CHEQUEPAYMENT": $("#txtChequePayment").val() || 0,
                 "EVENTMASTERID": $("#ddlevent").val(),
-                "ACCYEARID": $("#CurrentAccountYear").attr("accyearid")
-
+                "ACCYEARID": $("#CurrentAccountYear").attr("accyearid"),
+                "ESTIMATEID": $("#txtEstimate").attr("estimateid")
             };
             if ($("#ddlTDS").val()) {
                 data.TDSID = $("#ddlTDS").val()
@@ -569,6 +570,10 @@ var PurchaseView = {
                                 }
                         }
                         PurchaseView.ClearData();
+                        debugger
+                        if (PurchaseView.variables.oper == 'Add') {
+                            $(".estimate").show();
+                        }
                         $("#panelView").hide();
                         $("#panelEdit").show();
                         ItemAddNewRow();
@@ -711,6 +716,9 @@ var PurchaseView = {
 
     ClearData: function () {
         try {
+            $(".estimate").hide();
+            $("#txtEstimate").attr("estimateid", "");
+            $("#txtEstimate").val("");
             $("#lblPurchaseCode").hide();
             $("#txtAccount").attr("partymasterid","")
             $("#hdnVenderStateId").val("");
@@ -1289,13 +1297,272 @@ var PurchaseView = {
 
     TDSORTCSChange: function () {
         PurchaseView.Calculation();
+    },
+    BindEstimate_AutoComplete: function () {
+        $('#txtEstimate').autocomplete({
+            source: function (request, response) {
+                var myfilter;
+                myfilter = {
+                    rules: []
+                };
+                var Value = $('#txtEstimate').val();
+                var Estimate = Value.replace(/[^a-z0-9\s]/gi, '');
+
+                myfilter.rules.push({ field: "SEARCH", op: "eq", data: Estimate }); //$('#txtAccount').val()
+                myfilter.rules.push({ field: "ACCOUNTYEARID", op: "eq", data: $("#CurrentAccountYear").attr("accyearid") }); //$('#txtAccount').val()
+                myfilter.rules.push({ field: "CITY", op: "eq", data: $("#ddlPartyBranch").val() }); //$('#txtAccount').val()
+                myfilter.rules.push({ field: "ESTIMATEUSE", op: "eq", data: 0 }); //$('#txtAccount').val()
+                
+                
+                var url = getDomain() + "/Common/BindMastersDetails?ServiceName=ESTIMATE_GET&myfilters=" + JSON.stringify(myfilter);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        debugger
+                        if ($(data).find('RESPONSECODE').text() == "0") {
+                            var JsonObject = xml2json.parser(data);
+
+                            if (JsonObject.serviceresponse.detailslist != undefined) {
+                                var List;
+                                if (JsonObject.serviceresponse.detailslist.details.length > 1)
+                                    List = JsonObject.serviceresponse.detailslist.details;
+                                else
+                                    List = JsonObject.serviceresponse.detailslist;
+                                response(
+                                    $.map(List, function (item) {
+                                        if (jQuery.type(item) == "object") {
+                                            return {
+                                                label: item.purchasecode,
+                                                name: item.purchasecode,
+                                                estimateid: item.estimateid,
+                                                partymasterid: item.partymasterid,
+                                                purchasedate: item.purchasedate,
+                                                rof: item.rof,
+                                                totalnetamt: item.totalnetamt,
+                                                cgst: item.cgst,
+                                                sgst: item.sgst,
+                                                igst: item.igst,
+                                                amtwithtax: item.amtwithtax,
+                                                rofamt: item.rofamt,
+                                                totalamt: item.totalamt,
+                                                partyname: item.partyname,
+                                                statename: item.statename,
+                                                stateid: item.stateid,
+                                                mobile1: item.mobile1,
+                                                mobile2: item.mobile2,
+                                                phoneno: item.phoneno,
+                                                cityid: item.cityid,
+                                                cityname: item.cityname,
+                                                pincode: item.pincode,
+                                                address1: item.address1,
+                                                address2: item.address2,
+                                                address3: item.address3,
+                                                gstno: item.gstno,
+                                                panno: item.panno,
+                                                adharcardno: item.adharcardno
+                                            }
+                                        }
+                                        else {
+                                            return {
+                                                label: item.purchasecode,
+                                                name: item.purchasecode,
+                                                estimateid: item.estimateid,
+                                                partymasterid: item.partymasterid,
+                                                purchasedate: item.purchasedate,
+                                                rof: item.rof,
+                                                totalnetamt: item.totalnetamt,
+                                                cgst: item.cgst,
+                                                sgst: item.sgst,
+                                                igst: item.igst,
+                                                amtwithtax: item.amtwithtax,
+                                                rofamt: item.rofamt,
+                                                totalamt: item.totalamt,
+                                                partyname: item.partyname,
+                                                statename: item.statename,
+                                                stateid: item.stateid,
+                                                mobile1: item.mobile1,
+                                                mobile2: item.mobile2,
+                                                phoneno: item.phoneno,
+                                                cityid: item.cityid,
+                                                cityname: item.cityname,
+                                                pincode: item.pincode,
+                                                address1: item.address1,
+                                                address2: item.address2,
+                                                address3: item.address3,
+                                                gstno: item.gstno,
+                                                panno: item.panno,
+                                                adharcardno: item.adharcardno
+                                            }
+                                        }
+                                    }))
+                            }
+                            else {
+                                $("#txtEstimate").html('');
+                                notificationMessage('Head Name', $(data).find('RESPONSEMESSAGE').text(), 'error');
+                            }
+                        }
+                        else {
+                            $("#txtEstimate").html('');
+                            notificationMessage('Head Name', $(data).find('RESPONSEMESSAGE').text(), 'error');
+                        }
+                    }
+                })
+            },
+            messages: {
+                noResults: "No Results Found"
+            },
+            select: function (event, ui) {
+                if (ui.item.label != 'No Results Found') {
+                    $("#txtAccount").val(ui.item.partyname);
+                    $("#txtAccount").attr("partymasterid", ui.item.partymasterid);
+                    $("#lblPurchaseCode").html("");
+                    $("#lblPurchaseCode").hide()
+                    if (ui.item.rof == 1) {
+                        $("#chkROF").iCheck('check');
+                    } else {
+                        $("#chkROF").iCheck('uncheck');
+                    }
+                    //$("#txtTotalNetAmt").val(rowData['TOTALNETAMT']);
+                    //$("#txtSGSTTaxAmt").val(rowData['SGST'] || 0);
+                    //$("#txtCGSTTaxAmt").val(rowData['CGST'] || 0);
+                    //$("#txtIGSTTaxAmt").val(rowData['IGST'] || 0);
+                    //$("#txtTotalWithTaxAmt").val(rowData['AMTWITHTAX']);
+                    /*$("#txtROFAmt").val(rowData['ROFAMT'] || 0);*/
+                    /*$("#txtTotalAmt").val(rowData['TOTALAMT'] || 0);*/
+                    $("#hdnVenderStateId").val(ui.item.stateid);
+                    $("#txtMobile").val(ui.item.mobile1);
+                    $("#txtPhone").val(ui.item.phoneno);
+                    $("#ddlCity").attr("cityid", ui.item.cityid);
+                    $("#ddlCity").val(ui.item.cityname);
+                    $("#txtPin").val(ui.item.pincode);
+                    $("#txtAddress1").val(ui.item.address1);
+                    $("#txtAddress2").val(ui.item.address2);
+                    $("#txtAddress3").val(ui.item.address3);
+                    $("#txtGstNo").val(ui.item.gstno);
+                    $("#txtPanNo").val(ui.item.panno);
+                    $("#txtAdhhar").val(ui.item.adharcardno);
+                    PurchaseView.SubDeatilEstimate(ui.item.estimateid)
+                    $("#txtEstimate").attr("estimateid", ui.item.estimateid)
+                }
+                else {
+                    setTimeout(function () {
+                        $("#txtEstimate").val('');
+                    }, 1)
+                }
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    //$("#txtcity").val('');
+                }
+            },
+            focus: function (event, ui) {
+                //$("#txtcity").val('');
+            },
+            minLength: 1,
+            autoFocus: true
+        });
+    },
+
+
+    SubDeatilEstimate: function (Id) {
+        var myfilter,
+            myfilter = { rules: [] };
+        myfilter.rules.push({ field: "ESTIMATEID", op: "eq", data: Id });
+        $.ajax({
+            url: getDomain() + PurchaseView.variables.QuotationEstimateDetailUrl + "&myfilters=" + JSON.stringify(myfilter) + '&ISRECORDALL=true',
+            async: false,
+            cache: false,
+            type: 'POST',
+            success: function (data) {
+                var JsonObject = xml2json.parser(data);
+                if (JsonObject.serviceresponse != undefined) {
+                    if (JsonObject.serviceresponse.detailslist) {
+                        if (JsonObject.serviceresponse.responsecode == 0) {
+                            $("#Quotationitem_tbody").html('');
+
+                            var list;
+                            if (JsonObject.serviceresponse.detailslist.details.length > 1)
+                                list = JsonObject.serviceresponse.detailslist.details;
+                            else
+                                list = JsonObject.serviceresponse.detailslist;
+
+
+                            PurchaseView.variables.ListId = 1;
+                            $.each(list, function (key, innerjsonDetails) {
+                                $("#Quotationitem_tbody").append('<tr>' +
+                                    '<td style="text-align: center;"></td>' +
+                                    '<td>' +
+                                    '<input   type="text" value="' + innerjsonDetails.itemgroupname + '" onkeyup="AutosuggestItemName(this)" class="form-control txtItemName txtAutocomplete" onfocusout="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtItemName' + PurchaseView.variables.ListId + '" id="txtItemName' + PurchaseView.variables.ListId + '" itemgroupmasterid="' + innerjsonDetails.itemgroupmasterid + '">' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<input   value="' + innerjsonDetails.itemname + '" type="text" onkeyup="AutosuggestSubitemName(this)" class="form-control txtAutocomplete txtSubitemName" name="txtSubitemName' + PurchaseView.variables.ListId + '" id="txtSubitemName' + PurchaseView.variables.ListId + '" itemid="' + innerjsonDetails.itemid + '">' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<input  value="' + innerjsonDetails.pcs + '" type="text" class="txtPcs form-control txtR number pcs required" onkeyup="PurchaseView.Calculation(this,' + PurchaseView.variables.ListId + ')" name="txtPcs' + PurchaseView.variables.ListId + '" id="txtPcs' + PurchaseView.variables.ListId + '">' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<input value="' + innerjsonDetails.itemtype + '" disabled type="text" class="txtitemtype form-control txtR number pcs required"  name="txtitemtype' + PurchaseView.variables.ListId + '" id="txtitemtype' + PurchaseView.variables.ListId + '">' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="ValueChange(' + PurchaseView.variables.ListId + ')" name="HsnCode' + PurchaseView.variables.ListId + '" id="txtHsnCode' + PurchaseView.variables.ListId + '"></select>' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<input disabled value="' + innerjsonDetails.rate + '" type="text" class="form-control txtR numbers grosswt fixed required txtRate" decimals="3" name="txtRate' + PurchaseView.variables.ListId + '" id="txtRate' + PurchaseView.variables.ListId + '">' +
+                                    '</td>' +
+
+                                    '<td>' +
+                                    '<input disabled value="' + innerjsonDetails.amount + '" type="text" class="form-control txtR numbers grosswt fixed required txtAmount" decimals="3" name="txtAmount' + PurchaseView.variables.ListId + '" id="txtAmount' + PurchaseView.variables.ListId + '">' +
+                                    '</td>' +
+
+                                    '<td>' +
+                                    '<input disabled value="' + innerjsonDetails.taxamt + '" type="text" class="form-control txtR numbers grosswt fixed required txtteaxAmount" decimals="3" name="txtteaxAmount' + PurchaseView.variables.ListId + '" id="txtteaxAmount' + PurchaseView.variables.ListId + '">' +
+                                    '</td>' +
+
+                                    '<td>' +
+                                    '<input disabled value="' + innerjsonDetails.amttax + '" type="text" class="form-control txtR numbers grosswt fixed required txtAmtTaxTotal" decimals="3" name="txtAmtTax' + PurchaseView.variables.ListId + '" id="txtAmtTax' + PurchaseView.variables.ListId + '">' +
+                                    '</td>' +
+
+                                    '<td class="btnRemove" id="btnRemove' + PurchaseView.variables.ListId + '">' +
+                                    //'<div class="as_row_rmv" onclick="PurchaseView.RemoveRow(this)">' +
+                                    //'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox = "0 0 24 24" fill = "none"> <path fill-rule="evenodd" clip-rule="evenodd" d="M7 4C7 2.34315 8.34315 1 10 1H14C15.6569 1 17 2.34315 17 4V5H21C21.5523 5 22 5.44772 22 6C22 6.55228 21.5523 7 21 7H19.9394L19.1153 20.1871C19.0164 21.7682 17.7053 23 16.1211 23H7.8789C6.29471 23 4.98356 21.7682 4.88474 20.1871L4.06055 7H3C2.44772 7 2 6.55228 2 6C2 5.44772 2.44772 5 3 5H7V4ZM9 5H15V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V5ZM6.06445 7L6.88085 20.0624C6.91379 20.5894 7.35084 21 7.8789 21H16.1211C16.6492 21 17.0862 20.5894 17.1191 20.0624L17.9355 7H6.06445Z" fill="#ad2c2c"></path></svg>' +
+                                    //'</div>' +
+                                    '<div>' +
+                                    '<i class="icon-cancel-circle2" onclick="PurchaseView.RemoveRow(this)"></i>' +
+                                    '</div>' +
+                                    '</td>' +
+                                    '</tr>');
+
+                                HSNCode(PurchaseView.variables.ListId)
+
+                                $("#txtHsnCode" + PurchaseView.variables.ListId).val(innerjsonDetails.hsnid)
+                                PurchaseView.variables.ListId = PurchaseView.variables.ListId + 1;
+
+                            });
+                            PurchaseView.Calculation();
+
+                        }
+                        else {
+                            notificationTost('error', JsonObject.serviceresponse.responsemessage)
+                        }
+                    }
+                    else {
+                        $("#Quotationitem_tbody").html('');
+                    }
+                }
+            },
+            error: OnError
+        });
     }
-
-
 }
 
 $(document).ready(function () {
     try {
+
+
+        PurchaseView.BindEstimate_AutoComplete();
         PurchaseView.bindEvent();
         $("#ddlTDS").change(function () {
             PurchaseView.Calculation();
@@ -1334,6 +1601,7 @@ $(document).ready(function () {
         //$("#panelEdit").show();
         $("#btnAddnewQuotation").click(function () {
             PurchaseView.ClearData();
+            $(".estimate").show();
             PurchaseView.variables.AddNew = true;
             ItemAddNewRow();
             setTimeout(function () {
