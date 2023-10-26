@@ -1095,6 +1095,7 @@ function openaccyear() {
 };
 
 function SubmitEmpAccountYearBranch() {
+    debugger
     //$("#ddlaccountyear").val($("#CurrentAccountYear").attr('accyearid'));
 
     var accid = 0, branchid = 0, BranchName = "";

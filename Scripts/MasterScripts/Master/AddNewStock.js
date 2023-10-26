@@ -14,6 +14,8 @@ var AddNewStockView = {
         BindDropdown('ddlItemGroup', 'GroupDropdownList', getDomain() + "/Common/BindMastersDetails?ServiceName=ITEMGROUPMASTER_GET&IsRecordAll=true&ISACTIVE=1&COLUMNREQUESTED=ITEMGROUPMASTERID&COLUMNREQUESTED=ITEMGROUPNAME,ITEMGROUPMASTERID", '', true);
         AddNewStockView.BindItemMaster();
     },
+
+    
     BindItemMaster: function () {
         
         $("#div_loading").show();
@@ -23,6 +25,8 @@ var AddNewStockView = {
             rules: []
         };
         myfilter.rules.push({ field: "ITEMGROUPID", op: "eq", data: $("#ddlItemGroup").val() }); //$('#txtAccount').val()
+        myfilter.rules.push({ field: "ACCOUNTYEARID", op: "eq", data: $("#CurrentAccountYear").attr("accyearid") }); //$('#txtAccount').val()
+        myfilter.rules.push({ field: "CITYID", op: "eq", data: $("#ddlPartyBranch").val() }); //$('#txtAccount').val()
         var url = getDomain() + "/Common/BindMastersDetails?ServiceName=ITEMMASTER_GET&IsRecordAll=true&myfilters=" + JSON.stringify(myfilter);
         $.ajax({
             url: url,
@@ -135,10 +139,12 @@ function makeFileXml(saveDiv) {
                 if ($(obj).find('.itemid').attr("itemid1")) {
                     
                         xmlsaveFiles += '<DETAILS>';
-                        xmlsaveFiles += '<ITEMID>' + $(obj).find('.itemid').attr("itemid1") + '</ITEMID>';
-                        xmlsaveFiles += '<STOCKQTY>' + ($(obj).find('.txtstockqty').val() || 0) + '</STOCKQTY>';
-                        xmlsaveFiles += '<RENTSTOCKQTY>' + ($(obj).find('.txtrentstockqty').html() || 0) + '</RENTSTOCKQTY>';
-                        xmlsaveFiles += '<AVAILABLESTOCKQTY>' + ($(obj).find('.txtavailablestockqty').html() || 0) + '</AVAILABLESTOCKQTY>';
+                            xmlsaveFiles += '<ITEMID>' + $(obj).find('.itemid').attr("itemid1") + '</ITEMID>';
+                            xmlsaveFiles += '<STOCKQTY>' + ($(obj).find('.txtstockqty').val() || 0) + '</STOCKQTY>';
+                            xmlsaveFiles += '<RENTSTOCKQTY>' + ($(obj).find('.txtrentstockqty').html() || 0) + '</RENTSTOCKQTY>';
+                            xmlsaveFiles += '<AVAILABLESTOCKQTY>' + ($(obj).find('.txtavailablestockqty').html() || 0) + '</AVAILABLESTOCKQTY>';
+                            xmlsaveFiles += '<ACCOUNTYEARID>' + $("#CurrentAccountYear").attr("accyearid") + '</ACCOUNTYEARID>';
+                            xmlsaveFiles += '<CITYID>' + $("#ddlPartyBranch").val() + '</CITYID>';
                         xmlsaveFiles += '</DETAILS>';
                 }
             }
