@@ -521,24 +521,24 @@ var EstimateView = {
 
     SaveData: function (IsPrint) {
         try {
-            if ($("#Quotationitem_tbody tr:first td:nth-child(2) input").val() == "") {
-                $("#Quotationitem_tbody tr:first td:nth-child(2) input").addClass('table-input-error');
-            } else {
-                $("#Quotationitem_tbody tr:first td:nth-child(2) input").removeClass('table-input-error');
-            }
+            $("#Quotationitem_tbody tr").each(function (key, obj) {
+                if ($(obj).find(".txtPcs").val() == "" || $(obj).find(".txtPcs").val() == "0")
+                    $(obj).find(".txtPcs").addClass('table-input-error');
+                else
+                    $(obj).find(".txtPcs").removeClass('table-input-error');
 
-            if ($("#Quotationitem_tbody tr:first td:nth-child(3) input").val() == "") {
-                $("#Quotationitem_tbody tr:first td:nth-child(3) input").addClass('table-input-error');
-            } else {
-                $("#Quotationitem_tbody tr:first td:nth-child(3) input").removeClass('table-input-error');
-            }
 
-            if ($("#Quotationitem_tbody tr:first td:nth-child(4) input").val() == "") {
-                $("#Quotationitem_tbody tr:first td:nth-child(4) input").addClass('table-input-error');
-            } else {
-                $("#Quotationitem_tbody tr:first td:nth-child(4) input").removeClass('table-input-error');
-            }
+                if ($(obj).find(".txtItemName").val() == "")
+                    $(obj).find(".txtItemName").addClass('table-input-error');
+                else
+                    $(obj).find(".txtItemName").removeClass('table-input-error');
 
+
+                if ($(obj).find(".txtSubitemName").val() == "")
+                    $(obj).find(".txtSubitemName").addClass('table-input-error');
+                else
+                    $(obj).find(".txtSubitemName").removeClass('table-input-error');
+            });
 
             error = $(".table-input-error")
             if (error.length > 0) {
