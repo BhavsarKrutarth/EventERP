@@ -13,15 +13,18 @@ namespace EventERP.Controllers
     [AuthorizeUserAttribute]
     public class TransactionController : Controller
     {
-        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
         public ActionResult Purchase()
         {
             return View(FormPermissionHelper.GetFormPermission("Purchase", "Transaction"));
         }
-        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
         public ActionResult Estimate()
         {
             return View(FormPermissionHelper.GetFormPermission("Estimate", "Transaction"));
+        }
+        
+        public ActionResult Sales()
+        {
+            return View(FormPermissionHelper.GetFormPermission("Sales", "Transaction"));
         }
     }
 }

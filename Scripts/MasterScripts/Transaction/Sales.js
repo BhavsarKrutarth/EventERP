@@ -1,24 +1,22 @@
-﻿var View = "EstimateView", afterTableId = "txtTotalAmt", searchtxt = ''; // -------- variables for keyboard use in tables
-var EstimateView = {
+﻿var View = "PurchaseView", afterTableId = "txtTotalAmt", searchtxt = ''; // -------- variables for keyboard use in tables
+var PurchaseView = {
     variables: {
         oper: 'Add',
         AddNew: true,
-        File: "EstimateView.js",
+        File: "PurchaseView.js",
         ListId: 1,
-        BindGroupListUrl: "/Common/BindMastersDetails?ServiceName=ESTIMATE_GET",
-        QuotationDetailUrl: "/Common/BindMastersDetails?ServiceName=ESTIMATE_DETAILS_GET",
-        PerformMasterOperationUrl: "/Common/OpeartionsOnMaster?ServiceName=ESTIMATE_CRUD",
-        Bind_Salesreturnfiles_get: "/Common/BindMastersDetails?ServiceName=ESTIMATEFILES_GET",
+        BindGroupListUrl: "/Common/BindMastersDetails?ServiceName=PURCHASE_GET",
+        QuotationDetailUrl: "/Common/BindMastersDetails?ServiceName=PURCHASE_DETAILS_GET",
+        PerformMasterOperationUrl: "/Common/OpeartionsOnMaster?ServiceName=PURCHASE_CRUD",
         //table: "",
         HSNCodeList: [],
     },
 
     initializeJqgrid: function (url) {
         try {
-            colNames = ['ESTIMATEID','DELETE_VIRTUALFILENAME' ,'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'EVENTMASTERID', 'Event Name', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
+            colNames = ['PURCHASEID', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'EVENTMASTERID', 'Event Name', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
             colModel = [
-                { name: "ESTIMATEID", index: "ESTIMATEID", xmlmap: xmlvars.common_colmap + "ESTIMATEID", sortable: true, search: false, hidden: true },
-                { name: "DELETE_VIRTUALFILENAME", index: "DELETE_VIRTUALFILENAME", xmlmap: xmlvars.common_colmap + "DELETE_VIRTUALFILENAME", sortable: true, search: false, hidden: true },
+                { name: "PURCHASEID", index: "PURCHASEID", xmlmap: xmlvars.common_colmap + "PURCHASEID", sortable: true, search: false, hidden: true },
                 { name: "STATEID", index: "STATEID", xmlmap: xmlvars.common_colmap + "STATEID", sortable: true, search: false, hidden: true },
                 { name: "MOBILE1", index: "MOBILE1", xmlmap: xmlvars.common_colmap + "MOBILE1", sortable: true, search: false, hidden: true },
                 { name: "PHONENO", index: "PHONENO", xmlmap: xmlvars.common_colmap + "PHONENO", sortable: true, search: false, hidden: true },
@@ -65,7 +63,7 @@ var EstimateView = {
 
             ];
             colNames.push('Action');
-            colModel.push({ name: 'act', index: 'act', exportcol: false, width: 10, sortable: false, align: "center", search: false, formatter: function (cv, op, ro) { return jqGridVariables.ActionBtnFmatter(cv, op, ro, 'EstimateView') } });
+            colModel.push({ name: 'act', index: 'act', exportcol: false, width: 10, sortable: false, align: "center", search: false, formatter: function (cv, op, ro) { return jqGridVariables.ActionBtnFmatter(cv, op, ro, 'PurchaseView') } });
             //$("#table_list_Quotation").GridUnload();
             $.jgrid.gridUnload('#table_list_Quotation');
 
@@ -89,7 +87,7 @@ var EstimateView = {
                     total: xmlvars.common_response + "TOTALPAGES",
                     records: xmlvars.common_response + "TOTALRECORDS",
                     repeatitems: false,
-                    id: "ESTIMATEID"
+                    id: "PURCHASEID"
                 },
                 loadComplete: function () {
                     $("tr.jqgrow:even").addClass('myAltRowClass');
@@ -123,11 +121,11 @@ var EstimateView = {
                 beforeProcessing: OnJqbeforeProcessingErrorcheck,
                 viewrecords: true,
                 hidegrid: false,
-                sortname: 'ESTIMATEID',
+                sortname: 'PURCHASEID',
                 sortorder: 'desc',
                 ondblClickRow: function (rowid) {
                     if (isU()) {
-                        EstimateView.triggerId(rowid, 'edit')
+                        PurchaseView.triggerId(rowid, 'edit')
                     }
                 }
             });
@@ -135,7 +133,7 @@ var EstimateView = {
             // JqGrid navigations shortcuts
             jQuery("#table_list_Quotation").jqGrid('bindKeys', {
                 "onEnter": function (rowid) {
-                    EstimateView.triggerId(rowid, 'edit')
+                    PurchaseView.triggerId(rowid, 'edit')
                 }
             });
 
@@ -149,18 +147,18 @@ var EstimateView = {
             RightAlignJqGridHeader('table_list_Quotation', ['TOTALAMOUNT']);
         }
         catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
 
     triggerId: function (Id) {
         try {
 
-            EstimateView.variables.AddNew = false;
+            PurchaseView.variables.AddNew = false;
             $("#panelEdit").show();
             $("#panelView").hide();
             $("#hdnQuotationId").val(Id);
-            EstimateView.variables.oper = 'Edit';
+            PurchaseView.variables.oper = 'Edit';
 
             //var table = $("#saleQuotation").DataTable();
             //var rowData = table.row(Id).data();
@@ -246,9 +244,9 @@ var EstimateView = {
 
             var myfilter,
                 myfilter = { rules: [] };
-            myfilter.rules.push({ field: "ESTIMATEID", op: "eq", data: Id });
+            myfilter.rules.push({ field: "PURCHASEID", op: "eq", data: Id });
             $.ajax({
-                url: getDomain() + EstimateView.variables.QuotationDetailUrl + "&myfilters=" + JSON.stringify(myfilter) + '&ISRECORDALL=true',
+                url: getDomain() + PurchaseView.variables.QuotationDetailUrl + "&myfilters=" + JSON.stringify(myfilter) + '&ISRECORDALL=true',
                 async: false,
                 cache: false,
                 type: 'POST',
@@ -258,66 +256,63 @@ var EstimateView = {
                         if (JsonObject.serviceresponse.detailslist) {
                             if (JsonObject.serviceresponse.responsecode == 0) {
                                 $("#Quotationitem_tbody").html('');
-                                
                                 var list;
                                 if (JsonObject.serviceresponse.detailslist.details.length > 1)
                                     list = JsonObject.serviceresponse.detailslist.details;
                                 else
                                     list = JsonObject.serviceresponse.detailslist;
-                                
-
-                                EstimateView.variables.ListId = 1;
+                                PurchaseView.variables.ListId = 1;
                                 $.each(list, function (key, innerjsonDetails) {
                                     $("#Quotationitem_tbody").append('<tr>' +
                                         '<td style="text-align: center;"></td>' +
                                         '<td>' +
-                                        '<input   type="text" value="' + innerjsonDetails.itemgroupname + '" onkeyup="AutosuggestItemName(this)" class="form-control txtItemName txtAutocomplete" onfocusout="EstimateView.validation(this,' + EstimateView.variables.ListId + ')" name="txtItemName' + EstimateView.variables.ListId + '" id="txtItemName' + EstimateView.variables.ListId + '" itemgroupmasterid="' + innerjsonDetails.itemgroupmasterid + '">' +
+                                        '<input   type="text" value="' + innerjsonDetails.itemgroupname + '" onkeyup="AutosuggestItemName(this)" class="form-control txtItemName txtAutocomplete" onfocusout="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtItemName' + PurchaseView.variables.ListId + '" id="txtItemName' + PurchaseView.variables.ListId + '" itemgroupmasterid="' + innerjsonDetails.itemgroupmasterid + '">' +
                                         '</td>' +
                                         '<td>' +
-                                        '<input   value="' + innerjsonDetails.itemname + '" type="text" onkeyup="AutosuggestSubitemName(this)" class="form-control txtAutocomplete txtSubitemName" name="txtSubitemName' + EstimateView.variables.ListId + '" id="txtSubitemName' + EstimateView.variables.ListId + '" itemid="' + innerjsonDetails.itemid + '">' +
+                                        '<input   value="' + innerjsonDetails.itemname + '" type="text" onkeyup="AutosuggestSubitemName(this)" class="form-control txtAutocomplete txtSubitemName" name="txtSubitemName' + PurchaseView.variables.ListId + '" id="txtSubitemName' + PurchaseView.variables.ListId + '" itemid="' + innerjsonDetails.itemid + '">' +
                                         '</td>' +
                                         '<td>' +
-                                        '<input  value="' + innerjsonDetails.pcs + '" type="text" class="txtPcs form-control txtR number pcs required" onkeyup="EstimateView.Calculation(this,' + EstimateView.variables.ListId + ')" name="txtPcs' + EstimateView.variables.ListId + '" id="txtPcs' + EstimateView.variables.ListId + '">' +
+                                        '<input  value="' + innerjsonDetails.pcs + '" type="text" class="txtPcs form-control txtR number pcs required" onkeyup="PurchaseView.Calculation(this,' + PurchaseView.variables.ListId + ')" name="txtPcs' + PurchaseView.variables.ListId + '" id="txtPcs' + PurchaseView.variables.ListId + '">' +
                                         '</td>' +
                                         '<td>' +
-                                        '<input value="' + innerjsonDetails.itemtype + '" disabled type="text" class="txtitemtype form-control txtR number pcs required"  name="txtitemtype' + EstimateView.variables.ListId + '" id="txtitemtype' + EstimateView.variables.ListId + '">' +
+                                        '<input value="' + innerjsonDetails.itemtype + '" disabled type="text" class="txtitemtype form-control txtR number pcs required"  name="txtitemtype' + PurchaseView.variables.ListId + '" id="txtitemtype' + PurchaseView.variables.ListId + '">' +
                                         '</td>' +
                                         '<td>' +
-                                        '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="EstimateView.Calculation(' + EstimateView.variables.ListId + ')" name="HsnCode' + EstimateView.variables.ListId + '" id="txtHsnCode' + EstimateView.variables.ListId + '"></select>' +
+                                        '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="ValueChange(' + PurchaseView.variables.ListId + ')" name="HsnCode' + PurchaseView.variables.ListId + '" id="txtHsnCode' + PurchaseView.variables.ListId + '"></select>' +
                                         '</td>' +
                                         '<td>' +
-                                        '<input disabled value="' + innerjsonDetails.rate + '" type="text" class="form-control txtR numbers grosswt fixed required txtRate" decimals="3" name="txtRate' + EstimateView.variables.ListId + '" id="txtRate' + EstimateView.variables.ListId + '">' +
+                                        '<input disabled value="' + innerjsonDetails.rate + '" type="text" class="form-control txtR numbers grosswt fixed required txtRate" decimals="3" name="txtRate' + PurchaseView.variables.ListId + '" id="txtRate' + PurchaseView.variables.ListId + '">' +
                                         '</td>' +
 
                                         '<td>' +
-                                        '<input disabled value="' + innerjsonDetails.amount + '" type="text" class="form-control txtR numbers grosswt fixed required txtAmount" decimals="3" name="txtAmount' + EstimateView.variables.ListId + '" id="txtAmount' + EstimateView.variables.ListId + '">' +
+                                        '<input disabled value="' + innerjsonDetails.amount + '" type="text" class="form-control txtR numbers grosswt fixed required txtAmount" decimals="3" name="txtAmount' + PurchaseView.variables.ListId + '" id="txtAmount' + PurchaseView.variables.ListId + '">' +
                                         '</td>' +
 
                                         '<td>' +
-                                        '<input disabled value="' + innerjsonDetails.taxamt + '" type="text" class="form-control txtR numbers grosswt fixed required txtteaxAmount" decimals="3" name="txtteaxAmount' + EstimateView.variables.ListId + '" id="txtteaxAmount' + EstimateView.variables.ListId + '">' +
+                                        '<input disabled value="' + innerjsonDetails.taxamt + '" type="text" class="form-control txtR numbers grosswt fixed required txtteaxAmount" decimals="3" name="txtteaxAmount' + PurchaseView.variables.ListId + '" id="txtteaxAmount' + PurchaseView.variables.ListId + '">' +
                                         '</td>' +
 
                                         '<td>' +
-                                        '<input disabled value="' + innerjsonDetails.amttax + '" type="text" class="form-control txtR numbers grosswt fixed required txtAmtTaxTotal" decimals="3" name="txtAmtTax' + EstimateView.variables.ListId + '" id="txtAmtTax' + EstimateView.variables.ListId + '">' +
+                                        '<input disabled value="' + innerjsonDetails.amttax + '" type="text" class="form-control txtR numbers grosswt fixed required txtAmtTaxTotal" decimals="3" name="txtAmtTax' + PurchaseView.variables.ListId + '" id="txtAmtTax' + PurchaseView.variables.ListId + '">' +
                                         '</td>' +
 
-                                        '<td class="btnRemove" id="btnRemove' + EstimateView.variables.ListId + '">' +
-                                        //'<div class="as_row_rmv" onclick="EstimateView.RemoveRow(this)">' +
+                                        '<td class="btnRemove" id="btnRemove' + PurchaseView.variables.ListId + '">' +
+                                        //'<div class="as_row_rmv" onclick="PurchaseView.RemoveRow(this)">' +
                                         //'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox = "0 0 24 24" fill = "none"> <path fill-rule="evenodd" clip-rule="evenodd" d="M7 4C7 2.34315 8.34315 1 10 1H14C15.6569 1 17 2.34315 17 4V5H21C21.5523 5 22 5.44772 22 6C22 6.55228 21.5523 7 21 7H19.9394L19.1153 20.1871C19.0164 21.7682 17.7053 23 16.1211 23H7.8789C6.29471 23 4.98356 21.7682 4.88474 20.1871L4.06055 7H3C2.44772 7 2 6.55228 2 6C2 5.44772 2.44772 5 3 5H7V4ZM9 5H15V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V5ZM6.06445 7L6.88085 20.0624C6.91379 20.5894 7.35084 21 7.8789 21H16.1211C16.6492 21 17.0862 20.5894 17.1191 20.0624L17.9355 7H6.06445Z" fill="#ad2c2c"></path></svg>' +
                                         //'</div>' +
                                         '<div>' +
-                                        '<i class="icon-cancel-circle2" onclick="EstimateView.RemoveRow(this)"></i>' +
+                                        '<i class="icon-cancel-circle2" onclick="PurchaseView.RemoveRow(this)"></i>' +
                                         '</div>' +
                                         '</td>' +
                                         '</tr>');
 
-                                    HSNCode(EstimateView.variables.ListId)
+                                    HSNCode(PurchaseView.variables.ListId)
 
-                                    $("#txtHsnCode" + EstimateView.variables.ListId).val(innerjsonDetails.hsnid)
-                                    EstimateView.variables.ListId = EstimateView.variables.ListId + 1;
+                                    $("#txtHsnCode" + PurchaseView.variables.ListId).val(innerjsonDetails.hsnid)
+                                    PurchaseView.variables.ListId = PurchaseView.variables.ListId + 1;
 
                                 });
-                                EstimateView.Calculation();
+                                PurchaseView.Calculation();
 
                             }
                             else {
@@ -332,67 +327,25 @@ var EstimateView = {
                 error: OnError
             });
 
-            debugger
-            var myfilter = { rules: [] };
-            myfilter.rules.push({ field: "ESTIMATEFILEID", op: "eq", data: Id });
-            $.ajax({
-                url: getDomain() + EstimateView.variables.Bind_Salesreturnfiles_get + "&myfilters=" + JSON.stringify(myfilter),
-                async: false,
-                cache: false,
-                type: 'GET',
-                success: function (data) {
-                    debugger
-                    console.log(data)
-                    if ($(data).find('RESPONSECODE').text() == "0") {
-                        var vars = {};
-                        $.views.helpers({
-                            getvar: function (key) {
-                                return vars[key];
-                            }
-                        });
-                        $.views.tags({
-                            setvar: function (key, value) {
-                                vars[key] = value;
-                            }
-                        });
-                        $.views.settings.allowCode = true;
-
-                        window.domain = getDomain();
-                        var JsonObject = xml2json.parser(data);
-                        $('#imgPreviewTechnicalData').html("");
-                        if (JsonObject.serviceresponse.detailslist != undefined) {
-
-                            window.extension = 'jpg,jpeg,gif,png,pdf';
-                            $("#imgPreviewTechnicalData").html($("#FileList").render(JsonObject.serviceresponse.detailslist.details));
-                        }
-
-                    }
-                    else {
-                        InvalidResponseCode(data);
-                    }
-                },
-                error: OnError
-            });
-
-            //EstimateView.editTrigger();
+            //PurchaseView.editTrigger();
         }
         catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
 
     RemoveRow: function (row) {
         try {
             $(row).closest('tr').remove();
-            EstimateView.Calculation();
+            PurchaseView.Calculation();
             //$("#Quotationitem_tbody tr:last td:last").html('<div>' +
-            //                                                   '<i class="icon-cancel-circle2" onclick="EstimateView.RemoveRow(this)"></i>' +
+            //                                                   '<i class="icon-cancel-circle2" onclick="PurchaseView.RemoveRow(this)"></i>' +
             //                                             '</div>');
             //if ($("#Quotationitem_tbody tr").length >= 1) {
             //    $("#Quotationitem_tbody tr:first td:last div").remove();
             //}
         } catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
 
@@ -408,7 +361,7 @@ var EstimateView = {
                 }
             }
         } catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
 
@@ -515,7 +468,7 @@ var EstimateView = {
 
         }
         catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
 
@@ -552,25 +505,11 @@ var EstimateView = {
                 notificationTost('warning', 'Insert Items.');
                 return;
             }
+
             xmlsaveFiles += resultXml.xmlsaveFiles;
             xmlsaveFiles += "</PURCHASE_DETAILS>";
-
-
-            var bannerImage = $('#imgBanner').attr('src');
-            if (bannerImage.indexOf('noImage.png') > -1)
-                bannerImage = '';
-
-
-            var xmlsaveFiles1 = "<DOCUMENTDEATIL>", saveFiles = bannerImage + ',', refrenceFiles = '', priceFiles = '';
-            var resultXml1 = makeFileXml_DOC('#imgPreviewTechnicalData', 'Picture');
-            xmlsaveFiles1 += resultXml1.xmlsaveFiles1;
-            saveFiles += resultXml1.saveFiles;
-            xmlsaveFiles1 += "</DOCUMENTDEATIL>";
-
-
-
             var data = {
-                "ESTIMATEID": $("#hdnQuotationId").val(),
+                "PURCHASEID": $("#hdnQuotationId").val(),
                 "PARTYMASTERID": $("#txtAccount").attr("partymasterid"),
                 "PURCHASEDATE": $("#txtBillDate").val(),
                 "ROF": $("#chkROF").prop("checked") ? 1 : 0,
@@ -581,8 +520,8 @@ var EstimateView = {
                 "AMTWITHTAX": $("#txtTotalWithTaxAmt").val(),
                 "ROFAMT": $("#txtROFAmt").val(),
                 "TOTALAMT": $("#txtTotalAmt").val(),
-                "oper": EstimateView.variables.oper,
-                "XMLPARAM": escape(xmlsaveFiles + xmlsaveFiles1),
+                "oper": PurchaseView.variables.oper,
+                "XMLPARAM": escape(xmlsaveFiles),
                 "CITYID": $("#ddlPartyBranch").val(),
                 "TDSCHK": ($("#toggleSwitch").bootstrapSwitch('state') == true ? 1 : 0),
                 "TCSLIMT": $("#txtTCSApplicableLimit").val(),
@@ -595,8 +534,8 @@ var EstimateView = {
                 "CASHPAYMENT": $("#txtCashPayment").val() || 0,
                 "CHEQUEPAYMENT": $("#txtChequePayment").val() || 0,
                 "EVENTMASTERID": $("#ddlevent").val(),
-                "ACCYEARID": $("#CurrentAccountYear").attr("accyearid")
-
+                "ACCYEARID": $("#CurrentAccountYear").attr("accyearid"),
+                
             };
             if ($("#ddlTDS").val()) {
                 data.TDSID = $("#ddlTDS").val()
@@ -612,35 +551,16 @@ var EstimateView = {
                 data.CHEQUEBOOKDETAILID = $("#hdnChequebookid").val();
                 /*data.CHEQUENAME = $("#txtAccount").val();*/
             }
-            
-           
-                $.ajax({
-                    type: 'POST',
-                    async: false,
-                    cache: false,
-                    url: getDomain() + "/Common/SaveImage",
-                    data: {
-                        category: 'Estimate',
-                        deletedfiles: deletedFiles,
-                        savefiles: saveFiles
-                    },
-                    success: function (result) {
-
-                    },
-                    error: OnError
-                });
-            
-            
 
             $.ajax({
-                url: getDomain() + EstimateView.variables.PerformMasterOperationUrl,
+                url: getDomain() + PurchaseView.variables.PerformMasterOperationUrl,
                 type: "POST",
                 data: data,
                 async: false,
                 cache: false,
                 success: function (data) {
                     if ($(data).find('RESPONSECODE').text() == "0") {
-                        notificationMessage(EstimateView.variables.oper + ' Operation', $(data).find('RESPONSEMESSAGE').text(), 'success');
+                        notificationMessage(PurchaseView.variables.oper + ' Operation', $(data).find('RESPONSEMESSAGE').text(), 'success');
                         if (!IsPrint) {
                             if ($(location).attr('search').split('='))
                                 if ($(location).attr('search').split('=')[1]) {
@@ -648,7 +568,11 @@ var EstimateView = {
                                     return;
                                 }
                         }
-                        EstimateView.ClearData();
+                        PurchaseView.ClearData();
+                        debugger
+                        if (PurchaseView.variables.oper == 'Add') {
+                            $(".estimate").show();
+                        }
                         $("#panelView").hide();
                         $("#panelEdit").show();
                         ItemAddNewRow();
@@ -662,57 +586,34 @@ var EstimateView = {
             });
         }
         catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
 
     deleteRow: function (id) {
         try {
-            $("#delDELETE_VIRTUALFILENAME").val("")
             rowData = jQuery("#table_list_Quotation").getRowData(id);
             $("#hdnQuotationId").val(id);
             $("#delCode").html(rowData['PURCHASECODE']);
-            $("#delDELETE_VIRTUALFILENAME").val(rowData['DELETE_VIRTUALFILENAME'])
             $("#ModalQuotationDelete").modal('show');
         } catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
 
     DeleteSubmit: function () {
         try {
-
-            
-
             var data = {
-                "ESTIMATEID": $("#hdnQuotationId").val(),
+                "PURCHASEID": $("#hdnQuotationId").val(),
                 "oper": 'Delete',
             };
             $.ajax({
-                url: getDomain() + EstimateView.variables.PerformMasterOperationUrl,
+                url: getDomain() + PurchaseView.variables.PerformMasterOperationUrl,
                 type: "POST",
                 data: data,
                 async: false,
                 cache: false,
                 success: function (data) {
-
-                    $.ajax({
-                        type: 'POST',
-                        async: false,
-                        cache: false,
-                        url: getDomain() + "/Common/SaveImage",
-                        data: {
-                            category: 'Estimate',
-                            deletedfiles: $("#delDELETE_VIRTUALFILENAME").val(),
-                            savefiles: ""
-                        },
-                        success: function (result) {
-
-                        },
-                        error: OnError
-                    });
-                    $("#delDELETE_VIRTUALFILENAME").val("")
-
                     if ($(data).find('RESPONSECODE').text() == "0") {
                         $("#hdnQuotationId").val("");
                         notificationMessage('Success', $(data).find('RESPONSEMESSAGE').text(), 'success');
@@ -724,13 +625,13 @@ var EstimateView = {
                 }
             });
         } catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
 
     //TaxDropDown: function () {
-    //    $("#ddlTax" + EstimateView.variables.ListId).html();
-    //    BindDropdown('ddlTax' + EstimateView.variables.ListId, 'TaxDropdownList', getDomain() + "/Common/BindMastersDetails?ServiceName=TAXMASTER_GET&IsRecordAll=true&ISACTIVE=1", '', true);
+    //    $("#ddlTax" + PurchaseView.variables.ListId).html();
+    //    BindDropdown('ddlTax' + PurchaseView.variables.ListId, 'TaxDropdownList', getDomain() + "/Common/BindMastersDetails?ServiceName=TAXMASTER_GET&IsRecordAll=true&ISACTIVE=1", '', true);
     //},
 
     Sum: function (id) {
@@ -808,18 +709,18 @@ var EstimateView = {
             $("#txtTotalAmt").val($("#totalnetamt").html());
         }
         catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
 
     ClearData: function () {
         try {
-            $("#imgPreviewTechnicalData").html("")
+            
             $("#lblPurchaseCode").hide();
             $("#txtAccount").attr("partymasterid", "")
             $("#hdnVenderStateId").val("");
-            EstimateView.variables.ListId = 1;
-            EstimateView.variables.oper = 'Add';
+            PurchaseView.variables.ListId = 1;
+            PurchaseView.variables.oper = 'Add';
             $("#Quotationitem_tbody").html('');
             jQuery("#table_list_Quotation").trigger('reloadGrid');
             $("#hdnQuotationId").val('');
@@ -871,7 +772,7 @@ var EstimateView = {
             //$('.as_add_data_wrap').hide();
         }
         catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
 
@@ -909,7 +810,7 @@ var EstimateView = {
             myfilter = { rules: [] };
             myfilter.rules.push({ field: "QUOTATIONID", op: "eq", data: VoucherId });
             $.ajax({
-                url: getDomain() + EstimateView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter),
+                url: getDomain() + PurchaseView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter),
                 async: false,
                 cache: false,
                 type: 'POST',
@@ -918,12 +819,12 @@ var EstimateView = {
                         var JsonObject = xml2json.parser(data);
                         var rowData = JsonObject.serviceresponse.detailslist.details;
                         var id = rowData.quotationid;
-                        EstimateView.variables.AddNew = false;
+                        PurchaseView.variables.AddNew = false;
                         $("#panelEdit").show();
                         $("#panelView").hide();
                         $("#hdnQuotationId").val(id);
                         $("#lbl_VoucherNo").show();
-                        EstimateView.variables.oper = 'Edit';
+                        PurchaseView.variables.oper = 'Edit';
                         var DATE = (rowData.date.toString()).split('/');
                         $("#txtBillDate").val(DATE[2] + '-' + DATE[1] + '-' + DATE[0]);
                         $("#lbl_VoucherNo").html(rowData.voucherno);
@@ -948,7 +849,7 @@ var EstimateView = {
                             myfilter = { rules: [] };
                         myfilter.rules.push({ field: "QUOTATIONID", op: "eq", data: id });
                         $.ajax({
-                            url: getDomain() + EstimateView.variables.QuotationDetailUrl + "&myfilters=" + JSON.stringify(myfilter),
+                            url: getDomain() + PurchaseView.variables.QuotationDetailUrl + "&myfilters=" + JSON.stringify(myfilter),
                             async: false,
                             cache: false,
                             type: 'POST',
@@ -963,65 +864,65 @@ var EstimateView = {
                                                 list = JsonObject.serviceresponse.detailslist.details;
                                             else
                                                 list = JsonObject.serviceresponse.detailslist;
-                                            EstimateView.variables.ListId = 1;
+                                            PurchaseView.variables.ListId = 1;
                                             $.each(list, function (key, innerjsonDetails) {
                                                 $("#Quotationitem_tbody").append('<tr>' +
                                                     '<td style="text-align: center;"></td>' +
                                                     '<td>' +
-                                                    '<input type="text" purchaseratetype="' + innerjsonDetails.purchaseratetype + '" value="' + innerjsonDetails.itemname + '" itemgroupid="' + innerjsonDetails.itemgroupid + '" ItemId="' + innerjsonDetails.itemid + '" onkeyup="AutosuggestItemName(this)" class="form-control txtItemName txtAutocomplete" onfocusout="EstimateView.validation(this,' + EstimateView.variables.ListId + ')" name="txtItemName' + EstimateView.variables.ListId + '" id="txtItemName' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text" purchaseratetype="' + innerjsonDetails.purchaseratetype + '" value="' + innerjsonDetails.itemname + '" itemgroupid="' + innerjsonDetails.itemgroupid + '" ItemId="' + innerjsonDetails.itemid + '" onkeyup="AutosuggestItemName(this)" class="form-control txtItemName txtAutocomplete" onfocusout="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtItemName' + PurchaseView.variables.ListId + '" id="txtItemName' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
                                                     '<td>' +
-                                                    '<input type="text" value="' + (innerjsonDetails.subitemname == '[object Object]' ? '' : innerjsonDetails.subitemname || "") + '"  onkeyup="AutosuggestSubitemName(this)" class="form-control txtAutocomplete txtSubitemName" name="txtSubitemName' + EstimateView.variables.ListId + '" id="txtSubitemName' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text" value="' + (innerjsonDetails.subitemname == '[object Object]' ? '' : innerjsonDetails.subitemname || "") + '"  onkeyup="AutosuggestSubitemName(this)" class="form-control txtAutocomplete txtSubitemName" name="txtSubitemName' + PurchaseView.variables.ListId + '" id="txtSubitemName' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
                                                     '<td>' +
-                                                    '<input type="text" value="' + innerjsonDetails.pcs + '" class="form-control txtR number pcs" onkeyup="EstimateView.validation(this,' + EstimateView.variables.ListId + ')" name="txtPcs' + EstimateView.variables.ListId + '" id="txtPcs' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text" value="' + innerjsonDetails.pcs + '" class="form-control txtR number pcs" onkeyup="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtPcs' + PurchaseView.variables.ListId + '" id="txtPcs' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
                                                     '<td>' +
-                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.grosswt).toFixed(3) + '" class="form-control txtR numbers grosswt fixed" decimals="3" onkeyup="EstimateView.validation(this,' + EstimateView.variables.ListId + ')" name="txtGrossWt' + EstimateView.variables.ListId + '" id="txtGrossWt' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.grosswt).toFixed(3) + '" class="form-control txtR numbers grosswt fixed" decimals="3" onkeyup="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtGrossWt' + PurchaseView.variables.ListId + '" id="txtGrossWt' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
                                                     '<td>' +
-                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.lesswt).toFixed(3) + '" class="form-control txtR numbers lesswt fixed" decimals="3" onkeyup="EstimateView.validation(this,' + EstimateView.variables.ListId + ')" name="txtLessWt' + EstimateView.variables.ListId + '" id="txtLessWt' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.lesswt).toFixed(3) + '" class="form-control txtR numbers lesswt fixed" decimals="3" onkeyup="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtLessWt' + PurchaseView.variables.ListId + '" id="txtLessWt' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
                                                     '<td>' +
-                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.netwt).toFixed(3) + '" class="form-control txtR numbers netwt fixed" decimals="3" onkeyup="EstimateView.validation(this,' + EstimateView.variables.ListId + ')" name="txtNetWt' + EstimateView.variables.ListId + '" id="txtNetWt' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.netwt).toFixed(3) + '" class="form-control txtR numbers netwt fixed" decimals="3" onkeyup="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtNetWt' + PurchaseView.variables.ListId + '" id="txtNetWt' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
                                                     '<td>' +
-                                                    '<input type="text" value="' + innerjsonDetails.touch + '" class="form-control txtR numbers txtTouch" onkeyup="EstimateView.validation(this,' + EstimateView.variables.ListId + ')" name="txtTouch' + EstimateView.variables.ListId + '" id="txtTouch' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text" value="' + innerjsonDetails.touch + '" class="form-control txtR numbers txtTouch" onkeyup="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtTouch' + PurchaseView.variables.ListId + '" id="txtTouch' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
                                                     '<td>' +
-                                                    '<input type="text"  value="' + parseFloat(formatTwoDigitDecimal(innerjsonDetails.finetwt)).toFixed(3) + '" class="form-control txtR numbers finewt fixed round" decimals="3" onkeyup="EstimateView.validation(this,' + EstimateView.variables.ListId + ')" name="txtFineWt' + EstimateView.variables.ListId + '" id="txtFineWt' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text"  value="' + parseFloat(formatTwoDigitDecimal(innerjsonDetails.finetwt)).toFixed(3) + '" class="form-control txtR numbers finewt fixed round" decimals="3" onkeyup="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtFineWt' + PurchaseView.variables.ListId + '" id="txtFineWt' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
                                                     '<td>' +
-                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.metalrate).toFixed(4) + '" class="form-control txtR numbers MetalRate fixed" decimals="4" onkeyup="EstimateView.validation(this,' + EstimateView.variables.ListId + ')" name="txtMetalRate' + EstimateView.variables.ListId + '" id="txtMetalRate' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.metalrate).toFixed(4) + '" class="form-control txtR numbers MetalRate fixed" decimals="4" onkeyup="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtMetalRate' + PurchaseView.variables.ListId + '" id="txtMetalRate' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
                                                     '<td>' +
-                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.amount).toFixed(2) + '" class="form-control txtR numbers amt fixed" decimals="2" onfocusout="EstimateView.validation(this,' + EstimateView.variables.ListId + ')" name="txtAmt' + EstimateView.variables.ListId + '" id="txtAmt' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.amount).toFixed(2) + '" class="form-control txtR numbers amt fixed" decimals="2" onfocusout="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtAmt' + PurchaseView.variables.ListId + '" id="txtAmt' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
                                                     '<td>' +
-                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.otheramt).toFixed(2) + '" class="form-control txtR numbers otheramt fixed" decimals="2" onkeyup="EstimateView.Sum(' + EstimateView.variables.ListId + ')" name="txtOtherAmt' + EstimateView.variables.ListId + '" id="txtOtherAmt' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.otheramt).toFixed(2) + '" class="form-control txtR numbers otheramt fixed" decimals="2" onkeyup="PurchaseView.Sum(' + PurchaseView.variables.ListId + ')" name="txtOtherAmt' + PurchaseView.variables.ListId + '" id="txtOtherAmt' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
                                                     '<td>' +
-                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.netamt).toFixed(2) + '" class="form-control txtR numbers NetAmt fixed" decimals="2" onblur="EstimateView.Sum(' + EstimateView.variables.ListId + ')" name="txtNetAmt' + EstimateView.variables.ListId + '" id="txtNetAmt' + EstimateView.variables.ListId + '">' +
+                                                    '<input type="text" value="' + parseFloat(innerjsonDetails.netamt).toFixed(2) + '" class="form-control txtR numbers NetAmt fixed" decimals="2" onblur="PurchaseView.Sum(' + PurchaseView.variables.ListId + ')" name="txtNetAmt' + PurchaseView.variables.ListId + '" id="txtNetAmt' + PurchaseView.variables.ListId + '">' +
                                                     '</td>' +
-                                                    '<td class="btnRemove" id="btnRemove' + EstimateView.variables.ListId + '">' +
-                                                    //'<div class="as_row_rmv" onclick="EstimateView.RemoveRow(this)">' +
+                                                    '<td class="btnRemove" id="btnRemove' + PurchaseView.variables.ListId + '">' +
+                                                    //'<div class="as_row_rmv" onclick="PurchaseView.RemoveRow(this)">' +
                                                     //'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox = "0 0 24 24" fill = "none"> <path fill-rule="evenodd" clip-rule="evenodd" d="M7 4C7 2.34315 8.34315 1 10 1H14C15.6569 1 17 2.34315 17 4V5H21C21.5523 5 22 5.44772 22 6C22 6.55228 21.5523 7 21 7H19.9394L19.1153 20.1871C19.0164 21.7682 17.7053 23 16.1211 23H7.8789C6.29471 23 4.98356 21.7682 4.88474 20.1871L4.06055 7H3C2.44772 7 2 6.55228 2 6C2 5.44772 2.44772 5 3 5H7V4ZM9 5H15V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V5ZM6.06445 7L6.88085 20.0624C6.91379 20.5894 7.35084 21 7.8789 21H16.1211C16.6492 21 17.0862 20.5894 17.1191 20.0624L17.9355 7H6.06445Z" fill="#ad2c2c"></path></svg>' +
                                                     //'</div>' +
                                                     '<div>' +
-                                                    '<i class="icon-cancel-circle2" onclick="EstimateView.RemoveRow(this)"></i>' +
+                                                    '<i class="icon-cancel-circle2" onclick="PurchaseView.RemoveRow(this)"></i>' +
                                                     '</div>' +
                                                     '</td>' +
                                                     '</tr>');
                                                 FixValue();
 
-                                                if (EstimateView.variables.AddNew != true) {
+                                                if (PurchaseView.variables.AddNew != true) {
                                                     $("#Quotationitem_tbody tr:last td:nth-child(2) input").focus();
                                                 } else {
-                                                    EstimateView.variables.AddNew = false;
+                                                    PurchaseView.variables.AddNew = false;
                                                 }
 
-                                                EstimateView.Sum(EstimateView.variables.ListId);
-                                                EstimateView.variables.ListId = EstimateView.variables.ListId + 1;
+                                                PurchaseView.Sum(PurchaseView.variables.ListId);
+                                                PurchaseView.variables.ListId = PurchaseView.variables.ListId + 1;
 
                                             });
                                         } else {
@@ -1073,7 +974,7 @@ var EstimateView = {
             }
         }
         catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
 
@@ -1300,22 +1201,22 @@ var EstimateView = {
                 success: function (data) {
                     if ($(data).find('RESPONSECODE').text() == "0") {
                         if ($(data).find(xmlvars.common_root).text() != '') {
-                            EstimateView.variables.HSNCodeList = xml2json.parser(data);
+                            PurchaseView.variables.HSNCodeList = xml2json.parser(data);
                         }
                         else {
-                            EstimateView.variables.HSNCodeList = [];
+                            PurchaseView.variables.HSNCodeList = [];
                         }
                     }
                     else {
                         InvalidResponseCode(data);
-                        EstimateView.variables.HSNCodeList = [];
+                        PurchaseView.variables.HSNCodeList = [];
                     }
                 },
                 error: OnError
             });
         }
         catch (e) {
-            ErrorDetails(e, EstimateView.variables.File);
+            ErrorDetails(e, PurchaseView.variables.File);
         }
     },
     GetVenderDetails: function (id, type) {
@@ -1392,19 +1293,18 @@ var EstimateView = {
     },
 
     TDSORTCSChange: function () {
-        EstimateView.Calculation();
-    }
-
-
+        PurchaseView.Calculation();
+    },
 }
 
 $(document).ready(function () {
     try {
-        EstimateView.bindEvent();
+        
+        PurchaseView.bindEvent();
         $("#ddlTDS").change(function () {
-            EstimateView.Calculation();
+            PurchaseView.Calculation();
         })
-        EstimateView.bindTDS();
+        PurchaseView.bindTDS();
 
         var myfilter;
         myfilter = {
@@ -1412,54 +1312,55 @@ $(document).ready(function () {
         };
         myfilter.rules.push({ field: "CITY", op: "eq", data: $("#ddlPartyBranch").val() });
         /*myfilter.rules.push({ field: "GROUP", op: "eq", data: 'Group' });*/
-        var url = EstimateView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter);
+        var url = PurchaseView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter);
 
-        EstimateView.initializeJqgrid(url);
+        PurchaseView.initializeJqgrid(url);
 
         $("#btnReCalculate").click(function () {
-            EstimateView.Calculation();
+            PurchaseView.Calculation();
         })
         $('#chkROF').on('ifChanged', function (event) {
-            EstimateView.Calculation();
+            PurchaseView.Calculation();
         });
         $('#chkROFTDS').on('ifChanged', function (event) {
-            EstimateView.Calculation();
+            PurchaseView.Calculation();
         });
 
 
-        EstimateView.GetHSNCodeList();
+        PurchaseView.GetHSNCodeList();
 
 
 
         $("#txtMobileNo").focus();
-        EstimateView.ClearData();
+        PurchaseView.ClearData();
         //ItemAddNewRow();
         //$("#panelView").hide();
         //$("#panelEdit").show();
         $("#btnAddnewQuotation").click(function () {
-            EstimateView.ClearData();
-            EstimateView.variables.AddNew = true;
+            PurchaseView.ClearData();
+            $(".estimate").show();
+            PurchaseView.variables.AddNew = true;
             ItemAddNewRow();
             setTimeout(function () {
-                EstimateView.variables.AddNew = false;
+                PurchaseView.variables.AddNew = false;
                 $("#txtMobileNo").focus();
             }, 60);
             $("#panelView").hide();
             $("#panelEdit").show();
-            EstimateView.VoucherDateCheck();
+            PurchaseView.VoucherDateCheck();
         });
         $("#btnSaveQuotation").click(function () {
             if ($("#btnSaveQuotation").is(":visible"))
-                EstimateView.SaveData(false);
+                PurchaseView.SaveData(false);
         });
         $("#btncancelQuotation").click(function () {
-            EstimateView.ClearData();
+            PurchaseView.ClearData();
         });
         $("#btnViewList").click(function () {
-            EstimateView.ClearData();
+            PurchaseView.ClearData();
         });
         $("#btnDeleteQuotation").click(function () {
-            EstimateView.DeleteSubmit();
+            PurchaseView.DeleteSubmit();
         });
         $("#btnCancelDelete").click(function () {
             $("#ModalQuotationDelete").modal('hide');
@@ -1493,11 +1394,11 @@ $(document).ready(function () {
             }, 100);
         });
         $("#btnSavePrint").click(function () {
-            EstimateView.RemoveEmptyRow();
+            PurchaseView.RemoveEmptyRow();
             if ($("#btnSaveQuotation").is(":visible"))
-                EstimateView.SaveData(false);
+                PurchaseView.SaveData(false);
             if ($("#hdnQuotationId").val()) {
-                EstimateView.print($("#hdnQuotationId").val());
+                PurchaseView.print($("#hdnQuotationId").val());
                 if ($(location).attr('search').split('='))
                     if ($(location).attr('search').split('=')[1]) {
                         window.top.close();
@@ -1507,7 +1408,7 @@ $(document).ready(function () {
         });
 
         $("#btnPrint").click(function () {
-            EstimateView.print($("#hdnQuotationId").val());
+            PurchaseView.print($("#hdnQuotationId").val());
         });
         $("#refreshgrid").click(function () {
             jQuery('#table_list_Quotation').trigger('reloadGrid');
@@ -1544,7 +1445,7 @@ $(document).ready(function () {
         //end tooltip function
         var params = new window.URLSearchParams(window.location.search);
         if (params.get('VoucherId')) {
-            EstimateView.GetVoucherDetails(params.get('VoucherId'));
+            PurchaseView.GetVoucherDetails(params.get('VoucherId'));
         } else {
             DateFilter();
         }
@@ -1560,9 +1461,9 @@ $(document).ready(function () {
         $("#AddEditPartyCusomerModal").on('hide.bs.modal', function () {
 
             if ($("#hdnCommonNewPartyId").val() != '') {    //--------------- New Party Id for new record
-                EstimateView.GetVenderDetails($("#hdnCommonNewPartyId").val(), 'PARTY');
+                PurchaseView.GetVenderDetails($("#hdnCommonNewPartyId").val(), 'PARTY');
             } else if ($("#hdnCommonNewCustomerId").val() != '') {  //--------------- New Customer Id for new record
-                EstimateView.GetVenderDetails($("#hdnCommonNewCustomerId").val(), 'CUSTOMER');
+                PurchaseView.GetVenderDetails($("#hdnCommonNewCustomerId").val(), 'CUSTOMER');
             } else {
                 setTimeout(function () {
                     $("#txtAccount").focus();
@@ -1577,7 +1478,7 @@ $(document).ready(function () {
                 $(".TDSCalculate").show();
                 $(".TCSCalculate").hide();
                 /*CalculateBill_PaymentInfo()*/
-                //EstimateView.bindtdspercentage()
+                //PurchaseView.bindtdspercentage()
             } else {
                 $(".TDSCalculate").hide();
                 $(".TCSCalculate").show();
@@ -1607,59 +1508,16 @@ $(document).ready(function () {
             $(".TDSCalculate").hide();
             $(".TCSCalculate").show();
         }
-        //*------------------------------------- Upload Image Multiple ----------------------------------------*/
-        $('#modalUpload').on('show.bs.modal', function (e) {
-            $('#hdnPreviewUploader').val(e.relatedTarget.dataset.preview);
-            $('#hdnExtUploader').val(e.relatedTarget.dataset.ext);
-            RegisterMultipleFileUpload('#imgUploader', e.relatedTarget.dataset.ext, '#btnAddFile');
-            $("#spExtension").html(e.relatedTarget.dataset.ext);
-        });
-        $('#btnAddFile').click(function () {
-            var strHref = '', file = '', fileid = '00000000-0000-0000-0000-000000000000', displayFile = '';
-            $('#imgUploader .plupload_filelist').find('li').each(function (key, obj) {
-                if ($(obj).find('.plupload_file_name a').length > 0) {
-                    strHref = $(obj).find('.plupload_file_name a').attr('href');
-                    file = strHref.substr(strHref.lastIndexOf('/') + 1).split('.')[0];
-                    displayFile = $(obj).find('.plupload_file_name a').html();
-                    //var x = displayFile;
-                    //var f = x.substr(0, x.lastIndexOf('.'));
-                    $('#' + $('#hdnPreviewUploader').val()).append('<tr id="' + file + '">' +
-                        '<td class="col-sm-3">' +
-                        '<label class="btn btn-quaternary uploadlink tooltip1" data-original-title="change file" for="btn' + file + '"><i class="fa fa-upload"></i>' +
-                        '<input type="file" accept="' + $('#hdnExtUploader').val() + '" name="file" id="btn' + file + '" class="hide"></label>&nbsp;' +
-                        '<a class="label-click" href="' + strHref + '" target="blank">' + displayFile + '</a>' +
-                        '<input type="hidden" class="fileid" value="' + fileid + '" /></td>' +
-                        '<td class="col-sm-2">' +
-                        '<input type="text" class="form-control title" value="' + displayFile.split('.')[0] + '" placeholder="Title"></td>' +
 
-                        '<td class="col-sm-1">' +
-
-                        '<a href="javascript:void(0);" onclick="deleteCustomerFile(\'' + file + '\', ' + fileid + ',\'' + strHref + '\');" data-original-title="delete record" class="btn btn-danger tooltip1"><i class="fa fa-trash"></i></a>' +
-                        '</td></tr>');
-                }
-
-                $('.tooltip1').tooltip({
-                    html: true,
-                    container: 'body',
-                    placement: 'right',
-                    template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
-                });
-                registerSingleFileUpload('.uploadlink');
-
-                $('#modalUpload').modal('hide');
-            });
-        });
-
-        //*------------------------------------- Upload Image Multiple ----------------------------------------*/
 
     }
     catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 });
 
 function GetVoucherData(VoucherId) {
-    EstimateView.GetVoucherDetails(VoucherId);
+    PurchaseView.GetVoucherDetails(VoucherId);
 }
 
 $(window).keydown(function (event) {
@@ -1668,7 +1526,7 @@ $(window).keydown(function (event) {
             jQuery('#table_list_Quotation').trigger('reloadGrid');
         }
     } catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 });
 
@@ -1751,7 +1609,7 @@ function AutosuggestItemName(id) {
                     if (ui.item.label != 'No Results Found') {
                         $("#txtItemName" + append).attr('itemgroupmasterid', ui.item.Id);
                         $("#txtPcs" + append).val(0);
-                        EstimateView.Calculation();
+                        PurchaseView.Calculation();
                     } else {
                         setTimeout(function () {
                             $("#" + id).val('');
@@ -1768,7 +1626,7 @@ function AutosuggestItemName(id) {
 
 
     } catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 };
 function AutosuggestSubitemName(id) {
@@ -1818,6 +1676,7 @@ function AutosuggestSubitemName(id) {
                                                     ITEMTYPE_COMMON: item.itemtype_common,
                                                     LABOURRATE: item.labourrate,
                                                     TOTALRATE: item.totalrate,
+                                                    STOCKQTY: item.stockqty
                                                 }
                                             }
                                             else {
@@ -1833,6 +1692,7 @@ function AutosuggestSubitemName(id) {
                                                     ITEMTYPE_COMMON: item.itemtype_common,
                                                     LABOURRATE: item.labourrate,
                                                     TOTALRATE: item.totalrate,
+                                                    STOCKQTY: item.stockqty
                                                 }
                                             }
                                         }))
@@ -1869,7 +1729,7 @@ function AutosuggestSubitemName(id) {
                         $("#txtHsnCode" + append).val(ui.item.HSNID)
                         $("#txtRate" + append).val(ui.item.TOTALRATE)
                         $("#txtitemtype" + append).val(ui.item.ITEMTYPE_COMMON)
-                        EstimateView.Calculation()
+                        PurchaseView.Calculation()
                     } else {
                         setTimeout(function () {
                             $("#" + id).val('');
@@ -1888,7 +1748,7 @@ function AutosuggestSubitemName(id) {
 
 
     } catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 };
 
@@ -1897,12 +1757,12 @@ function HSNCode(postfix) {
     try {
 
         $("#txtHsnCode" + postfix).html("");
-        if (EstimateView.variables.HSNCodeList) {
-            $("#txtHsnCode" + postfix).append($("#HSNDropdownList").render(EstimateView.variables.HSNCodeList.serviceresponse.detailslist.details));
+        if (PurchaseView.variables.HSNCodeList) {
+            $("#txtHsnCode" + postfix).append($("#HSNDropdownList").render(PurchaseView.variables.HSNCodeList.serviceresponse.detailslist.details));
         }
     }
     catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 };
 function ItemAddNewRow() {
@@ -1910,58 +1770,61 @@ function ItemAddNewRow() {
         $("#Quotationitem_tbody").append('<tr>' +
             '<td style="text-align: center;"></td>' +
             '<td>' +
-            '<input type="text" onkeyup="AutosuggestItemName(this)" class="form-control txtItemName txtAutocomplete" onfocusout="EstimateView.validation(this,' + EstimateView.variables.ListId + ')" name="txtItemName' + EstimateView.variables.ListId + '" id="txtItemName' + EstimateView.variables.ListId + '">' +
+            '<input type="text" onkeyup="AutosuggestItemName(this)" class="form-control txtItemName txtAutocomplete" onfocusout="PurchaseView.validation(this,' + PurchaseView.variables.ListId + ')" name="txtItemName' + PurchaseView.variables.ListId + '" id="txtItemName' + PurchaseView.variables.ListId + '">' +
             '</td>' +
             '<td>' +
-            '<input  type="text" onkeyup="AutosuggestSubitemName(this)" class="form-control txtAutocomplete txtSubitemName" name="txtSubitemName' + EstimateView.variables.ListId + '" id="txtSubitemName' + EstimateView.variables.ListId + '">' +
+            '<input  type="text" onkeyup="AutosuggestSubitemName(this)" class="form-control txtAutocomplete txtSubitemName" name="txtSubitemName' + PurchaseView.variables.ListId + '" id="txtSubitemName' + PurchaseView.variables.ListId + '">' +
             '</td>' +
             '<td>' +
-            '<input  type="text" class="txtPcs form-control txtR number pcs required" onkeyup="EstimateView.Calculation(this,' + EstimateView.variables.ListId + ')" name="txtPcs' + EstimateView.variables.ListId + '" id="txtPcs' + EstimateView.variables.ListId + '">' +
+            '<input  type="text" class="txtPcs form-control txtR number pcs required" onkeyup="PurchaseView.Calculation(this,' + PurchaseView.variables.ListId + ')" name="txtPcs' + PurchaseView.variables.ListId + '" id="txtPcs' + PurchaseView.variables.ListId + '">' +
             '</td>' +
             '<td>' +
-            '<input disabled type="text" class="txtitemtype form-control txtR number pcs required"  name="txtitemtype' + EstimateView.variables.ListId + '" id="txtitemtype' + EstimateView.variables.ListId + '">' +
+            '<input disabled type="text" class="txtStock form-control txtR number Stock required" onkeyup="PurchaseView.Calculation(this,' + PurchaseView.variables.ListId + ')" name="txtStock' + PurchaseView.variables.ListId + '" id="txtStock' + PurchaseView.variables.ListId + '">' +
+            '</td>' +
+            '<td>' +
+            '<input disabled type="text" class="txtitemtype form-control txtR number pcs required"  name="txtitemtype' + PurchaseView.variables.ListId + '" id="txtitemtype' + PurchaseView.variables.ListId + '">' +
             '</td>' +
 
             '<td>' +
-            '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="EstimateView.Calculation(' + EstimateView.variables.ListId + ')" name="HsnCode' + EstimateView.variables.ListId + '" id="txtHsnCode' + EstimateView.variables.ListId + '"></select>' +
+            '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="ValueChange(' + PurchaseView.variables.ListId + ')" name="HsnCode' + PurchaseView.variables.ListId + '" id="txtHsnCode' + PurchaseView.variables.ListId + '"></select>' +
             '</td>' +
             '<td>' +
-            '<input disabled type="text" class="form-control txtR numbers grosswt fixed required txtRate" decimals="3" name="txtRate' + EstimateView.variables.ListId + '" id="txtRate' + EstimateView.variables.ListId + '">' +
+            '<input disabled type="text" class="form-control txtR numbers grosswt fixed required txtRate" decimals="3" name="txtRate' + PurchaseView.variables.ListId + '" id="txtRate' + PurchaseView.variables.ListId + '">' +
             '</td>' +
 
             '<td>' +
-            '<input disabled type="text" class="form-control txtR numbers grosswt fixed required txtAmount" decimals="3" name="txtAmount' + EstimateView.variables.ListId + '" id="txtAmount' + EstimateView.variables.ListId + '">' +
+            '<input disabled type="text" class="form-control txtR numbers grosswt fixed required txtAmount" decimals="3" name="txtAmount' + PurchaseView.variables.ListId + '" id="txtAmount' + PurchaseView.variables.ListId + '">' +
             '</td>' +
 
             '<td>' +
-            '<input disabled type="text" class="form-control txtR numbers grosswt fixed required txtteaxAmount" decimals="3" name="txtteaxAmount' + EstimateView.variables.ListId + '" id="txtteaxAmount' + EstimateView.variables.ListId + '">' +
+            '<input disabled type="text" class="form-control txtR numbers grosswt fixed required txtteaxAmount" decimals="3" name="txtteaxAmount' + PurchaseView.variables.ListId + '" id="txtteaxAmount' + PurchaseView.variables.ListId + '">' +
             '</td>' +
 
             '<td>' +
-            '<input disabled type="text" class="form-control txtR numbers grosswt fixed required txtAmtTaxTotal" decimals="3" name="txtAmtTax' + EstimateView.variables.ListId + '" id="txtAmtTax' + EstimateView.variables.ListId + '">' +
+            '<input disabled type="text" class="form-control txtR numbers grosswt fixed required txtAmtTaxTotal" decimals="3" name="txtAmtTax' + PurchaseView.variables.ListId + '" id="txtAmtTax' + PurchaseView.variables.ListId + '">' +
             '</td>' +
 
-            '<td class="btnRemove" id="btnRemove' + EstimateView.variables.ListId + '">' +
-            //'<div class="as_row_rmv" onclick="EstimateView.RemoveRow(this)">' +
+            '<td class="btnRemove" id="btnRemove' + PurchaseView.variables.ListId + '">' +
+            //'<div class="as_row_rmv" onclick="PurchaseView.RemoveRow(this)">' +
             //'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox = "0 0 24 24" fill = "none"> <path fill-rule="evenodd" clip-rule="evenodd" d="M7 4C7 2.34315 8.34315 1 10 1H14C15.6569 1 17 2.34315 17 4V5H21C21.5523 5 22 5.44772 22 6C22 6.55228 21.5523 7 21 7H19.9394L19.1153 20.1871C19.0164 21.7682 17.7053 23 16.1211 23H7.8789C6.29471 23 4.98356 21.7682 4.88474 20.1871L4.06055 7H3C2.44772 7 2 6.55228 2 6C2 5.44772 2.44772 5 3 5H7V4ZM9 5H15V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V5ZM6.06445 7L6.88085 20.0624C6.91379 20.5894 7.35084 21 7.8789 21H16.1211C16.6492 21 17.0862 20.5894 17.1191 20.0624L17.9355 7H6.06445Z" fill="#ad2c2c"></path></svg>' +
             //'</div>' +
             '<div>' +
-            '<i class="icon-cancel-circle2" onclick="EstimateView.RemoveRow(this)"></i>' +
+            '<i class="icon-cancel-circle2" onclick="PurchaseView.RemoveRow(this)"></i>' +
             '</div>' +
             '</td>' +
             '</tr>');
         FixValue();
-        HSNCode(EstimateView.variables.ListId)
-        if (EstimateView.variables.AddNew != true) {
+        HSNCode(PurchaseView.variables.ListId)
+        if (PurchaseView.variables.AddNew != true) {
             $("#Quotationitem_tbody tr:last td:nth-child(2) input").focus();
         } else {
-            EstimateView.variables.AddNew = false;
+            PurchaseView.variables.AddNew = false;
         }
 
-        //EstimateView.TaxDropDown();
-        EstimateView.variables.ListId = EstimateView.variables.ListId + 1;
+        //PurchaseView.TaxDropDown();
+        PurchaseView.variables.ListId = PurchaseView.variables.ListId + 1;
     } catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 
 }
@@ -1986,7 +1849,7 @@ function makeFileXml(saveDiv) {
         });
         return { xmlsaveFiles: xmlsaveFiles };
     } catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 }
 
@@ -2014,7 +1877,7 @@ function notificationTost(type, message) {
         }
         toastr[type](message);
     } catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 }
 function DateFilter() {
@@ -2047,11 +1910,11 @@ function DateFilter() {
                 myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#txtsearchbox").val() });
 
             }
-            url = EstimateView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter);
-            EstimateView.initializeJqgrid(url);
+            url = PurchaseView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter);
+            PurchaseView.initializeJqgrid(url);
         }, 200);
     } catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 }
 function AllData() {
@@ -2064,11 +1927,11 @@ function AllData() {
                 myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#txtsearchbox").val() });
 
             }
-            url = EstimateView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter);
-            EstimateView.initializeJqgrid(url);
+            url = PurchaseView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter);
+            PurchaseView.initializeJqgrid(url);
         }
     } catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 }
 function DateLess(input) {
@@ -2117,7 +1980,7 @@ function BankDetail(id) {
                     '</div>' +
                     '</div>' +
                     '</form>');
-                if (EstimateView.variables.oper != 'edit' || $("#txtChequeNo").val() == '') {
+                if (PurchaseView.variables.oper != 'edit' || $("#txtChequeNo").val() == '') {
                     var myfilter,
                         myfilter = { rules: [] };
                     myfilter.rules.push({ field: "PURCHASESEARCH", op: "eq", data: 'DefaultBank' });
@@ -2144,7 +2007,7 @@ function BankDetail(id) {
                         }
                     });
                 }
-                if (EstimateView.variables.oper == 'edit' && rowData['BANKID'] > 0) {
+                if (PurchaseView.variables.oper == 'edit' && rowData['BANKID'] > 0) {
                     rowData = jQuery("#table_list_Purchase").getRowData(id);
                     $("#txtBankAC").val(rowData['BANKNAME']);
                     $("#hdnbankId").val(rowData['BANKID']);
@@ -2280,7 +2143,7 @@ function BankDetail(id) {
         }
 
     } catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 }
 function AutosuggestChequeNo(obj) {
@@ -2358,103 +2221,7 @@ function AutosuggestChequeNo(obj) {
             autoFocus: true
         });
     } catch (e) {
-        ErrorDetails(e, EstimateView.variables.File);
+        ErrorDetails(e, PurchaseView.variables.File);
     }
 }
 //-------------------------------------- /Bank Detail Hide/Show --------------------------------------//
-
-
-
-//*------------------------------------- Upload Image Multiple ----------------------------------------*/
-
-var deletedFiles = '';
-function deleteCustomerFile(rid, fileid, file) {
-    $.confirm({
-        'title': 'Delete Record',
-        'message': 'Are you sure about to delete this ' + $('#' + rid).find('.title').val() + ' file. It can not be restored at a later time! Continue? ',
-        'buttons': {
-            'Yes': {
-                'class': 'yes',
-                'action': function () {
-                    deletedFiles += file + ',';
-                    $('#' + rid).remove();
-                    $('.tooltip').remove();
-                }
-            },
-            'No': {
-                'class': 'no',
-                'action': function () {
-
-                }
-            }
-        }
-    });
-}
-function getFileNameWithoutExt(file) {
-    return file.split('.')[0];
-}
-function makeFileXml_DOC(saveDiv, type) {
-
-    var xmlsaveFiles = '', saveFiles = '', strHref = '';
-    $(saveDiv).find('tr').each(function (key, obj) {
-        strHref = $(obj).find('.label-click').attr('href');
-        saveFiles += strHref + ',';
-        xmlsaveFiles += '<DETAILS>';
-        xmlsaveFiles += '<ACTUALFILENAME><![CDATA[' + $.trim($(obj).find('.title').val()) + ']]></ACTUALFILENAME>';
-        xmlsaveFiles += '<VIRTUALFILENAME><![CDATA[' + strHref.substr(strHref.lastIndexOf('/') + 1) + ']]></VIRTUALFILENAME>';
-        xmlsaveFiles += '</DETAILS>';
-    });
-
-    return { xmlsaveFiles1: xmlsaveFiles, saveFiles: saveFiles };
-}
-function registerSingleFileUpload(uploader) {
-    $(uploader).fileupload({
-        url: getDomain() + "/Helpers/Handler/FileUploadHandler.ashx",
-        add: function (e, data) {
-
-            var rowId = $($(this).find('input')).attr('id').substr(3);
-            var displayLink = $('#' + rowId).find('.label-click');
-
-            var ext = data.files[0].name.split('.')[1].toLowerCase();
-            var accept = $(e.target).find('input').attr('accept');
-            if (accept.indexOf(ext) > -1) {
-                $(displayLink).parent().append('<img width="16" height="16" src="' + getDomain() + '/Images/loader.gif">');
-                data.submit();
-            }
-            else {
-                notificationMessage('File Attachment', 'Please select only ' + accept + ' files', 'warning');
-            }
-        },
-        success: function (response, status) {
-            if (response == 'Maximum request length exceeded.') {
-                notificationMessage('File Attachment Error', response, 'error');
-                $(displayLink).siblings('img').remove();
-                return;
-            }
-            if (response.indexOf('error') >= 0) {
-                notificationMessage('File Attachment Error', response, 'error');
-                $(displayLink).siblings('img').remove();
-                return;
-            }
-            var rowId = $($(this)[0].fileInput).attr('id').substr(3);
-            var displayFile = $(this)[0].files[0].name;
-            var displayLink = $('#' + rowId).find('.label-click');
-
-            if ($(displayLink).attr('href').length > 0 && $(displayLink).attr('href').indexOf('/Temp/') > -1) {
-                var strDeletedFile = $('#hdnDeletedBanner').val() + $(displayLink).attr('href') + ',';
-                $('#hdnDeletedBanner').val(strDeletedFile);
-            }
-            $(displayLink).attr('href', response);
-            $(displayLink).html(displayFile);
-            $(displayLink).siblings('img').remove();
-        },
-        error: function (xhr, errorType, exception) {
-            notificationMessage('File Attachment Error', xhr.responseText, 'error');
-            var rowId = $($(this).find('input')).attr('id').substr(3);
-            var displayLink = $('#' + rowId).find('.label-click');
-            $(displayLink).siblings('img').remove();
-        }
-    });
-}
-
-//*------------------------------------- Upload Image Multiple ----------------------------------------*/

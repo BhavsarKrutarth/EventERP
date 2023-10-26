@@ -279,7 +279,7 @@ var PurchaseView = {
                                         '<input value="' + innerjsonDetails.itemtype +'" disabled type="text" class="txtitemtype form-control txtR number pcs required"  name="txtitemtype' + PurchaseView.variables.ListId + '" id="txtitemtype' + PurchaseView.variables.ListId + '">' +
                                         '</td>' +
                                         '<td>' +
-                                        '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="ValueChange(' + PurchaseView.variables.ListId + ')" name="HsnCode' + PurchaseView.variables.ListId + '" id="txtHsnCode' + PurchaseView.variables.ListId + '"></select>' +
+                                        '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="PurchaseView.Calculation(' + PurchaseView.variables.ListId + ')" name="HsnCode' + PurchaseView.variables.ListId + '" id="txtHsnCode' + PurchaseView.variables.ListId + '"></select>' +
                                         '</td>' +
                                         '<td>' +
                                         '<input disabled value="' + innerjsonDetails.rate +'" type="text" class="form-control txtR numbers grosswt fixed required txtRate" decimals="3" name="txtRate' + PurchaseView.variables.ListId + '" id="txtRate' + PurchaseView.variables.ListId + '">' +
@@ -2044,7 +2044,7 @@ function ItemAddNewRow() {
             '</td>' +
 
             '<td>' +
-            '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="ValueChange(' + PurchaseView.variables.ListId + ')" name="HsnCode' + PurchaseView.variables.ListId + '" id="txtHsnCode' + PurchaseView.variables.ListId + '"></select>' +
+            '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="PurchaseView.Calculation(' + PurchaseView.variables.ListId + ')" name="HsnCode' + PurchaseView.variables.ListId + '" id="txtHsnCode' + PurchaseView.variables.ListId + '"></select>' +
             '</td>' +
             '<td>' +
             '<input disabled type="text" class="form-control txtR numbers grosswt fixed required txtRate" decimals="3" name="txtRate' + PurchaseView.variables.ListId + '" id="txtRate' + PurchaseView.variables.ListId + '">' +

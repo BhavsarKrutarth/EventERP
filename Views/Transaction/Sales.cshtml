@@ -1,0 +1,499 @@
+﻿@{
+    //Layout = "~/Views/Shared/_Layout_New.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Purchase Quotation";
+}
+
+<div class="page-container">
+    <div class="panel" id="panelView">
+        <div class="panel-heading row">
+            <div class="col-lg-12 pr-0" style="margin-top: 4px;text-align: right;">
+                <div class="col-sm-6" style="float:right;padding-right:5px">
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>&nbsp;&nbsp;
+                    <button class="formstylebutton divflotR btn alpha-green text-green-800 border-green-800" data-toggle="tooltip" data-placement="bottom" title="Excel Print" type="button" id="btnExcelPrint"><i class="fa fa-table"></i></button>
+                    <button class="formstylebutton divflotR btn alpha-danger text-danger-800 border-danger-800" data-toggle="tooltip" data-placement="bottom" title="Pdf" type="button" id="btnPdfPrint"><i class="fa fa-file-pdf-o"></i></button>
+                    @if (Model.ISADD == 1)
+                    {
+                        <button class="divflotR formstylebutton btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddnewQuotation" style='font-weight:600!important'><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>
+                    }
+                    <div class="btn btn-sm btn-default pull-right" id="refreshgrid"><span class="fa fa-refresh" style="color: #617dcf;"></span></div>
+                    <div class="col-sm-6 pull-right">
+                        <div class="form-group has-feedback">
+                            <input type="text" id="txtsearchbox" tabindex="3" class="form-control searchbox" placeholder="Search Here..." autofocus>
+                            <div class="form-control-feedback">
+                                <i class="icon-search4 text-size-large"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden;">
+                <div class="jqGrid_wrapper" id="jqgrid_Quotation">
+                    <table id="table_list_Quotation"></table>
+                    <div id="pager_list_Quotation"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="panelEdit" class="panel_container" style="display:none;">
+        <div class="panel panel-white" id="Billpanel">
+            <div class="row panel-heading" style="padding:0;">
+                <fieldset class="acto-bg">
+                    <form class="form-horizontal col-md-12" id="FrmDetails">
+                        <div class="form-group">
+                            <label id="lblPurchaseCode" class="col-md-1" style="display: none; text-align: end; margin-top:7px"></label>
+                            <label class="control-label col-md-1">Event Name<span style="color:red"> *</span></label>
+                            <div class="col-md-2">
+                                @*<input tabindex="1" class="form-control mobilenomask keyboard" name="txtMobileNo" id="txtMobileNo" />*@
+                                <select class="form-control" name="ddlevent" id="ddlevent" tabindex="1"></select>
+                            </div>
+                            <lable class="control-label col-md-1" style="padding-left: 0;">Date<span style="color:red"> *</span></lable>
+                            <div class="col-md-2">
+                                <input type="date" tabindex="2" class="form-control" name="txtBillDate" id="txtBillDate" onchange="VoucehrDateValidation(this)">
+                                <div class="form-control-feedback">
+                                    <i class="icon-calendar"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm-3" style="float:right;padding-right:5px">
+                                <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnNext"><i class="fa fa-angle-double-right"></i></button>
+                                <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnViewList"><i class="fa fa-th-list"></i>&nbsp;&nbsp;View List</button>
+                                <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnPrevious"><i class="fa fa-angle-double-left"></i></button>
+                            </div>
+                        </div>
+                       
+                    </form>
+                </fieldset>
+            </div>
+            <div class="panel-body">
+
+                @*<div class="row mt-15">*@
+                <form class="form-horizontal row acto_frmItemlist" style="padding: 0px;" id="FrmItemList">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:2%;">No.</th>
+                                <th style="width:8%;">Item Group</th>
+                                <th style="width:8%;">Item Name</th>
+                                <th style="width:2%;">Pcs</th>
+                                <th style="width:2%;">Stock</th>
+                                <th style="width:2%;">Type</th>
+                                <th style="width:2%;">HSN</th>
+                                <th style="width:4%;">Rate</th>
+                                <th style="width:4%;">Amount </th>
+                                <th style="width:4%;">Tax Amt </th>
+                                <th style="width:2%;">Amt(Tax)</th>
+                                <th style="width:2%;">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="Quotationitem_tbody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">
+                                    <a class="pull-left" id="addnewPurchLine" onclick="ItemAddNewRow()">+ Add New Line</a>
+                                    Total
+                                </th>
+                                <th id="totalpcs">0</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th id="totalamt">0.000</th>
+                                <th id="totaltaxamt">0.000</th>
+                                <th id="totalamtteax32423">0.000</th>
+
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </form>
+                @*</div>*@
+                <div class="col-md-12 mt-15">
+                    <div class="col-md-6" style="border-right: 1px solid #dddddd;">
+                        <fieldset>
+                            <legend class="text-semibold">Account Details</legend>
+                            <form class="form-horizontal col-md-12" style="padding-bottom: 15px;" id="FrmVenderDetails">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2" style="padding-left: 0;">A/C Name<span style="color:red"> *</span></label>
+                                        <div class="col-md-10">
+                                            <div class="input-group">
+                                                <input type="text" style="text-transform: uppercase;" class="form-control required txtAutocomplete acto-accountsuggest" onblur="PurchaseView.RemoveEmptyRow()" partymasterid="" placeholder="Search Name/Mobile" id="txtAccount" tabindex="5" onkeyup="PurchaseView.AccountNameAutoComplete(this)" />
+                                                <span class="input-group-addon CommonAddEditPartyCustomer" name="CommonAddEditPartyCustomer" style="background-color: #4caf50;color: white;"><i class="fa fa-plus"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2 addstar" id="lblPurchaseMobile" style="padding-left: 0;">Mobile No.</label>
+                                        <div class="col-md-4">
+                                            <input type="text" tabindex="6" class="form-control mobilenomask required" onkeyup="PurchaseView.AccountNameAutoComplete(this)" name="txtMobile" id="txtMobile" placeholder="Mobile No" disabled>
+                                            <div class="form-control-feedback">
+                                                <i class="fa fa-phone"></i>
+                                            </div>
+                                        </div>
+                                        <label class="control-label col-md-2">Phone</label>
+                                        <div class="col-md-4">
+                                            <input type="text" tabindex="7" class="form-control mobilenomask disable" name="txtPhone" id="txtPhone" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">City<span style="color:red"> *</span></label>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <input type="text" tabindex="8" onfocusout="Velidation(0, this)" class="form-control required disable" name="City" id="ddlCity" disabled>
+                                                <span class="input-group-addon CommonAddCity" name="CommonAddCity" style="background-color: #4caf50;color: white;"><i class="fa fa-plus"></i></span>
+                                            </div>
+                                        </div>
+
+                                        <label class="control-label col-md-2">Pincode</label>
+                                        <div class="col-md-4">
+                                            <input type="text" tabindex="9" class="form-control pincodemask disable" name="Pin" id="txtPin" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Address1</label>
+                                        <div class="col-md-10">
+                                            <input type="text" tabindex="10" class="form-control disable" name="Address1" id="txtAddress1" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Address2</label>
+                                        <div class="col-md-10">
+                                            <input type="text" tabindex="11" class="form-control disable" name="Address2" id="txtAddress2" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Address3</label>
+                                        <div class="col-md-10">
+                                            <input type="text" tabindex="12" class="form-control disable" name="Address3" id="txtAddress3" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2 pr-5">GST No</label>
+                                        <div class="col-md-5 pr-0">
+                                            <div class="input-group">
+                                                <input type="text" tabindex="13" onfocusout="OnChangeGST('txtPanNo','txtGstNo')" style="text-transform:uppercase" class="form-control gstnomask disable" name="GstNo" id="txtGstNo" disabled>
+                                                <span class="input-group-addon gstcheck" style="background-color: #4caf50;color: white;">Chk</span>
+                                            </div>
+                                        </div>
+
+                                        <label class="control-label col-md-1">Pan No</label>
+                                        <div class="col-md-4">
+                                            <input type="text" tabindex="14" style="text-transform:uppercase" class="form-control pannomask disable" name="PanNo" id="txtPanNo" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Adhaar</label>
+                                        <div class="col-md-4">
+                                            <input type="text" tabindex="15" class="form-control adhaarnomask disable" name="Adhhar" id="txtAdhhar" disabled>
+                                        </div>
+
+                                        <div class="col-md-4 col-md-offset-2 party">
+                                            <input type="checkbox" class="icheckminimal" tabindex="16" name="form60" id="chkform60" disabled>
+                                            <label class="control-label disable" style="margin-left: 5px;margin-top: 6px;" for="chkform60">Form 60 rec</label>
+                                        </div>
+
+                                        <div class="col-md-4 col-md-offset-2 customer" style="display: none;">
+                                            <input type="checkbox" class="icheckminimal disable" tabindex="16" name="chkIsOSBillNotAccept" id="chkIsOSBillNotAccept" disabled>
+                                            <label class="control-label" style="margin-left: 5px;margin-top: 6px;" for="chkIsOSBillNotAccept">OS Accept</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </fieldset>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-5 pl-10 pr-10" style="border-right: 1px solid #dddddd;">
+                            <fieldset>
+                                <legend class="text-semibold">Bill Info</legend>
+                                <form class="form-horizontal col-md-12" id="FrmBillInfo">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-6">Total Net Amt</label>
+                                        <div class="col-md-6">
+                                            <input type="text" onfocusout="Velidation(0, this)" onblur="CalculateBill_PaymentInfo()" class="form-control txtR numbers fixed pl-0" tabindex="6" name="TotalNetAmt" id="txtTotalNetAmt">
+                                        </div>
+                                    </div>
+                                    <div class="form-group taxDetails">
+                                        <div class="col-md-2" style="z-index: 999;margin-top: 10%;">
+                                            <input type="checkbox" tabindex="7" class="icheckminimal" name="chkROF" id="chkROF">
+                                            ROF
+                                        </div>
+                                        <div class="col-md-10 pl-0" style="border-left: 1px solid #ddd;">
+                                            <div class="col-md-12 pl-0 pr-0">
+                                                <label class="control-label col-md-5">SGST (<span id="sgstPer">0.00%</span>)</label>
+                                                <div class="col-md-7 pr-0">
+                                                    <input type="text" tabindex="8" class="form-control txtR numbers pl-0 fixed" onblur="CalculateBill_PaymentInfo()" name="SGSTTaxAmt" id="txtSGSTTaxAmt">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 pl-0 pr-0">
+                                                <label class="control-label col-md-5">CGST (<span id="cgstPer">0.00%</span>)</label>
+                                                <div class="col-md-7 pr-0">
+                                                    <input type="text" tabindex="9" class="form-control txtR numbers pl-0 fixed" onblur="CalculateBill_PaymentInfo()" name="CGSTTaxAmt" id="txtCGSTTaxAmt">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 pl-0 pr-0">
+                                                <label class="control-label col-md-5">IGST (<span id="igstPer">0.00%</span>)</label>
+                                                <div class="col-md-7 pr-0">
+                                                    <input type="text" tabindex="10" class="form-control txtR numbers pl-0 fixed" onblur="CalculateBill_PaymentInfo()" name="IGSTTaxAmt" id="txtIGSTTaxAmt">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-6" id="lblamtwithtax">Amt With Tax</label>
+                                        <div class="col-md-6">
+                                            <input type="text" tabindex="11" onblur="CalculateBill_PaymentInfo()" onfocusout="Velidation(0, this)" class="form-control txtR numbers fixed pl-0" name="TotalWithTaxAmt" id="txtTotalWithTaxAmt">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-6">ROF Amt</label>
+
+                                        <div class="col-md-6">
+                                            <input type="text" tabindex="12" onblur="CalculateBill_PaymentInfo()" onfocusout="RoundOffLive()" class="form-control txtR negative fixed pl-0" name="ROFAmt" id="txtROFAmt">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-6">Total Amt</label>
+                                        <div class="col-md-6">
+                                            @*onblur="OnBlurTotalAmt()"*@
+                                            <input type="text" tabindex="13" onfocusout="Velidation(0, this)" class="form-control txtR numbers fixed pl-0" name="TotalAmt" id="txtTotalAmt">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 pr-0">
+                                        <button type="button" class="pull-right" name="btnReCalculate" id="btnReCalculate">
+                                            <i class="fa fa-refresh"></i> Refresh
+                                        </button>
+                                    </div>
+                                </form>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-7 pl-10 pr-10">
+                            <div class="row">
+                                <div class="col-md-12 p-0">
+                                    <fieldset>
+                                        <legend class="text-semibold">Payment Info</legend>
+                                        <form class="form-horizontal col-md-12" id="FrmPaymentDetails">
+
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-5">TDS or TCS</label>
+                                                <div class="col-md-7 pt-5">
+                                                    <input type="checkbox" class="switch" style="float:right" tabindex="14" data-on-text="TDS" data-off-text="TCS" data-on-color="warning" data-off-color="default" onchange="PurchaseView.TDSORTCSChange()" id="toggleSwitch">
+                                                </div>
+                                            </div>
+
+                                            @*------------------------------------------TCS Count------------------------------------------*@
+                                            <div class="form-group TCSCalculate" style="display:none;">
+                                                <label class="control-label col-md-5">TCS Applicable Limit</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" name="txtTCSApplicableLimit" id="txtTCSApplicableLimit" tabindex="15" value="@Decimal.Round(Decimal.Parse(EventERP.CommonClasses.SessionFacade.UserSession.TCSLIMIT),2)" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="form-group TCSCalculate" style="display:none;">
+                                                <div class="col-md-2" style="z-index: 999;">
+                                                    <input type="checkbox" tabindex="16" class="icheckminimal" name="chkROFTCS" id="chkROFTCS" onblur="ValueChange()">
+                                                    ROF
+                                                </div>
+                                                <label class="control-label col-md-3" style="border-left: 1px solid #ddd;">TCS Per</label>
+                                                <div class="col-md-3 pr-0">
+                                                    <input type="text" class="form-control" name="TCSPer" id="txtTCSPer" tabindex="17" value="@Decimal.Round(Decimal.Parse(EventERP.CommonClasses.SessionFacade.UserSession.TCSPER),2)" disabled>
+                                                </div>
+                                                @*<label class="control-label col-md-4 pr-10" id="lblamtwithtax">TCS Tax Amt</label>*@
+                                                <div class="col-md-4">
+                                                    <input type="text" onblur="CalculateBill_PaymentInfo()" onfocusout="Velidation(0, this)" class="form-control txtR numbers fixed pl-0" name="TCSTaxAmt" id="txtTCSTaxAmt" tabindex="18" disabled>
+                                                    @*<span class="input-group-addon text-grey-800" id="OpenTcsModal" style="cursor:pointer;font-weight:900">F2</span>*@
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="display:none;">
+                                                <label class="control-label col-md-5">TCS On Amount</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" name="txtTCSAmt" id="txtTCSAmt" tabindex="19">
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="display:none">
+                                                <label class="control-label col-md-5">TCS</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" name="txtTCSModal" id="txtTCSModal" tabindex="20">
+                                                </div>
+                                            </div>
+                                            @*------------------------------------------/TCS Count------------------------------------------*@
+
+                                            <!--<div class="form-group TCSCalculate" style="display:none;">
+                                            <div class="col-md-2" style="z-index: 999;">
+                                                <input type="checkbox" tabindex="19" class="icheckminimal" name="chkROFTCS" id="chkROFTCS" onblur="ValueChange()">
+                                                ROF
+                                            </div>
+                                            <div class="col-md-10 pl-0" style="border-left: 1px solid #ddd;">
+                                                <label class="control-label col-md-4 pr-10" id="lblamtwithtax">TCS Tax Amt</label>
+                                                <div class="col-md-8 pr-0 pl-0">
+                                                    <div class="col-md-12 pl-0 pr-0">
+                                                        <input type="text" onblur="CalculateBill_PaymentInfo()" onfocusout="Velidation(0, this)" class="form-control txtR numbers fixed pl-0" name="TCSTaxAmt" id="txtTCSTaxAmt" tabindex="20" disabled>-->
+                                            @*<span class="input-group-addon text-grey-800" id="OpenTcsModal" style="cursor:pointer;font-weight:900">F2</span>*@
+                                            <!--</div>
+                                                    </div>
+                                                </div>
+                                            </div>-->
+                                            @*------------------------------------------TDS Count------------------------------------------*@
+                                            <div class="form-group TDSCalculate">
+                                                <div class="col-md-2" style="z-index: 999;">
+                                                    <input type="checkbox" tabindex="21" class="icheckminimal" name="chkROFTDS" id="chkROFTDS" onblur="ValueChange()">
+                                                    ROF
+                                                </div>
+                                                <label class="control-label col-md-3" style="border-left: 1px solid #ddd;">TDS</label>
+                                                <div class="col-md-3 pr-0">
+                                                    <select class="form-control" name="ddlTDS" id="ddlTDS" tabindex="22"></select>
+                                                </div>
+                                                @*<label class="control-label col-md-4 pr-10">TDS Amt</label>*@
+                                                <div class="col-md-4">
+                                                    <input type="text" onblur="CalculateBill_PaymentInfo()" onfocusout="Velidation(0, this)" tabindex="23" class="form-control txtR numbers fixed pl-0" name="TDSAmt" id="txtTDSAmt" disabled>
+                                                    @*<span class="input-group-addon text-grey-800" id="OpenTdsModal" style="cursor:pointer;font-weight:900">F4</span>*@
+                                                </div>
+                                            </div>
+                                            <div class="form-group TDSCalculate">
+                                                <label class="control-label col-md-5">TDS Rof Amt</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control txtR numbers fixed" name="txtTDSRofAmt" id="txtTDSRofAmt" tabindex="24">
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="display:none;">
+                                                <label class="control-label col-md-5">TDS On Amount</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" name="txtTDSOnAmt" id="txtTDSOnAmt" tabindex="24">
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="display:none">
+                                                <label class="control-label col-md-5">TDS</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" name="txtTDSAmtModal" id="txtTDSAmtModal" tabindex="25" disabled>
+                                                </div>
+                                            </div>
+                                            @*------------------------------------------/TDS Count------------------------------------------*@
+
+                                            <!--<div class="form-group TDSCalculate">
+                                            <div class="col-md-2" style="z-index: 999;">
+                                                <input type="checkbox" tabindex="24" class="icheckminimal" name="chkROFTDS" id="chkROFTDS" onblur="ValueChange()">
+                                                ROF
+                                            </div>
+                                            <div class="col-md-10 pl-0" style="border-left: 1px solid #ddd;">
+                                                <label class="control-label col-md-4 pr-10">TDS Amt</label>
+                                                <div class="col-md-8 pr-0 pl-0">
+                                                    <div class="col-md-12 pl-0 pr-0">
+                                                        <input type="text" onblur="CalculateBill_PaymentInfo()" onfocusout="Velidation(0, this)" tabindex="25" class="form-control txtR numbers fixed pl-0" name="TDSAmt" id="txtTDSAmt" disabled>-->
+                                            @*<span class="input-group-addon text-grey-800" id="OpenTdsModal" style="cursor:pointer;font-weight:900">F4</span>*@
+                                            <!--</div>
+                                                    </div>
+                                                </div>
+                                            </div>-->
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-5">Cash Payment</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" tabindex="26" class="form-control txtR numbers fixed" onfocusout="PurchaseView.Calculation()" name="CashPayment" id="txtCashPayment">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-5">Cheque Payment</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" tabindex="27" class="form-control txtR number" onfocusout="PurchaseView.Calculation()" onblur="BankDetail('')" name="ChequePayment" id="txtChequePayment">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-5">OS Payment</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" tabindex="28" class="form-control txtR fixed" name="OsPayment" id="txtOsPayment">
+                                                </div>
+                                            </div>
+
+                                        </form>
+
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="row" id="BankDetailDiv">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="panel-footer p-10 txtC">
+                <button type="button" class="btn btn-info btn-labeled-left btn-sm" id="btnPrint" style="display:none;"><i class="fa fa-print"></i>&nbsp;&nbsp;Print</button>
+                @if (Model.ISADD == 1)
+                {
+                    @*<button type="button" id="btnSavePrint" class="btn btn-info btn-labeled btn-labeled-left btn-sm"><b><i class="fa fa-print"></i></b> Save & Print</button>*@
+                    <button type="button" id="btnSaveQuotation" class="btn btn-success btn-labeled btn-labeled-left btn-sm btnSave"><b><i class="fa fa-save"></i></b> Save</button>
+                }
+                <button type="button" id="btncancelQuotation" class="btn btn-warning btn-labeled btn-labeled-left btn-sm btnCancel"><b><i class="fa fa-times"></i></b> Cancel</button>
+                <button type="button" class="formstylebutton ExitWindow btn btn-labeled btn-labeled-left btn-sm btn-danger"><b><i class="fa fa-close"></i></b>Exit</button>
+            </div>
+        </div>
+    </div>
+    <!-- Delete form modal -->
+    <div id="ModalQuotationDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Purchase Quotation</h5>
+                </div>
+                <form class="form-horizontal" id="frmQuotationDelete" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Code: </dt>
+                                <dd id="delCode"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @if (Model.ISDELETE == 1)
+                        {
+                            <button type="button" id="btnDeleteQuotation" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                        }
+                        <button id="btnCancelDelete" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- /Delete form modal -->
+</div>
+<!------ /old Design ------>
+
+<input type="hidden" id="hdnQuotationId" />
+<input type="hidden" id="hdnChequeId" />
+<input type="hidden" id="hdnbankId" />
+<input id="hdnVenderStateId" type="hidden" />
+
+
+@section scripts{
+    <script type="text/x-jsrender" id="EventList">
+        <option value="{{>eventmasterid}}">{{>eventmastername}}</option>
+    </script>
+
+    <script type="text/x-jsrender" id="HSNDropdownList">
+        <option gst="{{>gst}}" value="{{>hsnid}}">{{>hsncode}} - Gst({{>gst}} %)</option>
+    </script>
+    <script src="~/Scripts/MasterScripts/Transaction/Sales.js?v=@DateTime.UtcNow"></script>
+    <script type="text/x-jsrender" id="TDSDropdownList">
+        <option percentage="{{>percentage}}" value="{{>tdsid}}">{{>code}} - Per({{>percentage}}%)</option>
+    </script>
+    @*<script src="~/Content/assets/plugin/export-table/libs/base64.js"></script>
+        <script src="~/Content/assets/plugin/export-table/libs/sprintf.js"></script>
+        <script src="~/Content/assets/plugin/export-table/jspdf.js"></script>
+        <script src="~/Content/assets/plugin/export-table/tableExport.js"></script>*@
+}
+

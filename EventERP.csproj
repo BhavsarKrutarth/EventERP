@@ -170,6 +170,7 @@
     <Content Include="Scripts\MasterScripts\Master\UserAccount.js" />
     <Content Include="Scripts\MasterScripts\Transaction\Estimate.js" />
     <Content Include="Scripts\MasterScripts\Transaction\Purchase.js" />
+    <Content Include="Scripts\MasterScripts\Transaction\Sales.js" />
     <Content Include="Views\Master\AccountYearMaster.cshtml" />
     <Content Include="Views\Master\City_State_Country\_City.cshtml" />
     <Content Include="Views\Master\City_State_Country\_Country.cshtml" />
@@ -197,6 +198,7 @@
     <None Include="Views\Master\User_Groups.cshtml" />
     <Content Include="Views\Transaction\Purchase.cshtml" />
     <Content Include="Views\Transaction\Estimate.cshtml" />
+    <Content Include="Views\Transaction\Sales.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\EventERPReference\Event_Service.disco" />
