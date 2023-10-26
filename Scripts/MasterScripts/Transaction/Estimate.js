@@ -8,15 +8,17 @@ var EstimateView = {
         BindGroupListUrl: "/Common/BindMastersDetails?ServiceName=ESTIMATE_GET",
         QuotationDetailUrl: "/Common/BindMastersDetails?ServiceName=ESTIMATE_DETAILS_GET",
         PerformMasterOperationUrl: "/Common/OpeartionsOnMaster?ServiceName=ESTIMATE_CRUD",
+        Bind_Salesreturnfiles_get: "/Common/BindMastersDetails?ServiceName=ESTIMATEFILES_GET",
         //table: "",
         HSNCodeList: [],
     },
 
     initializeJqgrid: function (url) {
         try {
-            colNames = ['ESTIMATEID', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'EVENTMASTERID', 'Event Name', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
+            colNames = ['ESTIMATEID','DELETE_VIRTUALFILENAME' ,'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'EVENTMASTERID', 'Event Name', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
             colModel = [
                 { name: "ESTIMATEID", index: "ESTIMATEID", xmlmap: xmlvars.common_colmap + "ESTIMATEID", sortable: true, search: false, hidden: true },
+                { name: "DELETE_VIRTUALFILENAME", index: "DELETE_VIRTUALFILENAME", xmlmap: xmlvars.common_colmap + "DELETE_VIRTUALFILENAME", sortable: true, search: false, hidden: true },
                 { name: "STATEID", index: "STATEID", xmlmap: xmlvars.common_colmap + "STATEID", sortable: true, search: false, hidden: true },
                 { name: "MOBILE1", index: "MOBILE1", xmlmap: xmlvars.common_colmap + "MOBILE1", sortable: true, search: false, hidden: true },
                 { name: "PHONENO", index: "PHONENO", xmlmap: xmlvars.common_colmap + "PHONENO", sortable: true, search: false, hidden: true },
@@ -256,7 +258,7 @@ var EstimateView = {
                         if (JsonObject.serviceresponse.detailslist) {
                             if (JsonObject.serviceresponse.responsecode == 0) {
                                 $("#Quotationitem_tbody").html('');
-                                debugger
+                                
                                 var list;
                                 if (JsonObject.serviceresponse.detailslist.details.length > 1)
                                     list = JsonObject.serviceresponse.detailslist.details;
@@ -325,6 +327,48 @@ var EstimateView = {
                         else {
                             $("#Quotationitem_tbody").html('');
                         }
+                    }
+                },
+                error: OnError
+            });
+
+            debugger
+            var myfilter = { rules: [] };
+            myfilter.rules.push({ field: "ESTIMATEFILEID", op: "eq", data: Id });
+            $.ajax({
+                url: getDomain() + EstimateView.variables.Bind_Salesreturnfiles_get + "&myfilters=" + JSON.stringify(myfilter),
+                async: false,
+                cache: false,
+                type: 'GET',
+                success: function (data) {
+                    debugger
+                    console.log(data)
+                    if ($(data).find('RESPONSECODE').text() == "0") {
+                        var vars = {};
+                        $.views.helpers({
+                            getvar: function (key) {
+                                return vars[key];
+                            }
+                        });
+                        $.views.tags({
+                            setvar: function (key, value) {
+                                vars[key] = value;
+                            }
+                        });
+                        $.views.settings.allowCode = true;
+
+                        window.domain = getDomain();
+                        var JsonObject = xml2json.parser(data);
+                        $('#imgPreviewTechnicalData').html("");
+                        if (JsonObject.serviceresponse.detailslist != undefined) {
+
+                            window.extension = 'jpg,jpeg,gif,png,pdf';
+                            $("#imgPreviewTechnicalData").html($("#FileList").render(JsonObject.serviceresponse.detailslist.details));
+                        }
+
+                    }
+                    else {
+                        InvalidResponseCode(data);
                     }
                 },
                 error: OnError
@@ -508,9 +552,23 @@ var EstimateView = {
                 notificationTost('warning', 'Insert Items.');
                 return;
             }
-
             xmlsaveFiles += resultXml.xmlsaveFiles;
             xmlsaveFiles += "</PURCHASE_DETAILS>";
+
+
+            var bannerImage = $('#imgBanner').attr('src');
+            if (bannerImage.indexOf('noImage.png') > -1)
+                bannerImage = '';
+
+
+            var xmlsaveFiles1 = "<DOCUMENTDEATIL>", saveFiles = bannerImage + ',', refrenceFiles = '', priceFiles = '';
+            var resultXml1 = makeFileXml_DOC('#imgPreviewTechnicalData', 'Picture');
+            xmlsaveFiles1 += resultXml1.xmlsaveFiles1;
+            saveFiles += resultXml1.saveFiles;
+            xmlsaveFiles1 += "</DOCUMENTDEATIL>";
+
+
+
             var data = {
                 "ESTIMATEID": $("#hdnQuotationId").val(),
                 "PARTYMASTERID": $("#txtAccount").attr("partymasterid"),
@@ -524,7 +582,7 @@ var EstimateView = {
                 "ROFAMT": $("#txtROFAmt").val(),
                 "TOTALAMT": $("#txtTotalAmt").val(),
                 "oper": EstimateView.variables.oper,
-                "XMLPARAM": escape(xmlsaveFiles),
+                "XMLPARAM": escape(xmlsaveFiles + xmlsaveFiles1),
                 "CITYID": $("#ddlPartyBranch").val(),
                 "TDSCHK": ($("#toggleSwitch").bootstrapSwitch('state') == true ? 1 : 0),
                 "TCSLIMT": $("#txtTCSApplicableLimit").val(),
@@ -554,6 +612,25 @@ var EstimateView = {
                 data.CHEQUEBOOKDETAILID = $("#hdnChequebookid").val();
                 /*data.CHEQUENAME = $("#txtAccount").val();*/
             }
+            
+           
+                $.ajax({
+                    type: 'POST',
+                    async: false,
+                    cache: false,
+                    url: getDomain() + "/Common/SaveImage",
+                    data: {
+                        category: 'Estimate',
+                        deletedfiles: deletedFiles,
+                        savefiles: saveFiles
+                    },
+                    success: function (result) {
+
+                    },
+                    error: OnError
+                });
+            
+            
 
             $.ajax({
                 url: getDomain() + EstimateView.variables.PerformMasterOperationUrl,
@@ -591,9 +668,11 @@ var EstimateView = {
 
     deleteRow: function (id) {
         try {
+            $("#delDELETE_VIRTUALFILENAME").val("")
             rowData = jQuery("#table_list_Quotation").getRowData(id);
             $("#hdnQuotationId").val(id);
             $("#delCode").html(rowData['PURCHASECODE']);
+            $("#delDELETE_VIRTUALFILENAME").val(rowData['DELETE_VIRTUALFILENAME'])
             $("#ModalQuotationDelete").modal('show');
         } catch (e) {
             ErrorDetails(e, EstimateView.variables.File);
@@ -602,6 +681,9 @@ var EstimateView = {
 
     DeleteSubmit: function () {
         try {
+
+            
+
             var data = {
                 "ESTIMATEID": $("#hdnQuotationId").val(),
                 "oper": 'Delete',
@@ -613,6 +695,24 @@ var EstimateView = {
                 async: false,
                 cache: false,
                 success: function (data) {
+
+                    $.ajax({
+                        type: 'POST',
+                        async: false,
+                        cache: false,
+                        url: getDomain() + "/Common/SaveImage",
+                        data: {
+                            category: 'Estimate',
+                            deletedfiles: $("#delDELETE_VIRTUALFILENAME").val(),
+                            savefiles: ""
+                        },
+                        success: function (result) {
+
+                        },
+                        error: OnError
+                    });
+                    $("#delDELETE_VIRTUALFILENAME").val("")
+
                     if ($(data).find('RESPONSECODE').text() == "0") {
                         $("#hdnQuotationId").val("");
                         notificationMessage('Success', $(data).find('RESPONSEMESSAGE').text(), 'success');
@@ -714,6 +814,7 @@ var EstimateView = {
 
     ClearData: function () {
         try {
+            $("#imgPreviewTechnicalData").html("")
             $("#lblPurchaseCode").hide();
             $("#txtAccount").attr("partymasterid", "")
             $("#hdnVenderStateId").val("");
@@ -1506,7 +1607,50 @@ $(document).ready(function () {
             $(".TDSCalculate").hide();
             $(".TCSCalculate").show();
         }
+        //*------------------------------------- Upload Image Multiple ----------------------------------------*/
+        $('#modalUpload').on('show.bs.modal', function (e) {
+            $('#hdnPreviewUploader').val(e.relatedTarget.dataset.preview);
+            $('#hdnExtUploader').val(e.relatedTarget.dataset.ext);
+            RegisterMultipleFileUpload('#imgUploader', e.relatedTarget.dataset.ext, '#btnAddFile');
+            $("#spExtension").html(e.relatedTarget.dataset.ext);
+        });
+        $('#btnAddFile').click(function () {
+            var strHref = '', file = '', fileid = '00000000-0000-0000-0000-000000000000', displayFile = '';
+            $('#imgUploader .plupload_filelist').find('li').each(function (key, obj) {
+                if ($(obj).find('.plupload_file_name a').length > 0) {
+                    strHref = $(obj).find('.plupload_file_name a').attr('href');
+                    file = strHref.substr(strHref.lastIndexOf('/') + 1).split('.')[0];
+                    displayFile = $(obj).find('.plupload_file_name a').html();
+                    //var x = displayFile;
+                    //var f = x.substr(0, x.lastIndexOf('.'));
+                    $('#' + $('#hdnPreviewUploader').val()).append('<tr id="' + file + '">' +
+                        '<td class="col-sm-3">' +
+                        '<label class="btn btn-quaternary uploadlink tooltip1" data-original-title="change file" for="btn' + file + '"><i class="fa fa-upload"></i>' +
+                        '<input type="file" accept="' + $('#hdnExtUploader').val() + '" name="file" id="btn' + file + '" class="hide"></label>&nbsp;' +
+                        '<a class="label-click" href="' + strHref + '" target="blank">' + displayFile + '</a>' +
+                        '<input type="hidden" class="fileid" value="' + fileid + '" /></td>' +
+                        '<td class="col-sm-2">' +
+                        '<input type="text" class="form-control title" value="' + displayFile.split('.')[0] + '" placeholder="Title"></td>' +
 
+                        '<td class="col-sm-1">' +
+
+                        '<a href="javascript:void(0);" onclick="deleteCustomerFile(\'' + file + '\', ' + fileid + ',\'' + strHref + '\');" data-original-title="delete record" class="btn btn-danger tooltip1"><i class="fa fa-trash"></i></a>' +
+                        '</td></tr>');
+                }
+
+                $('.tooltip1').tooltip({
+                    html: true,
+                    container: 'body',
+                    placement: 'right',
+                    template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+                });
+                registerSingleFileUpload('.uploadlink');
+
+                $('#modalUpload').modal('hide');
+            });
+        });
+
+        //*------------------------------------- Upload Image Multiple ----------------------------------------*/
 
     }
     catch (e) {
@@ -2218,3 +2362,99 @@ function AutosuggestChequeNo(obj) {
     }
 }
 //-------------------------------------- /Bank Detail Hide/Show --------------------------------------//
+
+
+
+//*------------------------------------- Upload Image Multiple ----------------------------------------*/
+
+var deletedFiles = '';
+function deleteCustomerFile(rid, fileid, file) {
+    $.confirm({
+        'title': 'Delete Record',
+        'message': 'Are you sure about to delete this ' + $('#' + rid).find('.title').val() + ' file. It can not be restored at a later time! Continue? ',
+        'buttons': {
+            'Yes': {
+                'class': 'yes',
+                'action': function () {
+                    deletedFiles += file + ',';
+                    $('#' + rid).remove();
+                    $('.tooltip').remove();
+                }
+            },
+            'No': {
+                'class': 'no',
+                'action': function () {
+
+                }
+            }
+        }
+    });
+}
+function getFileNameWithoutExt(file) {
+    return file.split('.')[0];
+}
+function makeFileXml_DOC(saveDiv, type) {
+
+    var xmlsaveFiles = '', saveFiles = '', strHref = '';
+    $(saveDiv).find('tr').each(function (key, obj) {
+        strHref = $(obj).find('.label-click').attr('href');
+        saveFiles += strHref + ',';
+        xmlsaveFiles += '<DETAILS>';
+        xmlsaveFiles += '<ACTUALFILENAME><![CDATA[' + $.trim($(obj).find('.title').val()) + ']]></ACTUALFILENAME>';
+        xmlsaveFiles += '<VIRTUALFILENAME><![CDATA[' + strHref.substr(strHref.lastIndexOf('/') + 1) + ']]></VIRTUALFILENAME>';
+        xmlsaveFiles += '</DETAILS>';
+    });
+
+    return { xmlsaveFiles1: xmlsaveFiles, saveFiles: saveFiles };
+}
+function registerSingleFileUpload(uploader) {
+    $(uploader).fileupload({
+        url: getDomain() + "/Helpers/Handler/FileUploadHandler.ashx",
+        add: function (e, data) {
+
+            var rowId = $($(this).find('input')).attr('id').substr(3);
+            var displayLink = $('#' + rowId).find('.label-click');
+
+            var ext = data.files[0].name.split('.')[1].toLowerCase();
+            var accept = $(e.target).find('input').attr('accept');
+            if (accept.indexOf(ext) > -1) {
+                $(displayLink).parent().append('<img width="16" height="16" src="' + getDomain() + '/Images/loader.gif">');
+                data.submit();
+            }
+            else {
+                notificationMessage('File Attachment', 'Please select only ' + accept + ' files', 'warning');
+            }
+        },
+        success: function (response, status) {
+            if (response == 'Maximum request length exceeded.') {
+                notificationMessage('File Attachment Error', response, 'error');
+                $(displayLink).siblings('img').remove();
+                return;
+            }
+            if (response.indexOf('error') >= 0) {
+                notificationMessage('File Attachment Error', response, 'error');
+                $(displayLink).siblings('img').remove();
+                return;
+            }
+            var rowId = $($(this)[0].fileInput).attr('id').substr(3);
+            var displayFile = $(this)[0].files[0].name;
+            var displayLink = $('#' + rowId).find('.label-click');
+
+            if ($(displayLink).attr('href').length > 0 && $(displayLink).attr('href').indexOf('/Temp/') > -1) {
+                var strDeletedFile = $('#hdnDeletedBanner').val() + $(displayLink).attr('href') + ',';
+                $('#hdnDeletedBanner').val(strDeletedFile);
+            }
+            $(displayLink).attr('href', response);
+            $(displayLink).html(displayFile);
+            $(displayLink).siblings('img').remove();
+        },
+        error: function (xhr, errorType, exception) {
+            notificationMessage('File Attachment Error', xhr.responseText, 'error');
+            var rowId = $($(this).find('input')).attr('id').substr(3);
+            var displayLink = $('#' + rowId).find('.label-click');
+            $(displayLink).siblings('img').remove();
+        }
+    });
+}
+
+//*------------------------------------- Upload Image Multiple ----------------------------------------*/
