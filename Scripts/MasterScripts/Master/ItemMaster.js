@@ -17,7 +17,7 @@ var ItemMasterView = {
     },
 
     initializeJqgrid: function (url) {
-        var colNames = ['ItemId', 'Item Name', 'Short Name', 'ItemGroup', 'Item Group Name', 'ITEMTYPE', 'HSNID', 'Size Maintain', 'Auto MRP In Tag', 'Is Active', 'HSN Code', 'Item Type', 'Price', 'LabourRate','TotalRate'];
+        var colNames = ['ItemId', 'Item Name', 'Short Name', 'ItemGroup', 'Item Group Name', 'ITEMTYPE', 'HSNID', 'Size Maintain', 'Auto MRP In Tag', 'Is Active', 'HSN Code', 'Item Type', 'Price'];
         var colModel = [
             { name: "ITEMID", index: "ITEMID", xmlmap: xmlvars.common_colmap + "ITEMID", stype: 'int', sortable: true, hidden: true, search: false },
             { name: "ITEMNAME", width: 15, index: "ITEMNAME", xmlmap: xmlvars.common_colmap + "ITEMNAME", stype: 'text', sortable: true, searchoptions: jqGridVariables.stringSearchOption },
@@ -32,11 +32,6 @@ var ItemMasterView = {
             { name: "HSNCODE", width: 15, index: "HSNCODE", xmlmap: xmlvars.common_colmap + "HSNCODE", stype: 'int', sortable: true, searchoptions: jqGridVariables.stringSearchOption },
             { name: "ITEMTYPE_COMMON", width: 15, index: "ITEMTYPE_COMMON", xmlmap: xmlvars.common_colmap + "ITEMTYPE_COMMON", stype: 'int', sortable: true, searchoptions: jqGridVariables.stringSearchOption },
             { name: "PRICE", width: 15, index: "PRICE", xmlmap: xmlvars.common_colmap + "PRICE", stype: 'int', sortable: true, searchoptions: jqGridVariables.stringSearchOption },
-            { name: "LABOURRATE", width: 15, index: "LABOURRATE", xmlmap: xmlvars.common_colmap + "LABOURRATE", stype: 'int', sortable: true, searchoptions: jqGridVariables.stringSearchOption },
-            { name: "TOTALRATE", width: 15, index: "TOTALRATE", xmlmap: xmlvars.common_colmap + "TOTALRATE", stype: 'int', sortable: true, searchoptions: jqGridVariables.stringSearchOption },
-           
-            
-
         ];
         if (isU()) {
             colNames.push('Edit');
@@ -141,24 +136,6 @@ var ItemMasterView = {
             $("#ddlItemType").val(rowData['ITEMTYPE']);
             $("#ddlHsnCode").val(rowData['HSNID']);
             $("#txtPrice").val(rowData['PRICE']);
-            $("#txtLabourRate").val(rowData['LABOURRATE']);
-            $("#txtTotalRate").val(rowData['TOTALRATE']);
-
-            
-            if (rowData['SIZEMANTAIN'] == 1) {
-                $("input[name='txtSizemantain']").iCheck('check');
-            }
-            else {
-                $("input[name='txtSizemantain']").iCheck('uncheck');
-            }
-
-            if (rowData['AUTOMRPINTAG'] == 1) {
-                $("input[name='txtAutoMRPInTag']").iCheck('check');
-            }
-            else {
-                $("input[name='txtAutoMRPInTag']").iCheck('uncheck');
-            }
-
             if (rowData['ISACTIVE'] == 1) {
                 $("input[name='txtIsActive']").iCheck('check');
             }
@@ -266,12 +243,8 @@ var ItemMasterView = {
                 "ITEMGROUP": $("#ddlItemGroup").val(),
                 "ITEMTYPE": $("#ddlItemType").val(),
                 "HSNID": $("#ddlHsnCode").val(),
-                "SIZEMANTAIN": (($('input[name="txtSizemantain"]').prop("checked") == true) ? 1 : 0),
-                "AUTOMRPINTAG": (($('input[name="txtAutoMRPInTag"]').prop("checked") == true) ? 1 : 0),
                 "ISACTIVE": (($('input[name="txtIsActive"]').prop("checked") == true) ? 1 : 0),
                 "PRICE": +$("#txtPrice").val(),
-                "LABOURRATE": +$("#txtLabourRate").val(),
-                "TOTALRATE": +$("#txtTotalRate").val(),
                 "oper": ItemMasterView.variables.Oper,
                 "ITEMID": ItemMasterView.variables.Masterid
             }
@@ -311,37 +284,15 @@ var ItemMasterView = {
             $("#txtItemName").val("");
             $("#txtShortName").val("");
             $("#ddlItemGroup").val("");
-            /*$("#txtTouch").val("");*/
             $("#ddlItemType").val("");
-            //$('#ddlItemCategory').multiselect();
-            //$($("#ddlItemCategory")[0].nextSibling).attr("tabindex", "5");
-            //$('#ddlItemCategory').val('');
-            //$('#ddlSubItemType').multiselect();
-            //$($("#ddlSubItemType")[0].nextSibling).attr("tabindex", "6");
-            //$('#ddlSubItemType').val('');
-
-            /*$("#ddlLabourRateType").val("");*/
-            /*$("#ddlTLG").val("");*/
             $("#ddlHsnCode").val("");
-            $("input[name='txtAllowNegativeStock']").iCheck('uncheck');
-            $("input[name='txtOtherDefaultChecked']").iCheck('uncheck');
-            $("input[name='txtSizemantain']").iCheck('uncheck');
-            $("input[name='txtAutoMRPInTag']").iCheck('uncheck');
-            $("input[name='IsLot']").iCheck('uncheck');
             $("input[name='txtIsActive']").iCheck('check');
             $("#hdnItemId").val('');
             $("#txtPrice").val("0");
-            $("#txtLabourRate").val("0");
-            $("#txtTotalRate").val("0");
             ItemMasterView.variables.Oper = 'Add';
             ItemMasterView.variables.addedit = "added";
             jQuery("#table_ItemMaster").jqGrid('resetSelection');
             $("#frmItemMaster").validate().resetForm();
-            //$("#ddlItemCategory").multiselect("destroy");
-            //$("#ddlSubItemType").multiselect("destroy");
-            //$("#ddlSubItemType").multiselect().multiselectfilter();
-            //$("#ddlItemCategory").multiselect().multiselectfilter();
-
         } catch (e) {
             ErrorDetails(e, ItemMasterView.variables.File);
         }
@@ -508,19 +459,6 @@ $(document).ready(function () {
             }
         });
 
-        $("#txtPrice").keyup(function () {
-            var txtPrice = 0, txtLabourRate = 0
-            txtPrice = +$("#txtPrice").val() || 0;
-            txtLabourRate = +$("#txtLabourRate").val() || 0;
-            $("#txtTotalRate").val(+txtPrice + +txtLabourRate)
-        });
-
-        $("#txtLabourRate").keyup(function () {
-            var txtPrice = 0, txtLabourRate = 0
-            txtPrice = +$("#txtPrice").val() || 0;
-            txtLabourRate = +$("#txtLabourRate").val() || 0;
-            $("#txtTotalRate").val(+txtPrice + +txtLabourRate)
-        });
     } catch (e) {
         ErrorDetails(e, ItemMasterView.variables.File);
     }

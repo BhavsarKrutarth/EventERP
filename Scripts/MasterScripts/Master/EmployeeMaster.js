@@ -37,7 +37,7 @@ var EmployeeDetailMasView = {
             { name: "FULLNAME", width: 21, index: "FULLNAME", xmlmap: xmlvars.common_colmap + "FULLNAME", stype: 'text', sortable: false, search: false },
             { name: "SHORTNAME", index: "SHORTNAME", xmlmap: xmlvars.common_colmap + "SHORTNAME", stype: 'text', sortable: false, search: false, hidden: true },
 
-            { name: "EMAILID", width: 21, index: "EMAILID", xmlmap: xmlvars.common_colmap + "EMAILID", stype: 'text', sortable: false, search: false },
+            { name: "EMAILID", hidden: true, index: "EMAILID", xmlmap: xmlvars.common_colmap + "EMAILID", stype: 'text', sortable: false, search: false },
             { name: "USERGROUP", width: 10, index: "USERGROUP", xmlmap: xmlvars.common_colmap + "USERGROUP", stype: 'text', sortable: false, search: false },
             { name: "USERGROUPID", index: "USERGROUPID", xmlmap: xmlvars.common_colmap + "USERGROUPID", stype: 'text', sortable: false, search: false, hidden: true },
             { name: "BRANCHIDS", index: "BRANCHIDS", xmlmap: xmlvars.common_colmap + "BRANCHIDS", stype: 'text', sortable: false, search: false, hidden: true },
@@ -46,12 +46,12 @@ var EmployeeDetailMasView = {
             { name: "GENDER", width: 5, index: "GENDER", xmlmap: xmlvars.common_colmap + "GENDER", stype: 'text', align: 'center', sortable: false, search: false },
             { name: "DOB", index: "DOB", xmlmap: xmlvars.common_colmap + "DOB", stype: 'text', align: 'center', sortable: false, search: false, hidden: true },
             { name: "DOJ", index: "DOJ", xmlmap: xmlvars.common_colmap + "DOJ", stype: 'text', sortable: false, search: false, hidden: true },
-            { name: "CITY", width: 7, index: "CITY", xmlmap: xmlvars.common_colmap + "CITY", stype: 'text', align: 'center', sortable: false, search: false },
+            { name: "CITY", hidden: true, index: "CITY", xmlmap: xmlvars.common_colmap + "CITY", stype: 'text', align: 'center', sortable: false, search: false },
             { name: "CITYID", index: "CITYID", xmlmap: xmlvars.common_colmap + "CITYID", stype: 'text', sortable: false, search: false, hidden: true },
             { name: "ADDRESS1", index: "ADDRESS1", xmlmap: xmlvars.common_colmap + "ADDRESS1", stype: 'text', sortable: true, hidden: true },
             { name: "ADDRESS2", index: "ADDRESS2", xmlmap: xmlvars.common_colmap + "ADDRESS2", stype: 'text', sortable: true, hidden: true },
             { name: "ADDRESS3", index: "ADDRESS3", xmlmap: xmlvars.common_colmap + "ADDRESS3", stype: 'text', sortable: true, hidden: true },
-            { name: "PINCODE", width: 7, index: "PINCODE", xmlmap: xmlvars.common_colmap + "PINCODE", stype: 'text', align: 'center', sortable: false, search: false },
+            { name: "PINCODE", hidden: true, index: "PINCODE", xmlmap: xmlvars.common_colmap + "PINCODE", stype: 'text', align: 'center', sortable: false, search: false },
             { name: "PHOTOPATH", index: "PHOTOPATH", width: 10, xmlmap: xmlvars.common_colmap + "PHOTOPATH", sortable: true, align: "center", hidden: true },
             { name: "BALANCESHEETGROUPID", index: "BALANCESHEETGROUPID", xmlmap: xmlvars.common_colmap + "BALANCESHEETGROUPID", sortable: false, search: false, hidden: true },
             { name: "DEFAULTEMPBANKACCOUNT", index: "DEFAULTEMPBANKACCOUNT", xmlmap: xmlvars.common_colmap + "DEFAULTEMPBANKACCOUNT", sortable: false, search: false, hidden: true },
@@ -377,10 +377,10 @@ var EmployeeDetailMasView = {
                 ddlAdminOfBranch = "";
             }
 
-            if ($("#txtcity").attr("cityid") == "" || $("#txtcity").attr("cityid") == "undefined" || $("#txtcity").attr("cityid") == "[object Object]") {
-                notificationMessage('warning', 'City name is not proper selected.', 'warning');
-                return;
-            }
+            //if ($("#txtcity").attr("cityid") == "" || $("#txtcity").attr("cityid") == "undefined" || $("#txtcity").attr("cityid") == "[object Object]") {
+            //    notificationMessage('warning', 'City name is not proper selected.', 'warning');
+            //    return;
+            //}
 
             if (!isValid)
                 return;
@@ -458,9 +458,9 @@ var EmployeeDetailMasView = {
                 data.INSENTIVETAGID = $("#ddlTag").val().toString();
             }
 
-            if ($("#txtSalary").val() != "" && $("#txtSalary").val() != undefined) {
-                data.EMPSALARY = $("#txtSalary").val()
-            }
+            //if ($("#txtSalary").val() != "" && $("#txtSalary").val() != undefined) {
+            //    data.EMPSALARY = $("#txtSalary").val()
+            //}
 
             EmployeeDetailMasView.savedata(data);
         }

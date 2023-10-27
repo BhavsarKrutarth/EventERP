@@ -107,7 +107,7 @@ var Partydetailview = {
             colNames: colNames,
             colModel: colModel,
             pager: "#pager_list_Partydetail",
-            multiselect: true,
+            multiselect: false,
             xmlReader: {
                 root: xmlvars.common_root,
                 row: xmlvars.common_row,
