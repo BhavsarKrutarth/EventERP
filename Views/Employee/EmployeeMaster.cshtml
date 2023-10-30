@@ -1,0 +1,498 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .imgerror {
+        width: 95%;
+        text-align: center;
+    }
+
+    select.error {
+        color: #000 !important;
+    }
+
+    select {
+        padding: 5px 5px !important;
+    }
+
+    .select2-container {
+        width: 100% !important;
+    }
+
+    #profileimg {
+        height: 107px;
+        border: 2px solid #eaeaea;
+        /*padding: 0;*/
+        margin-bottom: 8px;
+        /*margin-left: 12px;*/
+    }
+
+    #btnlbl {
+        border: 2px solid #eaeaea;
+        width: 54%;
+    }
+
+    .addstar {
+        border: 1px solid #eaeaea;
+    }
+
+    .rdlbl {
+        padding-left: 27px;
+        padding-top: 2px;
+    }
+
+    #genderdiv {
+        padding-top: 7px;
+        padding-left: 9px;
+    }
+
+    #img-preview {
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+    }
+</style>
+
+<div class="page-container">
+    <!-- Add/Edit form Panel -->
+    <div class="panel pt-10" id="panelEmployeeDetailMasEdit" style="display:none;">
+        <form class="form-horizontal" id="frmEmployeeDetailMas" method="get">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="panel panel-flat">
+                        <div class="panel-body">
+                            <div class="col-lg-10" style="border-right: 1px solid #dddddd;">
+                                <fieldset>
+                                    <legend class="text-bold">Basic Detail</legend>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Emp Code</label>
+                                            <div class="col-md-4">
+                                                <input type="text" disabled id="txtEmpCode" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="AdminOfBranchdiv" style="display:none;">
+                                            <label class="control-label col-md-3 pl-0">Admin Of Project<span style="color:red"> *</span></label>
+                                            <div class="col-md-8">
+                                                <select id="ddlAdminOfBranch" name="ddlAdminOfBranch" multiple data-width="100%"></select>
+                                            </div>
+                                            <label id="ddlAdminOfBranchError" class="error" style="display:none; margin-left: 10px;">This field is required.</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Full Name<span style="color:red"> *</span></label>
+                                            <div class="col-md-8">
+                                                <input type="text" tabindex="3" placeholder="Enter Employee Name" name="txtEmployeeName" id="txtEmployeeName" class="form-control uppercase required" autofocus>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Short Name<span style="color:red"> *</span></label>
+                                            <div class="col-md-8">
+                                                <input type="text" tabindex="5" placeholder="Enter Short Name" name="txtShortName" id="txtShortName" class="form-control required uppercase">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Employee Type<span style="color:red"> *</span></label>
+                                            <div class="col-md-8">
+                                                <select id="ddlEmployeeType" tabindex="7" name="ddlEmployeeType" class="form-control required">
+                                                    <option value="temporary">Temporary</option>
+                                                    <option value="permanent">Permanent</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Gender<span style="color:red"> *</span></label>
+                                            <div class="col-md-8 input-group" id="genderdiv">
+                                                <div class="d-inline-block custom-control custom-radio pull-left" style="padding-right:5px;">
+                                                    <input type="radio" tabindex="2" name="gender" id="male" class="icheck" checked>
+                                                    <label for="male" class="rdlbl">Male</label>
+                                                </div>
+                                                <div class="d-inline-block custom-control custom-radio">
+                                                    <input type="radio" tabindex="8" name="gender" id="female" class="icheck">
+                                                    <label for="female" class="rdlbl">Female</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Birth Date</label>
+                                            <div class="col-md-7">
+                                                <input type="date" tabindex="4" name="txtDOB" id="txtDOB" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Joining Date<span style="color:red"> *</span></label>
+                                            <div class="col-md-7">
+                                                <input type="date" tabindex="6" name="txtDOJ" id="txtDOJ" class="form-control required">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-2">
+                                <fieldset class="text-center">
+                                    <legend class="text-bold">Profile Photo</legend>
+                                    <div class="form-group" style="margin-bottom:10px;">
+                                        <div class="col-lg-12">
+                                            <img id="profileimg" src='@System.Configuration.ConfigurationManager.AppSettings["domainpath"]/Content/assets/images/default-user.png' style="max-height: 107px; max-width: 100px;" />
+                                            <br />
+                                            <label title="Upload image file" for="BtnImageUpload" class="btn border-slate text-slate-800 btn-flat">
+                                                <input type="file" accept="image/*" name="ImageUpload" id="BtnImageUpload" class="hide required">
+                                                <i class="icon-upload4 position-left"></i>Upload Photo
+                                            </label>
+                                            <input id="hdnimg" value="" hidden />
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-12">
+                    <div class="panel panel-flat">
+                        <div class="panel-body">
+                            <div class="col-lg-8" style="border-right: 1px solid #dddddd;">
+                                <fieldset>
+                                    <legend class="text-bold">Contact Information</legend>
+                                    <div class="col-lg-7">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Address1</label>
+                                            <div class="col-md-10">
+                                                <input type="text" tabindex="8" placeholder="Enter Address1" name="txtAddress1" id="txtAddress1" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Address2</label>
+                                            <div class="col-md-10">
+                                                <input type="text" tabindex="9" placeholder="Enter Address2" name="txtAddress2" id="txtAddress2" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Address3</label>
+                                            <div class="col-md-10">
+                                                <input type="text" tabindex="10" placeholder="Enter Address3" name="txtAddress3" id="txtAddress3" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">City</label>
+                                            <div class="col-md-10">
+                                                @*<select id="ddlCity" tabindex="14" name="ddlCity" class="form-control required"></select>*@
+                                                <input type="text" onkeyup="EmployeeDetailMasPRView.BindCity_AutoComplete()" tabindex="11" class="form-control text-uppercase txtcity" placeholder="Select City" name="txtcity" id="txtcity">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Email Id</label>
+                                            <div class="col-md-8">
+                                                <input type="text" tabindex="12" placeholder="example@xyz.com" name="txtEmailId" id="txtEmailId" class="form-control email">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Mobile1<span style="color:red"> *</span></label>
+                                            <div class="col-md-8">
+                                                <input type="text" tabindex="13" placeholder="XXXXX-XXXXX" name="txtMobileNo1" id="txtMobileNo1" class="form-control mobilenomask required">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Mobile2</label>
+                                            <div class="col-md-8">
+                                                <input type="text" tabindex="14" placeholder="XXXXX-XXXXX" name="txtMobileNo2" id="txtMobileNo2" class="form-control mobilenomask">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Pincode</label>
+                                            <div class="col-md-8">
+                                                <input type="text" tabindex="15" placeholder="XXXXXX" name="txtPincode" id="txtPincode" class="form-control pincodemask ">
+                                            </div>
+                                            @*<div class="col-md-3">
+                                                    <button type="button" id="btnOtherDetails" class="btn btn-info">Other Details</button>
+                                                </div>*@
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-4">
+                                <fieldset>
+                                    <legend class="text-bold">Bank Information</legend>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">Bank Name</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" tabindex="16" name="txtBankName" id="txtBankName" placeholder="Enter Bank Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">A/C No</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" tabindex="17" name="txtACNo" id="txtACNo" style="font-size: 16px; font-family: monospace;" placeholder="Enter A/C No.">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">IFSC Code</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" tabindex="18" name="txtIFSCCode" id="txtIFSCCode" style="text-transform: uppercase;font-size: 16px;font-family: monospace;" placeholder="Enter IFSC Code">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">Branch Name</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" class="form-control" tabindex="19" name="txtBranchName" id="txtBranchName" placeholder="Enter Branch Name">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="mulPanel panel-footer txtC p-10">
+                            @if (Model.ISADD == 1 || Model.ISUPDATE == 1)
+                            {
+                                <button type="button" id="btnSaveEmployeeDetailMas" class="btn btn-success btnSave" tabindex="20"><span class="fa fa-floppy-o"></span> Save</button>
+                            }
+                            <button name="CancelEmployeeDetailMas" class="btn bg-slate-400 btnCancel" type="button" tabindex="21"><i class="fa fa-times"></i> Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <input type="text" id="hdnEmpId" hidden value="" />
+        </form>
+    </div>
+    <!-- Add/Edit form Panel -->
+    <!-- Delete form modal -->
+    <div id="panelEmployeeDetailMasDelete" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Login Master</h5>
+                </div>
+                <form class="form-horizontal" id="frmCommon_CountryMaster" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Employee Name: </dt>
+                                <dd id="delblFullName"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @if (Model.ISDELETE == 1)
+                        {
+                            <button type="button" id="btnDeleteEmployeeDetailMas" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                        }
+                        <button name="CancelEmployeeDetailMas" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /Delete form modal -->
+    <!-- List Panel -->
+    <div class="panel" id="panelEmployeeDetailMasList" style="margin-bottom:0px;">
+        <div class="row panel-heading">
+            <div class="col-lg-7 pt-5 pl-0">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">User Login Master</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 pr-0">
+                <div class="col-md-8 txtR">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="txtsearchbox" class="form-control searchbox" placeholder="Search Here..." autofocus>
+                        <div class="form-control-feedback">
+                            <i class="icon-search4 text-size-base"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 pr-0 txtR">
+                    @if (Model.ISADD == 1)
+                    {
+                        <button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddEmployeeDetailMas" style="font-weight:600!important"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>
+                    }
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5 pull-right" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <div class="col-md-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="jqGrid_wrapper" id="jqGrid_EmployeeDetailMas">
+                    <table id="table_EmployeeDetailMas"></table>
+                    <div id="pager_EmployeeDetailMas"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- List Panel -->
+
+    <div id="Modal_EmployeeOtherDetails" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Employee Other Details</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="#" id="formEmpOther">
+                        <fieldset class="content-group">
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Account</label>
+                                <div class="col-lg-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" onkeyup="EmployeeDetailMasPRView.AutosuggestAccountName(this)" placeholder="Search Code/Name" id="txtACName" tabindex="1" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#AddAccountModal" style="padding-bottom: 3px;"><i class="icon-plus2"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Salary Account</label>
+                                <div class="col-lg-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" onkeyup="EmployeeDetailMasPRView.AutosuggestAccountName(this)" placeholder="Search Code/Name" id="txtSalaryAC" tabindex="2" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#AddAccountModal" style="padding-bottom: 3px;"><i class="icon-plus2"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Category</label>
+                                <div class="col-lg-3">
+                                    <select class="form-control" tabindex="3" id="ddl_SalesmanCategory"></select>
+                                </div>
+
+                                @*<label class="control-label col-lg-2 txtR">Counter</label>
+                                    <div class="col-lg-3">
+                                        <select class="form-control" tabindex="4" id="ddl_Counter"></select>
+                                    </div>*@
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Adhar</label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control adhaarnomask" tabindex="5" id="txt_adharno" />
+                                </div>
+
+                                <label class="control-label col-lg-2 txtR">PAN</label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control pannomask" tabindex="6" id="txt_panno" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Incentive Type</label>
+                                <div class="col-lg-3">
+                                    <select class="form-control" tabindex="7" id="ddl_incentiveType"></select>
+                                </div>
+
+                                <label class="control-label col-lg-2 txtR">Incentive Prc</label>
+                                <div class="col-lg-3">
+                                    <input type="number" class="form-control" tabindex="8" id="txt_incentivePrc" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">In Time</label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control timemask" tabindex="9" id="txt_inTime" />
+                                </div>
+
+                                <label class="control-label col-lg-2 txtR">Out Time (24 hours)</label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control timemask" tabindex="100" id="txt_outTime" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 txtR">Late Valid Time (min)</label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control number" tabindex="110" id="txt_lateValidTime" />
+                                </div>
+
+                                <label class="control-label col-lg-2 txtR">Break Time (min)</label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="form-control number" tabindex="120" id="txt_breakTime" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnOkOtherDetail" class="btn btn-success btnSave" tabindex="130"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Ok</button>
+                    <button type="button" id="btnCancelOtherDetail" class="btn bg-slate-400 btnCancel" tabindex="140"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="hdnCountryId" value="" />
+</div>
+
+<div id="ModelProfileImage" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h5 class="modal-title">Upload Photo</h5>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="frmUploadImage" method="get">
+                    <div class="row" style="margin:0px 5px;">
+                        <div class="col-md-6 col-md-6">
+                            <div class="image-cropper-container content-group" style="width:400px;background:gray !important;">
+                                <img src="" id="CustomerimgCrop" alt="" class="cropper">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-md-6 col-xs-12">
+                            <div class="col-md-12 col-md-12 col-xs-6 pl0 pr0">
+                                <div class="content-group">
+                                    <div class="eg-preview">
+                                        <div class="preview preview-lg"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-md-12 col-xs-6 pl0 pr0 MarginDesktop">
+                                <div class="docs-buttons1">
+                                    <div class="btn-group btn-group-crop">
+                                        <button type="button" class="btn bg-blue btn-icon legitRipple" data-method="getCroppedCanvas" data-option="{ &quot;width&quot;: 2506, &quot;height&quot;: 1200 }">
+                                            <span id="pictursetbtn" class="docs-tooltip" title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 1200, height: 300 })">
+                                                Set Photo
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn bg-blue btn-icon legitRipple" data-method="rotate" data-option="-45" title="Rotate Left">
+                                            <span class="icon-rotate-ccw3"></span>
+                                        </button>
+                                        <button type="button" class="btn bg-blue btn-icon legitRipple" data-method="rotate" data-option="45" title="Rotate Right">
+                                            <span class="icon-rotate-cw3"></span>
+                                        </button>
+                                    </div>
+                                    <div style="display:none;" id="divLoaderDP">
+                                        <img src="~/Content/assets/images/Loader.gif" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin:0px 5px;">
+                        <div class="col-md-12 col-md-12 col-xs-12">
+                            <div id="dpCropCanvas">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/assets/plugin/Cropper/cropper.min.js"></script>
+    <script src="~/Scripts/MasterScripts/Employee/EmployeeMaster.js?v=@DateTime.UtcNow"></script>
+   
+
+}
+
+
+
+
