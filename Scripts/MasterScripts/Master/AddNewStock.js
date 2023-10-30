@@ -26,7 +26,7 @@ var AddNewStockView = {
         };
         myfilter.rules.push({ field: "ITEMGROUPID", op: "eq", data: $("#ddlItemGroup").val() }); //$('#txtAccount').val()
         myfilter.rules.push({ field: "ACCOUNTYEARID", op: "eq", data: $("#CurrentAccountYear").attr("accyearid") }); //$('#txtAccount').val()
-        myfilter.rules.push({ field: "CITYID", op: "eq", data: $("#ddlPartyBranch").val() }); //$('#txtAccount').val()
+        myfilter.rules.push({ field: "BRANCHID", op: "eq", data: $("#ddlPartyBranch").val() }); //$('#txtAccount').val()
         var url = getDomain() + "/Common/BindMastersDetails?ServiceName=ITEMMASTER_GET&IsRecordAll=true&myfilters=" + JSON.stringify(myfilter);
         $.ajax({
             url: url,
@@ -144,7 +144,7 @@ function makeFileXml(saveDiv) {
                             xmlsaveFiles += '<RENTSTOCKQTY>' + ($(obj).find('.txtrentstockqty').html() || 0) + '</RENTSTOCKQTY>';
                             xmlsaveFiles += '<AVAILABLESTOCKQTY>' + ($(obj).find('.txtavailablestockqty').html() || 0) + '</AVAILABLESTOCKQTY>';
                             xmlsaveFiles += '<ACCOUNTYEARID>' + $("#CurrentAccountYear").attr("accyearid") + '</ACCOUNTYEARID>';
-                            xmlsaveFiles += '<CITYID>' + $("#ddlPartyBranch").val() + '</CITYID>';
+                            xmlsaveFiles += '<BRANCHID>' + $("#ddlPartyBranch").val() + '</BRANCHID>';
                         xmlsaveFiles += '</DETAILS>';
                 }
             }

@@ -1410,7 +1410,7 @@ $(document).ready(function () {
         myfilter = {
             rules: []
         };
-        myfilter.rules.push({ field: "CITY", op: "eq", data: $("#ddlPartyBranch").val() });
+        myfilter.rules.push({ field: "BRANCHID", op: "eq", data: $("#ddlPartyBranch").val() });
         /*myfilter.rules.push({ field: "GROUP", op: "eq", data: 'Group' });*/
         var url = EstimateView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter);
 
@@ -1787,6 +1787,8 @@ function AutosuggestSubitemName(id) {
                     };
                     myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#" + id).val() });
                     myfilter.rules.push({ field: "ITEMGROUPID", op: "eq", data: itemgroupmasterid });
+                    myfilter.rules.push({ field: "ACCOUNTYEARID", op: "eq", data: $("#CurrentAccountYear").attr("accyearid") });
+                    myfilter.rules.push({ field: "CITYID", op: "eq", data: $("#ddlPartyBranch").val() });
                     var url = getDomain() + "/Common/BindMastersDetails?ServiceName=ITEMMASTER_GET&myfilters=" + JSON.stringify(myfilter);
                     $.ajax({
                         url: url,
@@ -1863,11 +1865,11 @@ function AutosuggestSubitemName(id) {
                     noResults: "No Results Found"
                 },
                 select: function (event, ui) {
-
+                    debugger
                     if (ui.item.label != 'No Results Found') {
                         $("#txtSubitemName" + append).attr('itemid', ui.item.Id);
                         $("#txtHsnCode" + append).val(ui.item.HSNID)
-                        $("#txtRate" + append).val(ui.item.TOTALRATE)
+                        $("#txtRate" + append).val(ui.item.PRICE)
                         $("#txtitemtype" + append).val(ui.item.ITEMTYPE_COMMON)
                         EstimateView.Calculation()
                     } else {
@@ -2041,7 +2043,7 @@ function DateFilter() {
         }
         myfilter = { rules: [] };
         myfilter.rules.push({ field: "FROMDATE", op: "eq", data: FromDate }, { field: "TODATE", op: "eq", data: Todate });
-        myfilter.rules.push({ field: "CITY", op: "eq", data: $("#ddlPartyBranch").val() });
+        myfilter.rules.push({ field: "BRANCHID", op: "eq", data: $("#ddlPartyBranch").val() });
         setTimeout(function () {
             if ($("#txtsearchbox").val().length > 1) {
                 myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#txtsearchbox").val() });
@@ -2058,7 +2060,7 @@ function AllData() {
     try {
         if (!$("#txtToDate").val() && !$("#txtFromDate").val()) {
             myfilter = { rules: [] };
-            myfilter.rules.push({ field: "CITY", op: "eq", data: $("#ddlPartyBranch").val() });
+            myfilter.rules.push({ field: "BRANCHID", op: "eq", data: $("#ddlPartyBranch").val() });
             myfilter.rules.push({ field: "FROMDATE", op: "eq", data: $("#txtFromDate").val() }, { field: "TODATE", op: "eq", data: $("#txtToDate").val() });
             if ($("#txtsearchbox").val().length > 1) {
                 myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#txtsearchbox").val() });
