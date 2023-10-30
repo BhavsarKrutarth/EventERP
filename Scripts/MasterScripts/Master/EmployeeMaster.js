@@ -9,6 +9,7 @@ var EmployeeDetailMasView = {
         BindInsentiveGroupUrl: "/Common/BindMastersDetails?ServiceName=MASTER_INSENTIVE_GET",
         BindBranchUrl: "/Common/BindMastersDetails?ServiceName=BRANCHMASTER_GET&IsRecordAll=true&ISACTIVE=1",
         BindBalanceSheetGroupUrl: "/Common/BindMastersDetails?ServiceName=BALANCESHEETGROUPMAS_GET&IsRecordAll=true&ISACTIVE=1",
+        BindTagUrl: "/Common/BindMastersDetails?ServiceName=TAGMASTER_GET&IsRecordAll=true&ISACTIVE=1",
         Oper: 'Add',
         addedit: "added",
         File: "EmployeeMaster.js",
@@ -23,12 +24,13 @@ var EmployeeDetailMasView = {
     },
 
     initializeJqgrid: function (url) {
-        var colNames = ['EmpId', 'EmpCode', 'IsAdmin', 'Admin Of Branch', 'Full Name', 'Short Name', 'EmailId', "User Group", "UserGroupId", 'BRANCHIDS',
+        var colNames = ['EmpId','TAGIDS', 'EmpCode', 'IsAdmin', 'Admin Of Branch', 'Full Name', 'Short Name', 'EmailId', "User Group", "UserGroupId", 'BRANCHIDS',
             'Mobile No', 'MobileNo2', 'Gender', 'DOB', 'DOJ', 'City', 'CityId', 'Address1', 'Address2', 'Address3', 'Pincode', 'PhotoPath', 'BALANCESHEETGROUPID',
             'DEFAULTEMPBANKACCOUNT', 'EMPSHIFTID', 'COUNTERID', 'INSENTIVEGROUPNAME',  'EMPSALARY', 'Bank Name', 'A/C No', 'IFSC Code', 'Branch Name',
             'INSENTIVEGOLDID', 'TARGETINSENTIVEGOLD', 'DIAMONDCARATID', 'TARGETDIAMONDCARAT', 'INSENTIVEAMOUNTID', 'TARGETINSENTIVEAMOUNT', 'INSENTIVETAGID', 'TARGETINSENTIVETAG'];
         var colModel = [
             { name: "EMPID", index: "EMPID", xmlmap: xmlvars.common_colmap + "EMPID", stype: 'int', sortable: false, hidden: true, search: false },
+            { name: "TAGIDS", index: "TAGIDS", xmlmap: xmlvars.common_colmap + "TAGIDS", stype: 'int', sortable: false, hidden: true, search: false },
             { name: "EMPCODE", width: 5, index: "EMPCODE", xmlmap: xmlvars.common_colmap + "EMPCODE", stype: 'text', sortable: false, search: false, hidden: false },
 
             { name: "ISADMIN", index: "ISADMIN", xmlmap: xmlvars.common_colmap + "ISADMIN", sortable: false, search: false, formatter: jqGridVariables.chkFmatter, hidden: true },
@@ -233,6 +235,14 @@ var EmployeeDetailMasView = {
             $('#ddlBranch').val(selectedBranch);
             $("#ddlBranch").multiselect("refresh");
 
+
+            debugger
+            $('#ddlTag').multiselect();
+            //$(".Branch .btn-group").attr('tabindex', 7);
+            var selectedBranch = rowData["TAGIDS"].split(',');
+            $('#ddlTag').val(selectedBranch);
+            $("#ddlTag").multiselect("refresh");
+
             //$('#ddlInsentiveGroup').multiselect();
             ////$(".InsentiveGroup .btn-group").attr('tabindex', 11);
             //var selectedInsentive = rowData["INSENTIVEMASTERID"].split(',');
@@ -266,10 +276,7 @@ var EmployeeDetailMasView = {
             //$("#ddlInsentiveAmount").multiselect("refresh");
             //$("#txtTargetInsentiveAmount").val(rowData['TARGETINSENTIVEAMOUNT']);
 
-            $('#ddlTag').multiselect();
-            $('#ddlTag').val(rowData['INSENTIVETAGID'].split(','));
-            $("#ddlTag").multiselect("refresh");
-            $("#txtTargetTag").val(rowData['TARGETINSENTIVETAG']);
+           
 
             $("#panelEmployeeDetailMasList").hide();
             $("#panelEmployeeDetailMasEdit").show();
@@ -328,7 +335,8 @@ var EmployeeDetailMasView = {
 
     btnMasterSubmit: function () {
         try {
-            var usergroup, ddlBranch, ddlAdminOfBranch, ddlInsentive, ddlCounter;
+            debugger
+            var usergroup, ddlBranch, ddlAdminOfBranch, ddlTag, ddlInsentive, ddlCounter;
             var isValid = $("#frmEmployeeDetailMas").valid();
 
             if ($("#ddlUserGroup").val() == null) {
@@ -363,19 +371,7 @@ var EmployeeDetailMasView = {
             //    ddlInsentive = $("#ddlInsentiveGroup").val().toString();
             //}
 
-            if ($("#chkIsAdmin").prop("checked") == true) {
-                if ($("#ddlAdminOfBranch").val() == null) {
-                    $("#ddlAdminOfBranchError").show();
-                    isValid = false;
-                } else {
-                    $("#ddlAdminOfBranchError").hide();
-                    ddlAdminOfBranch = $("#ddlAdminOfBranch").val().toString();
-                }
-            }
-            else {
-                $("#ddlAdminOfBranchError").hide();
-                ddlAdminOfBranch = "";
-            }
+            
 
             //if ($("#txtcity").attr("cityid") == "" || $("#txtcity").attr("cityid") == "undefined" || $("#txtcity").attr("cityid") == "[object Object]") {
             //    notificationMessage('warning', 'City name is not proper selected.', 'warning');
@@ -433,6 +429,7 @@ var EmployeeDetailMasView = {
                 //"COUNTERID": ddlCounter,    //$("#ddl_Counter").val(),
                 "USERGROUP": usergroup,
                 "BRANCHIDS": ddlBranch,
+                
                 /*"INSENTIVEMASTERID": ddlInsentive,*/
                 "BANKNAME": $("#txtBankName").val(),
                 "ACCOUNTNO": $("#txtACNo").val(),
@@ -455,7 +452,7 @@ var EmployeeDetailMasView = {
             //    data.INSENTIVEAMOUNTID = $("#ddlInsentiveAmount").val().toString();
             //}
             if ($("#ddlTag").val()) {
-                data.INSENTIVETAGID = $("#ddlTag").val().toString();
+                data.TAGSID  = $("#ddlTag").val().toString()
             }
 
             //if ($("#txtSalary").val() != "" && $("#txtSalary").val() != undefined) {
@@ -494,6 +491,7 @@ var EmployeeDetailMasView = {
 
     clearControls: function () {
         try {
+          
             $("#txtcity").attr("cityid", "")
             EmployeeDetailMasView.bindUserGroup();
             EmployeeDetailMasView.bindBranch();
@@ -560,14 +558,25 @@ var EmployeeDetailMasView = {
             //$("#ddlInsentiveAmount").multiselect("refresh");
             //$("#txtTargetInsentiveAmount").val("");
 
-            var Store_InsentiveGold = [];
-            $('#ddlTag').multiselect();
-            $("#ddlTag option").each(function (key, obj) {
+            /* ------------ Select All Recored iN Multiple Select ------------ */
+            //var Store_InsentiveGold = [];
+            //$('#ddlTag').multiselect();
+            //$("#ddlTag option").each(function (key, obj) {
 
-                Store_InsentiveGold.push($(obj).val());
-            });
-            $('#ddlTag').val(Store_InsentiveGold);
+            //    Store_InsentiveGold.push($(obj).val());
+            //});
+            //$('#ddlTag').val(Store_InsentiveGold);
+            //$("#ddlTag").multiselect("refresh");
+            /* ------------ Select All Recored iN Multiple Select ------------ */
+
+            $('#ddlTag').multiselect();
+            //$(".Branch .btn-group").attr('tabindex', 7);
+            var selectedBranch = '';
+            $('#ddlTag').val(selectedBranch);
             $("#ddlTag").multiselect("refresh");
+
+
+
             $("#txtTargetTag").val("");
 
             /*$("#ddl_Counter").val('');*/
@@ -688,130 +697,14 @@ var EmployeeDetailMasView = {
         $("#ddlBranch").html("");
         BindDropdown('ddlBranch', 'BranchDropdownList', getDomain() + EmployeeDetailMasView.variables.BindBranchUrl + "&_search=true&searchField=ISACTIVE&searchOper=eq&searchString=1", '', true);
     },
-    //BindInsentiveGold: function () {
-    //    var myfilter;
-    //    myfilter = {
-    //        rules: []
-    //    };
-    //    myfilter.rules.push({ field: "INSERTIVETYPE", op: "eq", data: "GOLD - ( GRM )" }); //$('#txtAccount').val()
-    //    $("#ddlInsentiveGold").html("");
-    //    BindDropdown('ddlInsentiveGold', 'InsentiveGoldDropdownList', getDomain() + EmployeeDetailMasView.variables.BindInsentiveGroupUrl + "&IsRecordAll=true&searchString=1&myfilters=" + JSON.stringify(myfilter), '', true);
-
-    //    var Store_InsentiveGold = [];
-    //    $('#ddlInsentiveGold').multiselect();
-    //    $("#ddlInsentiveGold option").each(function (key, obj) {
-
-    //        Store_InsentiveGold.push($(obj).val());
-    //    });
-    //    $(".InsentiveGold .btn-group").attr('tabindex', 11);
-    //    $('#ddlInsentiveGold').val(Store_InsentiveGold);
-    //    $("#ddlInsentiveGold").multiselect("refresh");
-    //    //$("#ddlInsentiveGold").on("change", function () {
-    //    //    if ($("#ddlInsentiveGold").val() == null) {
-    //    //        $("#ddlInsentiveGoldError").show();
-    //    //        isValid = false;
-    //    //    } else {
-    //    //        $("#ddlInsentiveGold").hide();
-
-    //    //    }
-    //    //});
-    //},
-    //BindDiamondCarat: function () {
-    //    var myfilter;
-    //    myfilter = {
-    //        rules: []
-    //    };
-    //    myfilter.rules.push({ field: "INSERTIVETYPE", op: "eq", data: "Diamond carat" }); //$('#txtAccount').val()
-    //    $("#ddlDiamondCarat").html("");
-    //    BindDropdown('ddlDiamondCarat', 'InsentiveGoldDropdownList', getDomain() + EmployeeDetailMasView.variables.BindInsentiveGroupUrl + "&IsRecordAll=true&searchString=1&myfilters=" + JSON.stringify(myfilter), '', true);
-
-    //    var Store_InsentiveGold = [];
-    //    $('#ddlDiamondCarat').multiselect();
-    //    $("#ddlDiamondCarat option").each(function (key, obj) {
-
-    //        Store_InsentiveGold.push($(obj).val());
-    //    });
-    //    $(".DiamondCarat .btn-group").attr('tabindex', 11);
-    //    $('#ddlDiamondCarat').val(Store_InsentiveGold);
-    //    $("#ddlDiamondCarat").multiselect("refresh");
-    //    //$("#ddlDiamondCarat").on("change", function () {
-    //    //    if ($("#ddlDiamondCarat").val() == null) {
-    //    //        $("#ddlDiamondCaratError").show();
-    //    //        isValid = false;
-    //    //    } else {
-    //    //        $("#ddlDiamondCarat").hide();
-
-    //    //    }
-    //    //});
-    //},
-
-    //BindAmount: function () {
-
-    //    var myfilter;
-    //    myfilter = {
-    //        rules: []
-    //    };
-    //    myfilter.rules.push({ field: "INSERTIVETYPE", op: "eq", data: "Amount" }); //$('#txtAccount').val()
-    //    $("#ddlInsentiveAmount").html("");
-    //    BindDropdown('ddlInsentiveAmount', 'InsentiveGoldDropdownList', getDomain() + EmployeeDetailMasView.variables.BindInsentiveGroupUrl + "&IsRecordAll=true&searchString=1&myfilters=" + JSON.stringify(myfilter), '', true);
-
-    //    var Store_InsentiveGold = [];
-    //    $('#ddlInsentiveAmount').multiselect();
-    //    $("#ddlInsentiveAmount option").each(function (key, obj) {
-
-    //        Store_InsentiveGold.push($(obj).val());
-    //    });
-    //    $(".InsentiveAmount .btn-group").attr('tabindex', 11);
-    //    $('#ddlInsentiveAmount').val(Store_InsentiveGold);
-    //    $("#ddlInsentiveAmount").multiselect("refresh");
-    //    //$("#ddlInsentiveAmount").on("change", function () {
-    //    //    if ($("#ddlInsentiveAmount").val() == null) {
-    //    //        $("#ddlInsentiveAmountError").show();
-    //    //        isValid = false;
-    //    //    } else {
-    //    //        $("#ddlInsentiveAmount").hide();
-
-    //    //    }
-    //    //});
-    //},
-    BindTag: function () {
-
-        var myfilter;
-        myfilter = {
-            rules: []
-        };
-        myfilter.rules.push({ field: "INSERTIVETYPE", op: "eq", data: "Tag" }); //$('#txtAccount').val()
-        $("#ddlTag").html("");
-        BindDropdown('ddlTag', 'InsentiveGoldDropdownList', getDomain() + EmployeeDetailMasView.variables.BindInsentiveGroupUrl + "&IsRecordAll=true&searchString=1&myfilters=" + JSON.stringify(myfilter), '', true);
-
-        var Store_InsentiveGold = [];
-        $('#ddlTag').multiselect();
-        $("#ddlTag option").each(function (key, obj) {
-
-            Store_InsentiveGold.push($(obj).val());
-        });
-        $(".InsentiveAmount .btn-group").attr('tabindex', 11);
-        $('#ddlTag').val(Store_InsentiveGold);
-        $("#ddlTag").multiselect("refresh");
-        //$("#ddlTag").on("change", function () {
-        //    if ($("#ddlTag").val() == null) {
-        //        $("#ddlTagError").show();
-        //        isValid = false;
-        //    } else {
-        //        $("#ddlTag").hide();
-
-        //    }
-        //});
-    },
-
-    //bindIntesive: function () {
-    //    $("#ddlInsentiveGroup").html("");
-    //    BindDropdown('ddlInsentiveGroup', 'InsentiveUserDropdownList', getDomain() + EmployeeDetailMasView.variables.BindInsentiveGroupUrl, '', true);
-    //},
 
     bindAdminOfBranch: function () {
-        $("#ddlAdminOfBranch").html("");
-        BindDropdown('ddlAdminOfBranch', 'BranchDropdownList', getDomain() + EmployeeDetailMasView.variables.BindBranchUrl + "&_search=true&searchField=ISACTIVE&searchOper=eq&searchString=1", '', true);
+        $("#ddlBranch").html("");
+        BindDropdown('ddlBranch', 'BranchDropdownList', getDomain() + EmployeeDetailMasView.variables.BindBranchUrl + "&_search=true&searchField=ISACTIVE&searchOper=eq&searchString=1", '', true);
+    },
+    BindTag: function () {
+        $("#ddlTag").html("");
+        BindDropdown('ddlTag', 'TagDropdownList', getDomain() + EmployeeDetailMasView.variables.BindTagUrl + "&_search=true&searchField=TAGACTIVE&searchOper=eq&searchString=1", '', true);
     },
 
     bindCity: function () {
@@ -972,6 +865,20 @@ $(document).ready(function () {
         /*EmployeeDetailMasView.BindAmount();*/
         /*EmployeeDetailMasView.BindTag();*/
 
+        EmployeeDetailMasView.BindTag();
+        $('#ddlTag').multiselect();
+        $("#ddlTag").on("change", function () {
+            if ($("#ddlTag").val() == null) {
+                $("#ddlTagError").show();
+                isValid = false;
+            } else {
+                $("#ddlTagError").hide();
+            }
+        });
+
+
+
+
         $("*").prop("autocomplete", 'new');
         $('.number').keypress(function (event) {
             return numbersOnly(this, event, false, false);
@@ -1034,15 +941,7 @@ $(document).ready(function () {
             }
         });
 
-        $("#chkIsAdmin").on("ifChanged", function () {
-            if ($("#chkIsAdmin").prop("checked") == true) {
-                $('#AdminOfBranchdiv').show();
-            }
-            else {
-                $('#AdminOfBranchdiv').hide();
-            }
-        });
-
+       
         $(".icheck").iCheck({
             checkboxClass: 'icheckbox_square-blue',
             radioClass: 'iradio_square-blue',

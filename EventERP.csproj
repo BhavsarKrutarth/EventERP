@@ -167,6 +167,7 @@
     <Content Include="Scripts\MasterScripts\Master\ItemGroupMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\ItemMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\PartyMaster.js" />
+    <Content Include="Scripts\MasterScripts\Master\TagMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\TCSMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\TDSMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\UserAccount.js" />
@@ -198,6 +199,7 @@
     <Content Include="Views\Master\EventMaster.cshtml" />
     <Content Include="Views\Master\AddNewStock.cshtml" />
     <Content Include="Views\Employee\EmployeeMaster.cshtml" />
+    <Content Include="Views\Master\TagMaster.cshtml" />
     <None Include="Views\Master\User_Groups.cshtml" />
     <Content Include="Views\Transaction\Purchase.cshtml" />
     <Content Include="Views\Transaction\Estimate.cshtml" />

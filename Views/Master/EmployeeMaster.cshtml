@@ -78,13 +78,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group" id="AdminOfBranchdiv" style="display:none;">
-                                            <label class="control-label col-md-3 pl-0">Admin Of Project<span style="color:red"> *</span></label>
-                                            <div class="col-md-8">
-                                                <select id="ddlAdminOfBranch" name="ddlAdminOfBranch" multiple data-width="100%"></select>
-                                            </div>
-                                            <label id="ddlAdminOfBranchError" class="error" style="display:none; margin-left: 10px;">This field is required.</label>
-                                        </div>
+                                        
 
                                         <div class="form-group">
                                             <label class="control-label col-md-3">Full Name<span style="color:red"> *</span></label>
@@ -107,26 +101,26 @@
                                             <label id="ddlUserGroupError" class="error" style="display:none; margin-left: 10px;">This field is required.</label>
                                         </div>
                                         @*<div class="form-group">
-                                            <label class="control-label col-md-3">Default BankAccount</label>
-                                            <div class="col-md-8 UserGroup">
-                                                <select type="text" tabindex="4" name="ddlDefaultEmpBankAcc" id="ddlDefaultEmpBankAcc" class="form-control"></select>
-                                            </div>
-                                        </div>*@
-                                        @*<div class="form-group">
-                                            <label class="control-label col-md-3">Emp Shift <span style="color:red"> *</span></label>
-                                            <div class="col-md-8 UserGroup">
-                                                <select type="text" tabindex="5" name="ddlEmpShift" id="ddlEmpShift" class="form-control" required></select>
-                                            </div>
-                                        </div>*@
-                                        @*@if (EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Administrator" || EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Admin")
-                                        {
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3">Salary<span style="color:red"> *</span></label>
+                                                <label class="control-label col-md-3">Default BankAccount</label>
                                                 <div class="col-md-8 UserGroup">
-                                                    <input type="text" tabindex="6" name="txtSalary" id="txtSalary" class="form-control numbers amt fixed keyboard" decimals="2" placeholder="Emp Salary" />
+                                                    <select type="text" tabindex="4" name="ddlDefaultEmpBankAcc" id="ddlDefaultEmpBankAcc" class="form-control"></select>
                                                 </div>
-                                            </div>
-                                        }*@
+                                            </div>*@
+                                        @*<div class="form-group">
+                                                <label class="control-label col-md-3">Emp Shift <span style="color:red"> *</span></label>
+                                                <div class="col-md-8 UserGroup">
+                                                    <select type="text" tabindex="5" name="ddlEmpShift" id="ddlEmpShift" class="form-control" required></select>
+                                                </div>
+                                            </div>*@
+                                        @*@if (EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Administrator" || EventERP.CommonClasses.SessionFacade.UserSession.USERGROUPNAME == "Admin")
+                                            {
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">Salary<span style="color:red"> *</span></label>
+                                                    <div class="col-md-8 UserGroup">
+                                                        <input type="text" tabindex="6" name="txtSalary" id="txtSalary" class="form-control numbers amt fixed keyboard" decimals="2" placeholder="Emp Salary" />
+                                                    </div>
+                                                </div>
+                                            }*@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -161,21 +155,28 @@
                                             </div>
                                             <label id="ddlBranchError" class="error" style="display:none; margin-left: 10px;">This field is required.</label>
                                         </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Tag</label>
+                                            <div class="col-md-7 Branch">
+                                                <select id="ddlTag" tabindex="11" name="ddlTag" multiple data-width="100%" style="display:none;"></select>
+                                            </div>
+                                            <label id="ddlTagError" class="error" style="display:none; margin-left: 10px;">This field is.</label>
+                                        </div>
                                         <!--<div class="form-group">
-                                            <label class="control-label col-md-3">Insentive Group<span style="color:red"> *</span></label>
-                                            <div class="col-md-7 InsentiveGroup">-->
+                                        <label class="control-label col-md-3">Insentive Group<span style="color:red"> *</span></label>
+                                        <div class="col-md-7 InsentiveGroup">-->
                                         @*<select id="ddlInsentiveGroup" name="InsentiveGroup" data-width="100%" multiple data-toggle="select"></select>*@
                                         <!--<select id="ddlInsentiveGroup" name="InsentiveGroup"></select>
                                             </div>
                                             <label id="ddlInsentiveGroupError" tabindex="11" class="error" style="display:none; margin-left: 10px;">This field is required.</label>
                                         </div>-->
                                         @*<div class="form-group">
-                                            <label class="control-label col-lg-3 txtR">Counter</label>
-                                            <div class="col-lg-7">
-                                                <select class="form-control" name="ddl_Counter" id="ddl_Counter" multiple tabindex="12" style="display: none;"></select>
-                                            </div>
-                                            <label id="ddl_CounterError" class="error" style="display:none; margin-left: 10px;">This field is required.</label>
-                                        </div>*@
+                                                <label class="control-label col-lg-3 txtR">Counter</label>
+                                                <div class="col-lg-7">
+                                                    <select class="form-control" name="ddl_Counter" id="ddl_Counter" multiple tabindex="12" style="display: none;"></select>
+                                                </div>
+                                                <label id="ddl_CounterError" class="error" style="display:none; margin-left: 10px;">This field is required.</label>
+                                            </div>*@
 
                                     </div>
                                 </fieldset>
@@ -200,7 +201,7 @@
                     </div>
                 </div>
 
-            
+
                 <div class="col-lg-12">
                     <div class="panel panel-flat">
                         <div class="panel-body">
@@ -547,6 +548,9 @@
     </script>
     <script type="text/x-jsrender" id="BranchDropdownList">
         <option value="{{>branchid}}">{{>branchname}}</option>
+    </script>
+    <script type="text/x-jsrender" id="TagDropdownList">
+        <option value="{{>tagmasterid}}">{{>tagmastername}}</option>
     </script>
 
     <script id="BalnceSheetGroupList" type="text/x-jsrender">

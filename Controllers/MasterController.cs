@@ -112,5 +112,11 @@ namespace EventERP.Controllers
             return View(FormPermissionHelper.GetFormPermission("AddNewStock", "Master"));
         }
 
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult TagMaster()
+        {
+            return View(FormPermissionHelper.GetFormPermission("TagMaster", "Master"));
+        }
+
     }
 }
