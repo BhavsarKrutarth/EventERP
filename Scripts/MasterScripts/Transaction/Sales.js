@@ -624,6 +624,7 @@ var SalesView = {
                 cache: false,
                 success: function (data) {
                     if ($(data).find('RESPONSECODE').text() == "0") {
+                        SalesView.variables.ItemId = ''
                         notificationMessage(SalesView.variables.oper + ' Operation', $(data).find('RESPONSEMESSAGE').text(), 'success');
                         if (!IsPrint) {
                             if ($(location).attr('search').split('='))

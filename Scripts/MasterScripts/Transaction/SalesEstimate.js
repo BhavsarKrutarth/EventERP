@@ -11,6 +11,7 @@ var EstimateView = {
         Bind_Salesreturnfiles_get: "/Common/BindMastersDetails?ServiceName=ESTIMATESALESFILES_GET",
         //table: "",
         HSNCodeList: [],
+        ItemId: ""
     },
 
     initializeJqgrid: function (url) {
@@ -268,6 +269,12 @@ var EstimateView = {
 
                                 EstimateView.variables.ListId = 1;
                                 $.each(list, function (key, innerjsonDetails) {
+
+                                    if (EstimateView.variables.ItemId == '')
+                                        EstimateView.variables.ItemId = innerjsonDetails.itemid
+                                    else
+                                        EstimateView.variables.ItemId = EstimateView.variables.ItemId + ',' + innerjsonDetails.itemid
+
                                     $("#Quotationitem_tbody").append('<tr>' +
                                         '<td style="text-align: center;"></td>' +
                                         '<td>' +
@@ -332,7 +339,7 @@ var EstimateView = {
                 error: OnError
             });
 
-            debugger
+            
             var myfilter = { rules: [] };
             myfilter.rules.push({ field: "ESTIMATESALESID", op: "eq", data: Id });
             $.ajax({
@@ -641,6 +648,7 @@ var EstimateView = {
                 cache: false,
                 success: function (data) {
                     if ($(data).find('RESPONSECODE').text() == "0") {
+                        EstimateView.variables.ItemId = "";
                         notificationMessage(EstimateView.variables.oper + ' Operation', $(data).find('RESPONSEMESSAGE').text(), 'success');
                         if (!IsPrint) {
                             if ($(location).attr('search').split('='))
@@ -1786,6 +1794,9 @@ function AutosuggestSubitemName(id) {
                     myfilter.rules.push({ field: "ITEMGROUPID", op: "eq", data: itemgroupmasterid });
                     myfilter.rules.push({ field: "ACCOUNTYEARID", op: "eq", data: $("#CurrentAccountYear").attr("accyearid") });
                     myfilter.rules.push({ field: "CITYID", op: "eq", data: $("#ddlPartyBranch").val() });
+                    if (EstimateView.variables.ItemId != '')
+                        myfilter.rules.push({ field: "ITEMID", op: "ne", data: EstimateView.variables.ItemId });
+
                     var url = getDomain() + "/Common/BindMastersDetails?ServiceName=ITEMMASTER_GET&myfilters=" + JSON.stringify(myfilter);
                     $.ajax({
                         url: url,
@@ -1862,7 +1873,11 @@ function AutosuggestSubitemName(id) {
                     noResults: "No Results Found"
                 },
                 select: function (event, ui) {
-                    debugger
+                    if (EstimateView.variables.ItemId == "")
+                        EstimateView.variables.ItemId = ui.item.Id
+                    else
+                        EstimateView.variables.ItemId = EstimateView.variables.ItemId + "," + ui.item.Id
+
                     if (ui.item.label != 'No Results Found') {
                         $("#txtSubitemName" + append).attr('itemid', ui.item.Id);
                         $("#txtHsnCode" + append).val(ui.item.HSNID)

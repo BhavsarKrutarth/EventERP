@@ -203,7 +203,7 @@ var PurchaseView = {
                 $(".TCSCalculate").hide();
             } else {
                 $("#toggleSwitch").bootstrapSwitch('state', false);
-                $(".TDSCalculate").hide();
+                $(".TDSCalculate").show();
                 $(".TCSCalculate").show();
             }
 
@@ -431,39 +431,61 @@ var PurchaseView = {
             }
             var txtCashPayment = +$("#txtCashPayment").val() || 0
             var txtChequePayment = +$("#txtChequePayment").val() || 0
-            if ($("#toggleSwitch").bootstrapSwitch('state') == true) {
+            //if ($("#toggleSwitch").bootstrapSwitch('state') == true) {
 
-                if ($("#ddlTDS").val()) {
-                    var temp_ddlTDS = $('#ddlTDS  option:selected').attr('percentage');
-                    var txtTDSAmt = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2);
-                    $("#txtTDSAmt").val(txtTDSAmt);
+            //    if ($("#ddlTDS").val()) {
+            //        var temp_ddlTDS = $('#ddlTDS  option:selected').attr('percentage');
+            //        var txtTDSAmt = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2);
+            //        $("#txtTDSAmt").val(txtTDSAmt);
 
-                    var ROFTDS = 0
-                    ROFTDS = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2)
-                    if ($('#chkROFTDS').is(":checked") == true) {
-                        var ROFTDS1 = parseFloat(ROFTDS).toFixed()
-                        $("#txtTDSRofAmt").val(+ROFTDS1)
-                        $("#txtOsPayment").val((((+$("#txtTotalAmt").val() - (+ROFTDS1))) - txtCashPayment - txtChequePayment).toFixed(2))
-                    }
-                    else {
-                        $("#txtTDSRofAmt").val('')
-                        $("#txtOsPayment").val(((+((totalamtteax.toFixed(2)) - (ROFTDS.toFixed(2))).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2)) 
-                    }
+            //        var ROFTDS = 0
+            //        ROFTDS = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2)
+            //        if ($('#chkROFTDS').is(":checked") == true) {
+            //            var ROFTDS1 = parseFloat(ROFTDS).toFixed()
+            //            $("#txtTDSRofAmt").val(+ROFTDS1)
+            //            $("#txtOsPayment").val((((+$("#txtTotalAmt").val() - (+ROFTDS1))) - txtCashPayment - txtChequePayment).toFixed(2))
+            //        }
+            //        else {
+            //            $("#txtTDSRofAmt").val('')
+            //            $("#txtOsPayment").val(((+((totalamtteax.toFixed(2)) - (ROFTDS.toFixed(2))).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2))
+            //        }
+            //    }
+            //    else {
+            //        $("#txtTDSAmt").val('');
+            //        $("#txtTDSRofAmt").val('')
+            //        $("#txtOsPayment").val((+(+$("#txtTotalAmt").val() - (+$("#txtTDSAmt").val())) - txtCashPayment - txtChequePayment).toFixed(2))
+            //    }
+            //}
+            //else {
+
+            //    var txtTCSApplicableLimit = +$("#txtTCSApplicableLimit").val();
+            //    var txtTotalNetAmt = +$("#txtTotalNetAmt").val();
+            //    var txtTCSPer = +$("#txtTCSPer").val();
+            //    var txtTCSTaxAmt = +((txtTotalNetAmt * txtTCSPer) / 100).toFixed(2)
+            //    $("#txtTCSTaxAmt").val(+txtTCSTaxAmt)
+            //    $("#txtOsPayment").val((+((totalamtteax.toFixed(2)) - (txtTCSTaxAmt).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2))
+            //}
+            if ($("#ddlTDS").val()) {
+                var temp_ddlTDS = $('#ddlTDS  option:selected').attr('percentage');
+                var txtTDSAmt = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2);
+                $("#txtTDSAmt").val(txtTDSAmt);
+
+                var ROFTDS = 0
+                ROFTDS = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2)
+                if ($('#chkROFTDS').is(":checked") == true) {
+                    var ROFTDS1 = parseFloat(ROFTDS).toFixed()
+                    $("#txtTDSRofAmt").val(+ROFTDS1)
+                    $("#txtOsPayment").val((((+$("#txtTotalAmt").val() - (+ROFTDS1))) - txtCashPayment - txtChequePayment).toFixed(2))
                 }
                 else {
-                    $("#txtTDSAmt").val('');
                     $("#txtTDSRofAmt").val('')
-                    $("#txtOsPayment").val((+(+$("#txtTotalAmt").val() - (+$("#txtTDSAmt").val())) - txtCashPayment - txtChequePayment).toFixed(2))
+                    $("#txtOsPayment").val(((+((totalamtteax.toFixed(2)) - (ROFTDS.toFixed(2))).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2))
                 }
             }
             else {
-                
-                var txtTCSApplicableLimit = +$("#txtTCSApplicableLimit").val();
-                var txtTotalNetAmt = +$("#txtTotalNetAmt").val();
-                var txtTCSPer = +$("#txtTCSPer").val();
-                var txtTCSTaxAmt = +((txtTotalNetAmt * txtTCSPer) / 100).toFixed(2)
-                $("#txtTCSTaxAmt").val(+txtTCSTaxAmt)
-                $("#txtOsPayment").val((+((totalamtteax.toFixed(2)) - (txtTCSTaxAmt).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2))
+                $("#txtTDSAmt").val('');
+                $("#txtTDSRofAmt").val('')
+                $("#txtOsPayment").val((+(+$("#txtTotalAmt").val() - (+$("#txtTDSAmt").val())) - txtCashPayment - txtChequePayment).toFixed(2))
             }
 
         }
@@ -736,6 +758,10 @@ var PurchaseView = {
 
     ClearData: function () {
         try {
+            $("#totalpcs").html("0.00")
+            $("#totalamt").html("0.00")
+            $("#totaltaxamt").html("0.00")
+            $("#totalamtteax32423").html("0.00")
             $(".estimate").hide();
             $("#txtEstimate").attr("estimateid", "");
             $("#txtEstimate").val("");
@@ -1761,7 +1787,7 @@ $(document).ready(function () {
                 /*CalculateBill_PaymentInfo()*/
                 //PurchaseView.bindtdspercentage()
             } else {
-                $(".TDSCalculate").hide();
+                $(".TDSCalculate").show();
                 $(".TCSCalculate").show();
                 $("#txtTCSAmt").val($("#txtTotalNetAmt").val());
 
@@ -1786,7 +1812,7 @@ $(document).ready(function () {
             $(".TDSCalculate").show();
             $(".TCSCalculate").hide();
         } else {
-            $(".TDSCalculate").hide();
+            $(".TDSCalculate").show();
             $(".TCSCalculate").show();
         }
 
