@@ -1,7 +1,7 @@
 ﻿@{
     //Layout = "~/Views/Shared/_Layout_New.cshtml";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Purchase Quotation";
+    ViewBag.Title = "Sales Quotation";
 }
 
 <div class="page-container">
@@ -63,7 +63,6 @@
                                 <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnPrevious"><i class="fa fa-angle-double-left"></i></button>
                             </div>
                         </div>
-                       
                     </form>
                 </fieldset>
             </div>
@@ -78,7 +77,6 @@
                                 <th style="width:8%;">Item Group</th>
                                 <th style="width:8%;">Item Name</th>
                                 <th style="width:2%;">Pcs</th>
-                                <th style="width:2%;">Available Stock</th>
                                 <th style="width:2%;">Type</th>
                                 <th style="width:2%;">HSN</th>
                                 <th style="width:4%;">Rate</th>
@@ -96,7 +94,6 @@
                                     Total
                                 </th>
                                 <th id="totalpcs">0</th>
-                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -120,7 +117,7 @@
                                         <label class="control-label col-md-2" style="padding-left: 0;">A/C Name<span style="color:red"> *</span></label>
                                         <div class="col-md-10">
                                             <div class="input-group">
-                                                <input type="text" style="text-transform: uppercase;" class="form-control required txtAutocomplete acto-accountsuggest" onblur="SalesView.RemoveEmptyRow()" partymasterid="" placeholder="Search Name/Mobile" id="txtAccount" tabindex="5" onkeyup="SalesView.AccountNameAutoComplete(this)" />
+                                                <input type="text" style="text-transform: uppercase;" class="form-control required txtAutocomplete acto-accountsuggest" onblur="EstimateView.RemoveEmptyRow()" partymasterid="" placeholder="Search Name/Mobile" id="txtAccount" tabindex="5" onkeyup="EstimateView.AccountNameAutoComplete(this)" />
                                                 <span class="input-group-addon CommonAddEditPartyCustomer" name="CommonAddEditPartyCustomer" style="background-color: #4caf50;color: white;"><i class="fa fa-plus"></i></span>
                                             </div>
                                         </div>
@@ -128,7 +125,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-md-2 addstar" id="lblPurchaseMobile" style="padding-left: 0;">Mobile No.</label>
                                         <div class="col-md-4">
-                                            <input type="text" tabindex="6" class="form-control mobilenomask required" onkeyup="SalesView.AccountNameAutoComplete(this)" name="txtMobile" id="txtMobile" placeholder="Mobile No" disabled>
+                                            <input type="text" tabindex="6" class="form-control mobilenomask required" onkeyup="EstimateView.AccountNameAutoComplete(this)" name="txtMobile" id="txtMobile" placeholder="Mobile No" disabled>
                                             <div class="form-control-feedback">
                                                 <i class="fa fa-phone"></i>
                                             </div>
@@ -211,7 +208,7 @@
                         </fieldset>
                     </div>
                     <div class="col-md-6">
-                        <div class="col-md-5 pl-10 pr-10" style="border-right: 1px solid #dddddd;">
+                        <div class="col-md-12 pl-10 pr-10" style="border-right: 1px solid #dddddd;">
                             <fieldset>
                                 <legend class="text-semibold">Bill Info</legend>
                                 <form class="form-horizontal col-md-12" id="FrmBillInfo">
@@ -260,7 +257,7 @@
                                         <label class="control-label col-md-6">ROF Amt</label>
 
                                         <div class="col-md-6">
-                                            <input type="text" tabindex="12" onblur="CalculateBill_PaymentInfo()" onfocusout="RoundOffLive()" class="form-control txtR negative fixed pl-0" name="ROFAmt" id="txtROFAmt" disabled>
+                                            <input type="text" tabindex="12" onblur="CalculateBill_PaymentInfo()" onfocusout="RoundOffLive()" class="form-control txtR negative fixed pl-0" name="ROFAmt" id="txtROFAmt">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -278,7 +275,7 @@
                                 </form>
                             </fieldset>
                         </div>
-                        <div class="col-md-7 pl-10 pr-10">
+                        <div class="col-md-7 pl-10 pr-10" style="display:none">
                             <div class="row">
                                 <div class="col-md-12 p-0">
                                     <fieldset>
@@ -286,15 +283,15 @@
                                         <form class="form-horizontal col-md-12" id="FrmPaymentDetails">
 
 
-                                            @*<div class="form-group">
+                                            <div class="form-group">
                                                 <label class="control-label col-md-5">TDS or TCS</label>
                                                 <div class="col-md-7 pt-5">
-                                                    <input type="checkbox" class="switch" style="float:right" tabindex="14" data-on-text="TDS" data-off-text="TCS" data-on-color="warning" data-off-color="default" onchange="SalesView.TDSORTCSChange()" id="toggleSwitch">
+                                                    <input type="checkbox" class="switch" style="float:right" tabindex="14" data-on-text="TDS" data-off-text="TCS" data-on-color="warning" data-off-color="default" onchange="EstimateView.TDSORTCSChange()" id="toggleSwitch">
                                                 </div>
-                                            </div>*@
+                                            </div>
 
                                             @*------------------------------------------TCS Count------------------------------------------*@
-                                            @*<div class="form-group TCSCalculate" style="display:none;">
+                                            <div class="form-group TCSCalculate" style="display:none;">
                                                 <label class="control-label col-md-5">TCS Applicable Limit</label>
                                                 <div class="col-md-7">
                                                     <input type="text" class="form-control" name="txtTCSApplicableLimit" id="txtTCSApplicableLimit" tabindex="15" value="@Decimal.Round(Decimal.Parse(EventERP.CommonClasses.SessionFacade.UserSession.TCSLIMIT),2)" disabled>
@@ -309,8 +306,10 @@
                                                 <div class="col-md-3 pr-0">
                                                     <input type="text" class="form-control" name="TCSPer" id="txtTCSPer" tabindex="17" value="@Decimal.Round(Decimal.Parse(EventERP.CommonClasses.SessionFacade.UserSession.TCSPER),2)" disabled>
                                                 </div>
+                                                @*<label class="control-label col-md-4 pr-10" id="lblamtwithtax">TCS Tax Amt</label>*@
                                                 <div class="col-md-4">
                                                     <input type="text" onblur="CalculateBill_PaymentInfo()" onfocusout="Velidation(0, this)" class="form-control txtR numbers fixed pl-0" name="TCSTaxAmt" id="txtTCSTaxAmt" tabindex="18" disabled>
+                                                    @*<span class="input-group-addon text-grey-800" id="OpenTcsModal" style="cursor:pointer;font-weight:900">F2</span>*@
                                                 </div>
                                             </div>
                                             <div class="form-group" style="display:none;">
@@ -324,7 +323,7 @@
                                                 <div class="col-md-7">
                                                     <input type="text" class="form-control" name="txtTCSModal" id="txtTCSModal" tabindex="20">
                                                 </div>
-                                            </div>*@
+                                            </div>
                                             @*------------------------------------------/TCS Count------------------------------------------*@
 
                                             <!--<div class="form-group TCSCalculate" style="display:none;">
@@ -361,7 +360,7 @@
                                             <div class="form-group TDSCalculate">
                                                 <label class="control-label col-md-5">TDS Rof Amt</label>
                                                 <div class="col-md-7">
-                                                    <input type="text" class="form-control txtR numbers fixed" disabled name="txtTDSRofAmt" id="txtTDSRofAmt" tabindex="24">
+                                                    <input type="text" class="form-control txtR numbers fixed" name="txtTDSRofAmt" id="txtTDSRofAmt" tabindex="24">
                                                 </div>
                                             </div>
                                             <div class="form-group" style="display:none;">
@@ -397,14 +396,14 @@
                                             <div class="form-group">
                                                 <label class="control-label col-md-5">Cash Payment</label>
                                                 <div class="col-md-7">
-                                                    <input type="text" tabindex="26" class="form-control txtR numbers fixed" onfocusout="SalesView.Calculation()" name="CashPayment" id="txtCashPayment">
+                                                    <input type="text" tabindex="26" class="form-control txtR numbers fixed" onfocusout="EstimateView.Calculation()" name="CashPayment" id="txtCashPayment">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="control-label col-md-5">Cheque Payment</label>
                                                 <div class="col-md-7">
-                                                    <input type="text" tabindex="27" class="form-control txtR number" onfocusout="SalesView.Calculation()" onblur="BankDetail('')" name="ChequePayment" id="txtChequePayment">
+                                                    <input type="text" tabindex="27" class="form-control txtR number" onfocusout="EstimateView.Calculation()" onblur="BankDetail('')" name="ChequePayment" id="txtChequePayment">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -425,7 +424,40 @@
 
                     </div>
                 </div>
-
+                <div class="col-lg-12" style="padding-top:15px">
+                    <fieldset>
+                        <legend class="text-bold">Upload Documents</legend>
+                        <div class="col-lg-12">
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label col-md-2">Upload Files</label>
+                                    <div class="col-md-10">
+                                        <button class="btn btn-primary" type="button" data-preview="imgPreviewTechnicalData" data-toggle="modal"
+                                                data-ext="jpg,jpeg,gif,png,pdf,doc,docx,xls,xlsx" id="partynewaddfilebtn" data-backdrop="static" data-target="#modalUpload">
+                                            <i class="fa fa-plus"></i>&nbsp;Add New File
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-md-5">File</th>
+                                                    <th class="col-md-5">Title</th>
+                                                    <th class="col-md-2">Remove</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="imgPreviewTechnicalData"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
             </div>
             <div class="panel-footer p-10 txtC">
                 <button type="button" class="btn btn-info btn-labeled-left btn-sm" id="btnPrint" style="display:none;"><i class="fa fa-print"></i>&nbsp;&nbsp;Print</button>
@@ -452,6 +484,7 @@
                             <dl class="dl-horizontal">
                                 <dt>Code: </dt>
                                 <dd id="delCode"></dd>
+                                <dd id="delDELETE_VIRTUALFILENAME" style="display:none"></dd>
                             </dl>
                         </div>
                     </div>
@@ -468,6 +501,34 @@
     </div>
 
     <!-- /Delete form modal -->
+    @*UPLOAD FILE*@
+    <div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="modalUploadlbl" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="modalUploadlbl">Add Files</h4>
+                </div>
+                <div class="modal-body">
+                    <img width="100" height="100" src="" id="imgBanner" style="display:none" />
+                    <input type="hidden" id="hdnPreviewUploader" />
+                    <input type="hidden" id="hdnExtUploader" />
+                    <div class="text-red">
+                        Allow extensions: (
+                        <span id="spExtension"></span>)
+                    </div>
+                    <div id="imgUploader">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnAddFile" type="button" class="btn btn-success">Ok</button>
+                    <button type="button" class="btn btn-quaternary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*UPLOAD FILE*@
+
 </div>
 <!------ /old Design ------>
 
@@ -485,7 +546,7 @@
     <script type="text/x-jsrender" id="HSNDropdownList">
         <option gst="{{>gst}}" value="{{>hsnid}}">{{>hsncode}} - Gst({{>gst}} %)</option>
     </script>
-    <script src="~/Scripts/MasterScripts/Transaction/Sales.js?v=@DateTime.UtcNow"></script>
+    <script src="~/Scripts/MasterScripts/Transaction/Estimate.js?v=@DateTime.UtcNow"></script>
     <script type="text/x-jsrender" id="TDSDropdownList">
         <option percentage="{{>percentage}}" value="{{>tdsid}}">{{>code}} - Per({{>percentage}}%)</option>
     </script>
@@ -493,5 +554,27 @@
         <script src="~/Content/assets/plugin/export-table/libs/sprintf.js"></script>
         <script src="~/Content/assets/plugin/export-table/jspdf.js"></script>
         <script src="~/Content/assets/plugin/export-table/tableExport.js"></script>*@
+
+    <script id="FileList" type="text/x-jsrender">
+        <tr id="{{:salesreturnfileid}}">
+            <td class="col-sm-3">
+                <label class="btn btn-quaternary uploadlink tooltip1" data-original-title="change file" for="btn{{:salesreturnfileid}}">
+                    <input type="file" accept="{{*:window.extension}}" name="file" id="btn{{:salesreturnfileid}}" class="hide">
+                    <i class="fa fa-upload"></i>
+                </label>&nbsp;
+                <a class="label-click" href="@System.Configuration.ConfigurationManager.AppSettings["domainPath"]/UploadFiles/Estimate/{{:virtualfilename}}" target="blank">
+                    {{:actualfilename}}
+                </a>
+                <input type="hidden" class="fileid" value="{{:salesreturnid}}" />
+            </td>
+            <td class="col-sm-3">
+                <input type="text" class="form-control title" value="{{:actualfilename}}" placeholder="Title" />
+            </td>
+            <td class="col-sm-1 permissiondltbtn">
+                <a href="javascript:void(0);" onclick="deleteCustomerFile('{{:salesreturnfileid}}', '{{:salesreturnfileid}}', '{{:virtualfilename}}');"
+                   data-original-title="delete record" class="btn btn-danger tooltip1"><i class="fa fa-trash"></i></a>
+            </td>
+        </tr>
+    </script>
 }
 

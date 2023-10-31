@@ -26,5 +26,10 @@ namespace EventERP.Controllers
         {
             return View(FormPermissionHelper.GetFormPermission("Sales", "Transaction"));
         }
+
+        public ActionResult SalesEstimate()
+        {
+            return View(FormPermissionHelper.GetFormPermission("SalesEstimate", "Transaction"));
+        }
     }
 }

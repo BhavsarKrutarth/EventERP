@@ -204,7 +204,7 @@ var SalesView = {
                 $(".TCSCalculate").hide();
             } else {
                 $("#toggleSwitch").bootstrapSwitch('state', false);
-                $(".TDSCalculate").hide();
+                $(".TDSCalculate").show();
                 $(".TCSCalculate").show();
             }
 
@@ -415,7 +415,7 @@ var SalesView = {
 
             });
 
-            SalesView.variables.ItemId = ''
+            /*SalesView.variables.ItemId = ''*/
 
             $("#totalpcs").html(txtPcs.toFixed(2));
             $("#totalamt").html(totalamt.toFixed(2));
@@ -452,39 +452,61 @@ var SalesView = {
             }
             var txtCashPayment = +$("#txtCashPayment").val() || 0
             var txtChequePayment = +$("#txtChequePayment").val() || 0
-            if ($("#toggleSwitch").bootstrapSwitch('state') == true) {
+            //if ($("#toggleSwitch").bootstrapSwitch('state') == true) {
 
-                if ($("#ddlTDS").val()) {
-                    var temp_ddlTDS = $('#ddlTDS  option:selected').attr('percentage');
-                    var txtTDSAmt = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2);
-                    $("#txtTDSAmt").val(txtTDSAmt);
+            //    if ($("#ddlTDS").val()) {
+            //        var temp_ddlTDS = $('#ddlTDS  option:selected').attr('percentage');
+            //        var txtTDSAmt = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2);
+            //        $("#txtTDSAmt").val(txtTDSAmt);
 
-                    var ROFTDS = 0
-                    ROFTDS = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2)
-                    if ($('#chkROFTDS').is(":checked") == true) {
-                        var ROFTDS1 = parseFloat(ROFTDS).toFixed()
-                        $("#txtTDSRofAmt").val(+ROFTDS1)
-                        $("#txtOsPayment").val((((+$("#txtTotalAmt").val() - (+ROFTDS1))) - txtCashPayment - txtChequePayment).toFixed(2))
-                    }
-                    else {
-                        $("#txtTDSRofAmt").val('')
-                        $("#txtOsPayment").val(((+((totalamtteax.toFixed(2)) - (ROFTDS.toFixed(2))).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2))
-                    }
+            //        var ROFTDS = 0
+            //        ROFTDS = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2)
+            //        if ($('#chkROFTDS').is(":checked") == true) {
+            //            var ROFTDS1 = parseFloat(ROFTDS).toFixed()
+            //            $("#txtTDSRofAmt").val(+ROFTDS1)
+            //            $("#txtOsPayment").val((((+$("#txtTotalAmt").val() - (+ROFTDS1))) - txtCashPayment - txtChequePayment).toFixed(2))
+            //        }
+            //        else {
+            //            $("#txtTDSRofAmt").val('')
+            //            $("#txtOsPayment").val(((+((totalamtteax.toFixed(2)) - (ROFTDS.toFixed(2))).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2))
+            //        }
+            //    }
+            //    else {
+            //        $("#txtTDSAmt").val('');
+            //        $("#txtTDSRofAmt").val('')
+            //        $("#txtOsPayment").val((+(+$("#txtTotalAmt").val() - (+$("#txtTDSAmt").val())) - txtCashPayment - txtChequePayment).toFixed(2))
+            //    }
+            //}
+            //else {
+
+            //    var txtTCSApplicableLimit = +$("#txtTCSApplicableLimit").val();
+            //    var txtTotalNetAmt = +$("#txtTotalNetAmt").val();
+            //    var txtTCSPer = +$("#txtTCSPer").val();
+            //    var txtTCSTaxAmt = +((txtTotalNetAmt * txtTCSPer) / 100).toFixed(2)
+            //    $("#txtTCSTaxAmt").val(+txtTCSTaxAmt)
+            //    $("#txtOsPayment").val((+((totalamtteax.toFixed(2)) - (txtTCSTaxAmt).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2))
+            //}
+            if ($("#ddlTDS").val()) {
+                var temp_ddlTDS = $('#ddlTDS  option:selected').attr('percentage');
+                var txtTDSAmt = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2);
+                $("#txtTDSAmt").val(txtTDSAmt);
+
+                var ROFTDS = 0
+                ROFTDS = +((totalamt.toFixed(2) * temp_ddlTDS) / 100).toFixed(2)
+                if ($('#chkROFTDS').is(":checked") == true) {
+                    var ROFTDS1 = parseFloat(ROFTDS).toFixed()
+                    $("#txtTDSRofAmt").val(+ROFTDS1)
+                    $("#txtOsPayment").val((((+$("#txtTotalAmt").val() - (+ROFTDS1))) - txtCashPayment - txtChequePayment).toFixed(2))
                 }
                 else {
-                    $("#txtTDSAmt").val('');
                     $("#txtTDSRofAmt").val('')
-                    $("#txtOsPayment").val((+(+$("#txtTotalAmt").val() - (+$("#txtTDSAmt").val())) - txtCashPayment - txtChequePayment).toFixed(2))
+                    $("#txtOsPayment").val(((+((totalamtteax.toFixed(2)) - (ROFTDS.toFixed(2))).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2))
                 }
             }
             else {
-
-                var txtTCSApplicableLimit = +$("#txtTCSApplicableLimit").val();
-                var txtTotalNetAmt = +$("#txtTotalNetAmt").val();
-                var txtTCSPer = +$("#txtTCSPer").val();
-                var txtTCSTaxAmt = +((txtTotalNetAmt * txtTCSPer) / 100).toFixed(2)
-                $("#txtTCSTaxAmt").val(+txtTCSTaxAmt)
-                $("#txtOsPayment").val((+((totalamtteax.toFixed(2)) - (txtTCSTaxAmt).toFixed(2)) - txtCashPayment - txtChequePayment).toFixed(2))
+                $("#txtTDSAmt").val('');
+                $("#txtTDSRofAmt").val('')
+                $("#txtOsPayment").val((+(+$("#txtTotalAmt").val() - (+$("#txtTDSAmt").val())) - txtCashPayment - txtChequePayment).toFixed(2))
             }
 
         }
@@ -563,7 +585,8 @@ var SalesView = {
                 "TOTALAMT": $("#txtTotalAmt").val(),
                 "oper": SalesView.variables.oper,
                 "XMLPARAM": escape(xmlsaveFiles),
-                "CITYID": $("#ddlPartyBranch").val(),
+                "BRANCHID": $("#ddlPartyBranch").val(),
+                "CITYID": $("#ddlCity").attr("cityid"),
                 "TDSCHK": ($("#toggleSwitch").bootstrapSwitch('state') == true ? 1 : 0),
                 "TCSLIMT": $("#txtTCSApplicableLimit").val(),
                 "TCSPER": $("#txtTCSPer").val(),
@@ -1351,7 +1374,7 @@ $(document).ready(function () {
         myfilter = {
             rules: []
         };
-        myfilter.rules.push({ field: "CITY", op: "eq", data: $("#ddlPartyBranch").val() });
+        myfilter.rules.push({ field: "BRANCHID", op: "eq", data: $("#ddlPartyBranch").val() });
         /*myfilter.rules.push({ field: "GROUP", op: "eq", data: 'Group' });*/
         var url = SalesView.variables.BindGroupListUrl + "&myfilters=" + JSON.stringify(myfilter);
 
@@ -1521,7 +1544,7 @@ $(document).ready(function () {
                 /*CalculateBill_PaymentInfo()*/
                 //SalesView.bindtdspercentage()
             } else {
-                $(".TDSCalculate").hide();
+                $(".TDSCalculate").show();
                 $(".TCSCalculate").show();
                 $("#txtTCSAmt").val($("#txtTotalNetAmt").val());
 
@@ -1546,7 +1569,7 @@ $(document).ready(function () {
             $(".TDSCalculate").show();
             $(".TCSCalculate").hide();
         } else {
-            $(".TDSCalculate").hide();
+            $(".TDSCalculate").show();
             $(".TCSCalculate").show();
         }
 
@@ -1688,7 +1711,7 @@ function AutosuggestSubitemName(id) {
                     myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#" + id).val() });
                     myfilter.rules.push({ field: "ITEMGROUPID", op: "eq", data: itemgroupmasterid });
                     myfilter.rules.push({ field: "ACCOUNTYEARID", op: "eq", data: $("#CurrentAccountYear").attr("accyearid") });
-                    myfilter.rules.push({ field: "CITYID", op: "eq", data: $("#ddlPartyBranch").val() });
+                    myfilter.rules.push({ field: "BRANCHID", op: "eq", data: $("#ddlPartyBranch").val() });
                     if (SalesView.variables.ItemId != '')
                         myfilter.rules.push({ field: "ITEMID", op: "ne", data: SalesView.variables.ItemId });
 
@@ -1730,7 +1753,7 @@ function AutosuggestSubitemName(id) {
                                                 return {
                                                     label: item.itemname,
                                                     value: item.itemname,
-                                                    Id: item.itemgroupmasterid,
+                                                    Id: item.itemid,
                                                     SHORTNAME: item.shortname,
                                                     GST: item.gst,
                                                     HSNID: item.hsnid,
@@ -1775,10 +1798,12 @@ function AutosuggestSubitemName(id) {
                         SalesView.variables.ItemId = ui.item.Id
                     else 
                         SalesView.variables.ItemId = SalesView.variables.ItemId + "," + ui.item.Id
+
+
                     if (ui.item.label != 'No Results Found') {
                         $("#txtSubitemName" + append).attr('itemid', ui.item.Id);
                         $("#txtHsnCode" + append).val(ui.item.HSNID)
-                        $("#txtRate" + append).val(ui.item.TOTALRATE)
+                        $("#txtRate" + append).val(ui.item.PRICE)
                         $("#txtitemtype" + append).val(ui.item.ITEMTYPE_COMMON)
                         $("#txtStock" + append).val(ui.item.STOCKQTY)
                         SalesView.Calculation()
@@ -1956,7 +1981,7 @@ function DateFilter() {
         }
         myfilter = { rules: [] };
         myfilter.rules.push({ field: "FROMDATE", op: "eq", data: FromDate }, { field: "TODATE", op: "eq", data: Todate });
-        myfilter.rules.push({ field: "CITY", op: "eq", data: $("#ddlPartyBranch").val() });
+        myfilter.rules.push({ field: "BRANCHID", op: "eq", data: $("#ddlPartyBranch").val() });
         setTimeout(function () {
             if ($("#txtsearchbox").val().length > 1) {
                 myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#txtsearchbox").val() });
