@@ -5,19 +5,19 @@ var EstimateView = {
         AddNew: true,
         File: "EstimateView.js",
         ListId: 1,
-        BindGroupListUrl: "/Common/BindMastersDetails?ServiceName=ESTIMATE_GET",
-        QuotationDetailUrl: "/Common/BindMastersDetails?ServiceName=ESTIMATE_DETAILS_GET",
-        PerformMasterOperationUrl: "/Common/OpeartionsOnMaster?ServiceName=ESTIMATE_CRUD",
-        Bind_Salesreturnfiles_get: "/Common/BindMastersDetails?ServiceName=ESTIMATEFILES_GET",
+        BindGroupListUrl: "/Common/BindMastersDetails?ServiceName=ESTIMATESALES_GET",
+        QuotationDetailUrl: "/Common/BindMastersDetails?ServiceName=ESTIMATESALES_DETAILS_GET",
+        PerformMasterOperationUrl: "/Common/OpeartionsOnMaster?ServiceName=ESTIMATESALES_CRUD",
+        Bind_Salesreturnfiles_get: "/Common/BindMastersDetails?ServiceName=ESTIMATESALESFILES_GET",
         //table: "",
         HSNCodeList: [],
     },
 
     initializeJqgrid: function (url) {
         try {
-            colNames = ['ESTIMATEID', 'DELETE_VIRTUALFILENAME', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'EVENTMASTERID', 'Event Name', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
+            colNames = ['ESTIMATESALESID', 'DELETE_VIRTUALFILENAME', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
             colModel = [
-                { name: "ESTIMATEID", index: "ESTIMATEID", xmlmap: xmlvars.common_colmap + "ESTIMATEID", sortable: true, search: false, hidden: true },
+                { name: "ESTIMATESALESID", index: "ESTIMATESALESID", xmlmap: xmlvars.common_colmap + "ESTIMATESALESID", sortable: true, search: false, hidden: true },
                 { name: "DELETE_VIRTUALFILENAME", index: "DELETE_VIRTUALFILENAME", xmlmap: xmlvars.common_colmap + "DELETE_VIRTUALFILENAME", sortable: true, search: false, hidden: true },
                 { name: "STATEID", index: "STATEID", xmlmap: xmlvars.common_colmap + "STATEID", sortable: true, search: false, hidden: true },
                 { name: "MOBILE1", index: "MOBILE1", xmlmap: xmlvars.common_colmap + "MOBILE1", sortable: true, search: false, hidden: true },
@@ -31,12 +31,11 @@ var EstimateView = {
                 { name: "GSTNO", index: "GSTNO", xmlmap: xmlvars.common_colmap + "GSTNO", sortable: true, search: false, hidden: true },
                 { name: "PANNO", index: "PANNO", xmlmap: xmlvars.common_colmap + "PANNO", sortable: true, search: false, hidden: true },
                 { name: "ADHARCARDNO", index: "ADHARCARDNO", xmlmap: xmlvars.common_colmap + "ADHARCARDNO", sortable: true, search: false, hidden: true },
-                { name: "PURCHASECODE", width: 10, index: "PURCHASECODE", xmlmap: xmlvars.common_colmap + "PURCHASECODE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "EVENTMASTERID", index: "EVENTMASTERID", xmlmap: xmlvars.common_colmap + "EVENTMASTERID", sortable: true, search: false, hidden: true },
-                { name: "EVENTMASTERNAME", width: 10, index: "EVENTMASTERNAME", xmlmap: xmlvars.common_colmap + "EVENTMASTERNAME", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
+                { name: "ESTIMATESALESCODE", width: 10, index: "ESTIMATESALESCODE", xmlmap: xmlvars.common_colmap + "ESTIMATESALESCODE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
+
                 { name: "PARTYNAME", width: 10, index: "PARTYNAME", xmlmap: xmlvars.common_colmap + "PARTYNAME", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
                 { name: "PARTYMASTERID", index: "PARTYMASTERID", xmlmap: xmlvars.common_colmap + "PARTYMASTERID", sortable: true, search: false, hidden: true },
-                { name: "PURCHASEDATE", width: 10, index: "PURCHASEDATE", xmlmap: xmlvars.common_colmap + "PURCHASEDATE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
+                { name: "ESTIMATESALESDATE", width: 10, index: "ESTIMATESALESDATE", xmlmap: xmlvars.common_colmap + "ESTIMATESALESDATE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
                 { name: "ROF", index: "ROF", xmlmap: xmlvars.common_colmap + "ROF", sortable: true, search: false, hidden: true },
                 { name: "TOTALNETAMT", width: 10, index: "TOTALNETAMT", xmlmap: xmlvars.common_colmap + "TOTALNETAMT", sortable: false, search: false },
                 { name: "CGST", width: 10, index: "CGST", xmlmap: xmlvars.common_colmap + "CGST", sortable: false, search: false },
@@ -89,7 +88,7 @@ var EstimateView = {
                     total: xmlvars.common_response + "TOTALPAGES",
                     records: xmlvars.common_response + "TOTALRECORDS",
                     repeatitems: false,
-                    id: "ESTIMATEID"
+                    id: "ESTIMATESALESID"
                 },
                 loadComplete: function () {
                     $("tr.jqgrow:even").addClass('myAltRowClass');
@@ -123,7 +122,7 @@ var EstimateView = {
                 beforeProcessing: OnJqbeforeProcessingErrorcheck,
                 viewrecords: true,
                 hidegrid: false,
-                sortname: 'ESTIMATEID',
+                sortname: 'ESTIMATESALESID',
                 sortorder: 'desc',
                 ondblClickRow: function (rowid) {
                     if (isU()) {
@@ -166,11 +165,11 @@ var EstimateView = {
             //var rowData = table.row(Id).data();
 
             rowData = jQuery("#table_list_Quotation").getRowData(Id);
-            var DATE = (rowData['PURCHASEDATE']).split('/');
+            var DATE = (rowData['ESTIMATESALESDATE']).split('/');
             $("#txtBillDate").val(DATE[2] + '-' + DATE[1] + '-' + DATE[0]);
             $("#txtAccount").val(rowData['PARTYNAME']);
             $("#txtAccount").attr("partymasterid", rowData['PARTYMASTERID']);
-            $("#lblPurchaseCode").html(rowData['PURCHASECODE']);
+            $("#lblPurchaseCode").html(rowData['ESTIMATESALESCODE']);
             $("#lblPurchaseCode").show()
             if (rowData['ROF'] == 1) {
                 $("#chkROF").iCheck('check');
@@ -246,7 +245,7 @@ var EstimateView = {
 
             var myfilter,
                 myfilter = { rules: [] };
-            myfilter.rules.push({ field: "ESTIMATEID", op: "eq", data: Id });
+            myfilter.rules.push({ field: "ESTIMATESALESID", op: "eq", data: Id });
             $.ajax({
                 url: getDomain() + EstimateView.variables.QuotationDetailUrl + "&myfilters=" + JSON.stringify(myfilter) + '&ISRECORDALL=true',
                 async: false,
@@ -254,6 +253,7 @@ var EstimateView = {
                 type: 'POST',
                 success: function (data) {
                     var JsonObject = xml2json.parser(data);
+                    debugger
                     if (JsonObject.serviceresponse != undefined) {
                         if (JsonObject.serviceresponse.detailslist) {
                             if (JsonObject.serviceresponse.responsecode == 0) {
@@ -334,7 +334,7 @@ var EstimateView = {
 
             debugger
             var myfilter = { rules: [] };
-            myfilter.rules.push({ field: "ESTIMATEFILEID", op: "eq", data: Id });
+            myfilter.rules.push({ field: "ESTIMATESALESID", op: "eq", data: Id });
             $.ajax({
                 url: getDomain() + EstimateView.variables.Bind_Salesreturnfiles_get + "&myfilters=" + JSON.stringify(myfilter),
                 async: false,
@@ -570,9 +570,9 @@ var EstimateView = {
 
 
             var data = {
-                "ESTIMATEID": $("#hdnQuotationId").val(),
+                "ESTIMATESALESID": $("#hdnQuotationId").val(),
                 "PARTYMASTERID": $("#txtAccount").attr("partymasterid"),
-                "PURCHASEDATE": $("#txtBillDate").val(),
+                "ESTIMATESALESDATE": $("#txtBillDate").val(),
                 "ROF": $("#chkROF").prop("checked") ? 1 : 0,
                 "TOTALNETAMT": $("#txtTotalNetAmt").val(),
                 "CGST": $("#txtCGSTTaxAmt").val(),
@@ -595,7 +595,7 @@ var EstimateView = {
                 "TDSAMT": $("#txtTDSAmt").val() ? $("#txtTDSAmt").val() : 0,
                 "CASHPAYMENT": $("#txtCashPayment").val() || 0,
                 "CHEQUEPAYMENT": $("#txtChequePayment").val() || 0,
-                "EVENTMASTERID": $("#ddlevent").val(),
+                /*"EVENTMASTERID": $("#ddlevent").val(),*/
                 "ACCYEARID": $("#CurrentAccountYear").attr("accyearid")
 
             };
@@ -621,7 +621,7 @@ var EstimateView = {
                 cache: false,
                 url: getDomain() + "/Common/SaveImage",
                 data: {
-                    category: 'Estimate',
+                    category: 'EstimateSales',
                     deletedfiles: deletedFiles,
                     savefiles: saveFiles
                 },
@@ -672,7 +672,7 @@ var EstimateView = {
             $("#delDELETE_VIRTUALFILENAME").val("")
             rowData = jQuery("#table_list_Quotation").getRowData(id);
             $("#hdnQuotationId").val(id);
-            $("#delCode").html(rowData['PURCHASECODE']);
+            $("#delCode").html(rowData['ESTIMATESALESCODE']);
             $("#delDELETE_VIRTUALFILENAME").val(rowData['DELETE_VIRTUALFILENAME'])
             $("#ModalQuotationDelete").modal('show');
         } catch (e) {
@@ -686,7 +686,7 @@ var EstimateView = {
 
 
             var data = {
-                "ESTIMATEID": $("#hdnQuotationId").val(),
+                "ESTIMATESALESID": $("#hdnQuotationId").val(),
                 "oper": 'Delete',
             };
             $.ajax({
@@ -703,7 +703,7 @@ var EstimateView = {
                         cache: false,
                         url: getDomain() + "/Common/SaveImage",
                         data: {
-                            category: 'Estimate',
+                            category: 'EstimateSales',
                             deletedfiles: $("#delDELETE_VIRTUALFILENAME").val(),
                             savefiles: ""
                         },
@@ -1387,10 +1387,7 @@ var EstimateView = {
         BindDropdown('ddlTDS', 'TDSDropdownList', getDomain() + "/Common/BindMastersDetails?ServiceName=TDSMASTER_GET&IsRecordAll=true&ISACTIVE=1&COLUMNREQUESTED=TDSID,CODE,PERCENTAGE", '-- TDS --', true);
     },
 
-    bindEvent: function () {
-        $("#ddlevent").html("");
-        BindDropdown('ddlevent', 'EventList', getDomain() + "/Common/BindMastersDetails?ServiceName=EVENTMASTER_GET&IsRecordAll=true&ISACTIVE=1", '', true);
-    },
+
 
     TDSORTCSChange: function () {
         EstimateView.Calculation();
@@ -1401,7 +1398,6 @@ var EstimateView = {
 
 $(document).ready(function () {
     try {
-        EstimateView.bindEvent();
         $("#ddlTDS").change(function () {
             EstimateView.Calculation();
         })

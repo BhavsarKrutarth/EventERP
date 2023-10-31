@@ -1,7 +1,7 @@
 ﻿@{
     //Layout = "~/Views/Shared/_Layout_New.cshtml";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Sales Quotation";
+    ViewBag.Title = "Purchase Quotation";
 }
 
 <div class="page-container">
@@ -44,12 +44,11 @@
                 <fieldset class="acto-bg">
                     <form class="form-horizontal col-md-12" id="FrmDetails">
                         <div class="form-group">
-                            <label id="lblPurchaseCode" class="col-md-1" style="display: none; text-align: end; margin-top:7px"></label>
-                            <label class="control-label col-md-1">Event Name<span style="color:red"> *</span></label>
-                            <div class="col-md-2">
-                                @*<input tabindex="1" class="form-control mobilenomask keyboard" name="txtMobileNo" id="txtMobileNo" />*@
-                                <select class="form-control" name="ddlevent" id="ddlevent" tabindex="1"></select>
-                            </div>
+                            @*<label id="lblPurchaseCode" class="col-md-1" style="display: none; text-align: end; margin-top:7px"></label>
+                                <label class="control-label col-md-1">Event Name<span style="color:red"> *</span></label>
+                                <div class="col-md-2">
+                                    <select class="form-control" name="ddlevent" id="ddlevent" tabindex="1"></select>
+                                </div>*@
                             <lable class="control-label col-md-1" style="padding-left: 0;">Date<span style="color:red"> *</span></lable>
                             <div class="col-md-2">
                                 <input type="date" tabindex="2" class="form-control" name="txtBillDate" id="txtBillDate" onchange="VoucehrDateValidation(this)">
@@ -546,7 +545,7 @@
     <script type="text/x-jsrender" id="HSNDropdownList">
         <option gst="{{>gst}}" value="{{>hsnid}}">{{>hsncode}} - Gst({{>gst}} %)</option>
     </script>
-    <script src="~/Scripts/MasterScripts/Transaction/Estimate.js?v=@DateTime.UtcNow"></script>
+    <script src="~/Scripts/MasterScripts/Transaction/SalesEstimate.js?v=@DateTime.UtcNow"></script>
     <script type="text/x-jsrender" id="TDSDropdownList">
         <option percentage="{{>percentage}}" value="{{>tdsid}}">{{>code}} - Per({{>percentage}}%)</option>
     </script>
@@ -562,7 +561,7 @@
                     <input type="file" accept="{{*:window.extension}}" name="file" id="btn{{:salesreturnfileid}}" class="hide">
                     <i class="fa fa-upload"></i>
                 </label>&nbsp;
-                <a class="label-click" href="@System.Configuration.ConfigurationManager.AppSettings["domainPath"]/UploadFiles/Estimate/{{:virtualfilename}}" target="blank">
+                <a class="label-click" href="@System.Configuration.ConfigurationManager.AppSettings["domainPath"]/UploadFiles/EstimateSales/{{:virtualfilename}}" target="blank">
                     {{:actualfilename}}
                 </a>
                 <input type="hidden" class="fileid" value="{{:salesreturnid}}" />

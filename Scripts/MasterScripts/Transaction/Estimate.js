@@ -15,7 +15,7 @@ var EstimateView = {
 
     initializeJqgrid: function (url) {
         try {
-            colNames = ['ESTIMATEID','DELETE_VIRTUALFILENAME' ,'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'EVENTMASTERID', 'Event Name', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
+            colNames = ['ESTIMATEID','DELETE_VIRTUALFILENAME' ,'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code','Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
             colModel = [
                 { name: "ESTIMATEID", index: "ESTIMATEID", xmlmap: xmlvars.common_colmap + "ESTIMATEID", sortable: true, search: false, hidden: true },
                 { name: "DELETE_VIRTUALFILENAME", index: "DELETE_VIRTUALFILENAME", xmlmap: xmlvars.common_colmap + "DELETE_VIRTUALFILENAME", sortable: true, search: false, hidden: true },
@@ -32,8 +32,7 @@ var EstimateView = {
                 { name: "PANNO", index: "PANNO", xmlmap: xmlvars.common_colmap + "PANNO", sortable: true, search: false, hidden: true },
                 { name: "ADHARCARDNO", index: "ADHARCARDNO", xmlmap: xmlvars.common_colmap + "ADHARCARDNO", sortable: true, search: false, hidden: true },
                 { name: "PURCHASECODE", width: 10, index: "PURCHASECODE", xmlmap: xmlvars.common_colmap + "PURCHASECODE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "EVENTMASTERID", index: "EVENTMASTERID", xmlmap: xmlvars.common_colmap + "EVENTMASTERID", sortable: true, search: false, hidden: true },
-                { name: "EVENTMASTERNAME", width: 10, index: "EVENTMASTERNAME", xmlmap: xmlvars.common_colmap + "EVENTMASTERNAME", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
+               
                 { name: "PARTYNAME", width: 10, index: "PARTYNAME", xmlmap: xmlvars.common_colmap + "PARTYNAME", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
                 { name: "PARTYMASTERID", index: "PARTYMASTERID", xmlmap: xmlvars.common_colmap + "PARTYMASTERID", sortable: true, search: false, hidden: true },
                 { name: "PURCHASEDATE", width: 10, index: "PURCHASEDATE", xmlmap: xmlvars.common_colmap + "PURCHASEDATE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
@@ -595,7 +594,7 @@ var EstimateView = {
                 "TDSAMT": $("#txtTDSAmt").val() ? $("#txtTDSAmt").val() : 0,
                 "CASHPAYMENT": $("#txtCashPayment").val() || 0,
                 "CHEQUEPAYMENT": $("#txtChequePayment").val() || 0,
-                "EVENTMASTERID": $("#ddlevent").val(),
+                /*"EVENTMASTERID": $("#ddlevent").val(),*/
                 "ACCYEARID": $("#CurrentAccountYear").attr("accyearid")
 
             };
@@ -1387,10 +1386,7 @@ var EstimateView = {
         BindDropdown('ddlTDS', 'TDSDropdownList', getDomain() + "/Common/BindMastersDetails?ServiceName=TDSMASTER_GET&IsRecordAll=true&ISACTIVE=1&COLUMNREQUESTED=TDSID,CODE,PERCENTAGE", '-- TDS --', true);
     },
 
-    bindEvent: function () {
-        $("#ddlevent").html("");
-        BindDropdown('ddlevent', 'EventList', getDomain() + "/Common/BindMastersDetails?ServiceName=EVENTMASTER_GET&IsRecordAll=true&ISACTIVE=1", '', true);
-    },
+   
 
     TDSORTCSChange: function () {
         EstimateView.Calculation();
@@ -1401,7 +1397,6 @@ var EstimateView = {
 
 $(document).ready(function () {
     try {
-        EstimateView.bindEvent();
         $("#ddlTDS").change(function () {
             EstimateView.Calculation();
         })
