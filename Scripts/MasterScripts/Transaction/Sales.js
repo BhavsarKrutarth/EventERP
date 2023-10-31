@@ -8,6 +8,7 @@ var SalesView = {
         BindGroupListUrl: "/Common/BindMastersDetails?ServiceName=SALES_GET",
         QuotationDetailUrl: "/Common/BindMastersDetails?ServiceName=SALES_DETAILS_GET",
         PerformMasterOperationUrl: "/Common/OpeartionsOnMaster?ServiceName=SALES_CRUD",
+        QuotationEstimateDetailUrl: "/Common/BindMastersDetails?ServiceName=ESTIMATESALES_DETAILS_GET",
         //table: "",
         HSNCodeList: [],
         ItemId:""
@@ -15,9 +16,11 @@ var SalesView = {
 
     initializeJqgrid: function (url) {
         try {
-            colNames = ['SALESID', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'EVENTMASTERID', 'Event Name', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
+            colNames = ['SALESID', 'ESTIMATESALESID','ESTIMATESALESCODE', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
             colModel = [
                 { name: "SALESID", index: "SALESID", xmlmap: xmlvars.common_colmap + "SALESID", sortable: true, search: false, hidden: true },
+                { name: "ESTIMATESALESID", index: "ESTIMATESALESID", xmlmap: xmlvars.common_colmap + "ESTIMATESALESID", sortable: true, search: false, hidden: true },
+                { name: "ESTIMATESALESCODE", index: "ESTIMATESALESCODE", xmlmap: xmlvars.common_colmap + "ESTIMATESALESCODE", sortable: true, search: false, hidden: true },
                 { name: "STATEID", index: "STATEID", xmlmap: xmlvars.common_colmap + "STATEID", sortable: true, search: false, hidden: true },
                 { name: "MOBILE1", index: "MOBILE1", xmlmap: xmlvars.common_colmap + "MOBILE1", sortable: true, search: false, hidden: true },
                 { name: "PHONENO", index: "PHONENO", xmlmap: xmlvars.common_colmap + "PHONENO", sortable: true, search: false, hidden: true },
@@ -31,8 +34,7 @@ var SalesView = {
                 { name: "PANNO", index: "PANNO", xmlmap: xmlvars.common_colmap + "PANNO", sortable: true, search: false, hidden: true },
                 { name: "ADHARCARDNO", index: "ADHARCARDNO", xmlmap: xmlvars.common_colmap + "ADHARCARDNO", sortable: true, search: false, hidden: true },
                 { name: "SALESCODE", width: 10, index: "SALESCODE", xmlmap: xmlvars.common_colmap + "SALESCODE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "EVENTMASTERID", index: "EVENTMASTERID", xmlmap: xmlvars.common_colmap + "EVENTMASTERID", sortable: true, search: false, hidden: true },
-                { name: "EVENTMASTERNAME", width: 10, index: "EVENTMASTERNAME", xmlmap: xmlvars.common_colmap + "EVENTMASTERNAME", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
+                
                 { name: "PARTYNAME", width: 10, index: "PARTYNAME", xmlmap: xmlvars.common_colmap + "PARTYNAME", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
                 { name: "PARTYMASTERID", index: "PARTYMASTERID", xmlmap: xmlvars.common_colmap + "PARTYMASTERID", sortable: true, search: false, hidden: true },
                 { name: "SALESDATE", width: 10, index: "SALESDATE", xmlmap: xmlvars.common_colmap + "SALESDATE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
@@ -170,6 +172,9 @@ var SalesView = {
             $("#txtAccount").val(rowData['PARTYNAME']);
             $("#txtAccount").attr("partymasterid", rowData['PARTYMASTERID']);
             $("#lblPurchaseCode").html(rowData['SALESCODE']);
+            $("#txtEstimate").attr("disabled", "disabled");
+            $("#txtEstimate").val(rowData['ESTIMATESALESCODE'])
+
             $("#lblPurchaseCode").show()
             if (rowData['ROF'] == 1) {
                 $("#chkROF").iCheck('check');
@@ -247,7 +252,7 @@ var SalesView = {
                 myfilter = { rules: [] };
             myfilter.rules.push({ field: "SALESID", op: "eq", data: Id });
             myfilter.rules.push({ field: "ACCOUNTYEARID", op: "eq", data: $("#CurrentAccountYear").attr("accyearid") });
-            myfilter.rules.push({ field: "CITYID", op: "eq", data: $("#ddlPartyBranch").val() });
+            myfilter.rules.push({ field: "BRANCHID", op: "eq", data: $("#ddlPartyBranch").val() });
             $.ajax({
                 url: getDomain() + SalesView.variables.QuotationDetailUrl + "&myfilters=" + JSON.stringify(myfilter) + '&ISRECORDALL=true',
                 async: false,
@@ -255,6 +260,7 @@ var SalesView = {
                 type: 'POST',
                 success: function (data) {
                     var JsonObject = xml2json.parser(data);
+                    
                     if (JsonObject.serviceresponse != undefined) {
                         if (JsonObject.serviceresponse.detailslist) {
                             if (JsonObject.serviceresponse.responsecode == 0) {
@@ -380,7 +386,7 @@ var SalesView = {
 
     Calculation: function (id, i) {
         try {
-
+            
             var txtPcs = 0, totalamt = 0, totaltaxamt = 0, totalamtteax = 0
             $("#Quotationitem_tbody tr").each(function (key, obj) {
 
@@ -597,8 +603,9 @@ var SalesView = {
                 "TDSAMT": $("#txtTDSAmt").val() ? $("#txtTDSAmt").val() : 0,
                 "CASHPAYMENT": $("#txtCashPayment").val() || 0,
                 "CHEQUEPAYMENT": $("#txtChequePayment").val() || 0,
-                "EVENTMASTERID": $("#ddlevent").val(),
+                /*"EVENTMASTERID": $("#ddlevent").val(),*/
                 "ACCYEARID": $("#CurrentAccountYear").attr("accyearid"),
+                "ESTIMATESALESID": $("#txtEstimate").attr("estimatesalesid")
                 
             };
             if ($("#ddlTDS").val()) {
@@ -624,6 +631,8 @@ var SalesView = {
                 cache: false,
                 success: function (data) {
                     if ($(data).find('RESPONSECODE').text() == "0") {
+                        $("#lblPurchaseCode").show();
+                        $("#lblPurchaseCode").html($(data).find('SALESCODE').text())
                         SalesView.variables.ItemId = ''
                         notificationMessage(SalesView.variables.oper + ' Operation', $(data).find('RESPONSEMESSAGE').text(), 'success');
                         if (!IsPrint) {
@@ -634,7 +643,7 @@ var SalesView = {
                                 }
                         }
                         SalesView.ClearData();
-                        debugger
+                        
                         if (SalesView.variables.oper == 'Add') {
                             $(".estimate").show();
                         }
@@ -780,7 +789,14 @@ var SalesView = {
 
     ClearData: function () {
         try {
-            
+            $("#txtBankAC").val("");
+            $("#txtEstimate").removeAttr("disabled");
+            $("#txtEstimate").val("");
+            $("#txtEstimate").attr("estimatesalesid", "");
+            $("#totalpcs").html("0.00")
+            $("#totalamt").html("0.00")
+            $("#totaltaxamt").html("0.00")
+            $("#totalamtteax32423").html("0.00")
             $("#lblPurchaseCode").hide();
             $("#txtAccount").attr("partymasterid", "")
             $("#hdnVenderStateId").val("");
@@ -1352,20 +1368,279 @@ var SalesView = {
         BindDropdown('ddlTDS', 'TDSDropdownList', getDomain() + "/Common/BindMastersDetails?ServiceName=TDSMASTER_GET&IsRecordAll=true&ISACTIVE=1&COLUMNREQUESTED=TDSID,CODE,PERCENTAGE", '-- TDS --', true);
     },
 
-    bindEvent: function () {
-        $("#ddlevent").html("");
-        BindDropdown('ddlevent', 'EventList', getDomain() + "/Common/BindMastersDetails?ServiceName=EVENTMASTER_GET&IsRecordAll=true&ISACTIVE=1", '', true);
-    },
+    
 
     TDSORTCSChange: function () {
         SalesView.Calculation();
     },
+    BindEstimate_AutoComplete: function () {
+        $('#txtEstimate').autocomplete({
+            source: function (request, response) {
+                var myfilter;
+                myfilter = {
+                    rules: []
+                };
+                var Value = $('#txtEstimate').val();
+                var Estimate = Value.replace(/[^a-z0-9\s]/gi, '');
+
+                myfilter.rules.push({ field: "SEARCH", op: "eq", data: Estimate }); //$('#txtAccount').val()
+                myfilter.rules.push({ field: "ACCOUNTYEARID", op: "eq", data: $("#CurrentAccountYear").attr("accyearid") }); //$('#txtAccount').val()
+                myfilter.rules.push({ field: "BRANCHID", op: "eq", data: $("#ddlPartyBranch").val() }); //$('#txtAccount').val()
+                myfilter.rules.push({ field: "ESTIMATEUSE", op: "eq", data: 0 }); //$('#txtAccount').val()
+
+
+                var url = getDomain() + "/Common/BindMastersDetails?ServiceName=ESTIMATESALES_GET&myfilters=" + JSON.stringify(myfilter);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        
+                        if ($(data).find('RESPONSECODE').text() == "0") {
+                            
+                            var JsonObject = xml2json.parser(data);
+
+                            if (JsonObject.serviceresponse.detailslist != undefined) {
+                                var List;
+                                if (JsonObject.serviceresponse.detailslist.details.length > 1)
+                                    List = JsonObject.serviceresponse.detailslist.details;
+                                else
+                                    List = JsonObject.serviceresponse.detailslist;
+                                response(
+                                    $.map(List, function (item) {
+                                        if (jQuery.type(item) == "object") {
+                                            return {
+                                                label: item.estimatesalescode,
+                                                name: item.estimatesalescode,
+                                                estimatesalesid: item.estimatesalesid,
+                                                partymasterid: item.partymasterid,
+                                                estimatesalesdate: item.estimatesalesdate,
+                                                rof: item.rof,
+                                                totalnetamt: item.totalnetamt,
+                                                cgst: item.cgst,
+                                                sgst: item.sgst,
+                                                igst: item.igst,
+                                                amtwithtax: item.amtwithtax,
+                                                rofamt: item.rofamt,
+                                                totalamt: item.totalamt,
+                                                partyname: item.partyname,
+                                                statename: item.statename,
+                                                stateid: item.stateid,
+                                                mobile1: item.mobile1,
+                                                mobile2: item.mobile2,
+                                                phoneno: item.phoneno,
+                                                cityid: item.cityid,
+                                                cityname: item.cityname,
+                                                pincode: item.pincode,
+                                                address1: item.address1,
+                                                address2: item.address2,
+                                                address3: item.address3,
+                                                gstno: item.gstno,
+                                                panno: item.panno,
+                                                adharcardno: item.adharcardno
+                                            }
+                                        }
+                                        else {
+                                            return {
+                                                label: item.estimatesalescode,
+                                                name: item.estimatesalescode,
+                                                estimatesalesid: item.estimatesalesid,
+                                                partymasterid: item.partymasterid,
+                                                estimatesalesdate: item.estimatesalesdate,
+                                                rof: item.rof,
+                                                totalnetamt: item.totalnetamt,
+                                                cgst: item.cgst,
+                                                sgst: item.sgst,
+                                                igst: item.igst,
+                                                amtwithtax: item.amtwithtax,
+                                                rofamt: item.rofamt,
+                                                totalamt: item.totalamt,
+                                                partyname: item.partyname,
+                                                statename: item.statename,
+                                                stateid: item.stateid,
+                                                mobile1: item.mobile1,
+                                                mobile2: item.mobile2,
+                                                phoneno: item.phoneno,
+                                                cityid: item.cityid,
+                                                cityname: item.cityname,
+                                                pincode: item.pincode,
+                                                address1: item.address1,
+                                                address2: item.address2,
+                                                address3: item.address3,
+                                                gstno: item.gstno,
+                                                panno: item.panno,
+                                                adharcardno: item.adharcardno
+                                            }
+                                        }
+                                    }))
+                            }
+                            else {
+                                $("#txtEstimate").html('');
+                                notificationMessage('Warning', 'No Recored Found.', 'warning');
+                            }
+                        }
+                        else {
+                            $("#txtEstimate").html('');
+                            notificationMessage('Head Name', $(data).find('RESPONSEMESSAGE').text(), 'error');
+                        }
+                    }
+                })
+            },
+            messages: {
+                noResults: "No Results Found"
+            },
+            select: function (event, ui) {
+                if (ui.item.label != 'No Results Found') {
+                    $("#txtAccount").val(ui.item.partyname);
+                    $("#txtAccount").attr("partymasterid", ui.item.partymasterid);
+                    $("#lblPurchaseCode").html("");
+                    $("#lblPurchaseCode").hide()
+                    if (ui.item.rof == 1) {
+                        $("#chkROF").iCheck('check');
+                    } else {
+                        $("#chkROF").iCheck('uncheck');
+                    }
+                    //$("#txtTotalNetAmt").val(rowData['TOTALNETAMT']);
+                    //$("#txtSGSTTaxAmt").val(rowData['SGST'] || 0);
+                    //$("#txtCGSTTaxAmt").val(rowData['CGST'] || 0);
+                    //$("#txtIGSTTaxAmt").val(rowData['IGST'] || 0);
+                    //$("#txtTotalWithTaxAmt").val(rowData['AMTWITHTAX']);
+                    /*$("#txtROFAmt").val(rowData['ROFAMT'] || 0);*/
+                    /*$("#txtTotalAmt").val(rowData['TOTALAMT'] || 0);*/
+                    $("#hdnVenderStateId").val(ui.item.stateid);
+                    $("#txtMobile").val(ui.item.mobile1);
+                    $("#txtPhone").val(ui.item.phoneno);
+                    $("#ddlCity").attr("cityid", ui.item.cityid);
+                    $("#ddlCity").val(ui.item.cityname);
+                    $("#txtPin").val(ui.item.pincode);
+                    $("#txtAddress1").val(ui.item.address1);
+                    $("#txtAddress2").val(ui.item.address2);
+                    $("#txtAddress3").val(ui.item.address3);
+                    $("#txtGstNo").val(ui.item.gstno);
+                    $("#txtPanNo").val(ui.item.panno);
+                    $("#txtAdhhar").val(ui.item.adharcardno);
+                    SalesView.SubDeatilEstimate(ui.item.estimatesalesid)
+                    $("#txtEstimate").attr("estimatesalesid", ui.item.estimatesalesid)
+                }
+                else {
+                    setTimeout(function () {
+                        $("#txtEstimate").val('');
+                    }, 1)
+                }
+            },
+            change: function (event, ui) {
+                if (!ui.item) {
+                    //$("#txtcity").val('');
+                }
+            },
+            focus: function (event, ui) {
+                //$("#txtcity").val('');
+            },
+            minLength: 1,
+            autoFocus: true
+        });
+    },
+    SubDeatilEstimate: function (Id) {
+        var myfilter,
+            myfilter = { rules: [] };
+        myfilter.rules.push({ field: "ESTIMATESALESID", op: "eq", data: Id });
+        $.ajax({
+            url: getDomain() + SalesView.variables.QuotationEstimateDetailUrl + "&myfilters=" + JSON.stringify(myfilter) + '&ISRECORDALL=true',
+            async: false,
+            cache: false,
+            type: 'POST',
+            success: function (data) {
+                var JsonObject = xml2json.parser(data);
+                debugger
+                if (JsonObject.serviceresponse != undefined) {
+                    if (JsonObject.serviceresponse.detailslist) {
+                        if (JsonObject.serviceresponse.responsecode == 0) {
+                            $("#Quotationitem_tbody").html('');
+
+                            var list;
+                            if (JsonObject.serviceresponse.detailslist.details.length > 1)
+                                list = JsonObject.serviceresponse.detailslist.details;
+                            else
+                                list = JsonObject.serviceresponse.detailslist;
+
+
+                            SalesView.variables.ListId = 1;
+                            $.each(list, function (key, innerjsonDetails) {
+                                $("#Quotationitem_tbody").append('<tr>' +
+                                    '<td style="text-align: center;"></td>' +
+                                    '<td>' +
+                                    '<input   type="text" value="' + innerjsonDetails.itemgroupname + '" onkeyup="AutosuggestItemName(this)" class="form-control txtItemName txtAutocomplete" onfocusout="SalesView.validation(this,' + SalesView.variables.ListId + ')" name="txtItemName' + SalesView.variables.ListId + '" id="txtItemName' + SalesView.variables.ListId + '" itemgroupmasterid="' + innerjsonDetails.itemgroupmasterid + '">' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<input   value="' + innerjsonDetails.itemname + '" type="text" onkeyup="AutosuggestSubitemName(this)" class="form-control txtAutocomplete txtSubitemName" name="txtSubitemName' + SalesView.variables.ListId + '" id="txtSubitemName' + SalesView.variables.ListId + '" itemid="' + innerjsonDetails.itemid + '">' +
+                                    '</td>' +
+                                    
+                                    '<td>' +
+                                    '<input  value="' + innerjsonDetails.pcs + '" type="text" class="txtPcs form-control txtR number pcs required" onkeyup="SalesView.Calculation(this,' + SalesView.variables.ListId + ')" name="txtPcs' + SalesView.variables.ListId + '" id="txtPcs' + SalesView.variables.ListId + '">' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<input disabled value="' + innerjsonDetails.stockqty + '" type="text" class="txtStock form-control txtR number Stock required" onkeyup="SalesView.Calculation(this,' + SalesView.variables.ListId + ')" name="txtStock' + SalesView.variables.ListId + '" id="txtStock' + SalesView.variables.ListId + '">' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<input value="' + innerjsonDetails.itemtype + '" disabled type="text" class="txtitemtype form-control txtR number pcs required"  name="txtitemtype' + SalesView.variables.ListId + '" id="txtitemtype' + SalesView.variables.ListId + '">' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<select type="text" style="padding: 0;" class="form-control txtHsnCode" onchange="SalesView.Calculation(this,' + SalesView.variables.ListId + ')" name="HsnCode' + SalesView.variables.ListId + '" id="txtHsnCode' + SalesView.variables.ListId + '"></select>' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<input disabled value="' + innerjsonDetails.rate + '" type="text" class="form-control txtR numbers grosswt fixed required txtRate" decimals="3" name="txtRate' + SalesView.variables.ListId + '" id="txtRate' + SalesView.variables.ListId + '">' +
+                                    '</td>' +
+
+                                    '<td>' +
+                                    '<input disabled value="' + innerjsonDetails.amount + '" type="text" class="form-control txtR numbers grosswt fixed required txtAmount" decimals="3" name="txtAmount' + SalesView.variables.ListId + '" id="txtAmount' + SalesView.variables.ListId + '">' +
+                                    '</td>' +
+
+                                    '<td>' +
+                                    '<input disabled value="' + innerjsonDetails.taxamt + '" type="text" class="form-control txtR numbers grosswt fixed required txtteaxAmount" decimals="3" name="txtteaxAmount' + SalesView.variables.ListId + '" id="txtteaxAmount' + SalesView.variables.ListId + '">' +
+                                    '</td>' +
+
+                                    '<td>' +
+                                    '<input disabled value="' + innerjsonDetails.amttax + '" type="text" class="form-control txtR numbers grosswt fixed required txtAmtTaxTotal" decimals="3" name="txtAmtTax' + SalesView.variables.ListId + '" id="txtAmtTax' + SalesView.variables.ListId + '">' +
+                                    '</td>' +
+
+                                    '<td class="btnRemove" id="btnRemove' + SalesView.variables.ListId + '">' +
+                                    //'<div class="as_row_rmv" onclick="SalesView.RemoveRow(this)">' +
+                                    //'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox = "0 0 24 24" fill = "none"> <path fill-rule="evenodd" clip-rule="evenodd" d="M7 4C7 2.34315 8.34315 1 10 1H14C15.6569 1 17 2.34315 17 4V5H21C21.5523 5 22 5.44772 22 6C22 6.55228 21.5523 7 21 7H19.9394L19.1153 20.1871C19.0164 21.7682 17.7053 23 16.1211 23H7.8789C6.29471 23 4.98356 21.7682 4.88474 20.1871L4.06055 7H3C2.44772 7 2 6.55228 2 6C2 5.44772 2.44772 5 3 5H7V4ZM9 5H15V4C15 3.44772 14.5523 3 14 3H10C9.44772 3 9 3.44772 9 4V5ZM6.06445 7L6.88085 20.0624C6.91379 20.5894 7.35084 21 7.8789 21H16.1211C16.6492 21 17.0862 20.5894 17.1191 20.0624L17.9355 7H6.06445Z" fill="#ad2c2c"></path></svg>' +
+                                    //'</div>' +
+                                    '<div>' +
+                                    '<i class="icon-cancel-circle2" onclick="SalesView.RemoveRow(this)"></i>' +
+                                    '</div>' +
+                                    '</td>' +
+                                    '</tr>');
+
+                                HSNCode(SalesView.variables.ListId)
+
+                                $("#txtHsnCode" + SalesView.variables.ListId).val(innerjsonDetails.hsnid)
+                                SalesView.variables.ListId = SalesView.variables.ListId + 1;
+
+                            });
+                            SalesView.Calculation();
+
+                        }
+                        else {
+                            notificationTost('error', JsonObject.serviceresponse.responsemessage)
+                        }
+                    }
+                    else {
+                        $("#Quotationitem_tbody").html('');
+                    }
+                }
+            },
+            error: OnError
+        });
+    }
 }
 
 $(document).ready(function () {
     try {
-        
-        SalesView.bindEvent();
+
+        SalesView.BindEstimate_AutoComplete();
         $("#ddlTDS").change(function () {
             SalesView.Calculation();
         })
@@ -1413,6 +1688,7 @@ $(document).ready(function () {
             $("#panelView").hide();
             $("#panelEdit").show();
             SalesView.VoucherDateCheck();
+            SalesView.variables.ItemId = "";
         });
         $("#btnSaveQuotation").click(function () {
             if ($("#btnSaveQuotation").is(":visible"))
@@ -1794,7 +2070,7 @@ function AutosuggestSubitemName(id) {
                     noResults: "No Results Found"
                 },
                 select: function (event, ui) {
-                    debugger
+                    
                     if (SalesView.variables.ItemId == "")
                         SalesView.variables.ItemId = ui.item.Id
                     else 
