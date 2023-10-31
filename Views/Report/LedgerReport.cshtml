@@ -1,0 +1,149 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .Metal_weights {
+        background-color: rgba(76, 251, 210, 0.24);
+    }
+
+    .Dia_weights {
+        background-color: rgba(251, 161, 227, 0.23);
+    }
+
+    .CS_weights {
+        background-color: rgba(175, 249, 249, 0.51);
+    }
+
+    .Amt_weights {
+        background-color: rgba(255, 202, 220, 0.50);
+    }
+
+    #ledgerHead tr {
+        width: 12%;
+        display: block;
+        margin: 0 auto;
+    }
+
+        #ledgerHead tr td {
+            width: 10%;
+            text-align: center;
+        }
+
+    #LedgerPDFTBody table {
+        width: 100%;
+    }
+
+    /*tr.jqgrow td {
+        font-size: 15px
+    }*/
+</style>
+
+<!-- Page container -->
+<div class="page-container">
+    <div class="panel" id="panelLedgerReport" style="display: block; margin-bottom: 0px;">
+        <div class="row panel-heading panel_row_fix">
+            <div class="col-lg-12 pr-0">
+                <form id="frmLedgerReport" class="form-horizontal">
+                    <div class="form-group row">
+                        <div class="col-md-5">
+                            <label class="control-label col-md-2">Account</label>
+                            <div class="col-md-6">
+                                <input type="text" id="txt_account" class="form-control txtAccountName txtAutocomplete acto-accountsuggest" tabindex="1" onkeyup="LedgerReportView.AutosuggestAccountName();" autofocus>
+                            </div>
+
+                            <label class="control-label col-md-1">Type</label>
+                            <div class="col-md-3">
+                                <select class="form-control" name="ddlType" id="ddlType" tabindex="2">
+                                    <option value="Summary">Summary</option>
+                                    <option value="Details">Details</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label col-md-2 addstar">From</label>
+                            <div class="col-md-4">
+                                <input type="date" id="date_fromDate" class="form-control required" tabindex="3">
+                            </div>
+                            <label class="control-label col-md-1 addstar pl-0">To</label>
+                            <div class="col-md-4">
+                                <input type="date" id="date_toDate" class="form-control required" tabindex="4">
+                            </div>
+                        </div>
+                        <div class="col-md-3 text-right">
+                            <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600" style="margin-left: 5px;" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                            @*<button class="btn btn-primary btnSave" type="button" id="btnViewLedger" style="font-weight:600!important"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</button>*@
+                            <div class="btn btn-sm btn-default" id="refreshgrid"><span class="fa fa-refresh" style="color: #617dcf;"></span></div>
+                            <div class="btn btn-sm btnPrintLedger alpha-danger text-danger-800 border-danger-800" id="btnPrintLedger"><span class="fa fa-file-pdf-o"></span></div>
+                            <button class="formstylebutton divflotR btn alpha-green text-green-800 border-green-800" type="button" id="btnExcelPrint"><i class="fa fa-table"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-5">
+                            <label class="control-label col-md-2">Branch</label>
+                            <div class="col-md-6">
+                                <select type="text" id="ddlBranch" class="form-control" tabindex="3"></select>
+                            </div>
+                            <select class="form-control" name="ddlBalSheetGroup" id="ddlBalSheetGroup"></select>
+                            <div class="col-md-3 col-md-offset-1">
+                                <select class="form-control" name="ddlZeroFilter" id="ddlZeroFilter">
+                                    <option value="WithZero">With Zero</option>
+                                    <option value="WithoutZero">Without Zero</option>
+                                    <option value="OnlyZero">Only Zero</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <div class="col-md-12 text-right">
+                <button type="button" class="btn btn-default" name="btnBack" id="btnBack" style="display:none;margin: 10px 0;"><i class="fa fa-arrow-left"></i> Back</button>
+            </div>
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden;margin-bottom:10px;">
+                <div class="jqGrid_wrapper" id="jqgrid_LedgerAccountList">
+                    <table id="table_LedgerAccountList"></table>
+                    <div id="pager_LedgerAccountList"></div>
+                </div>
+
+                <div class="jqGrid_wrapper" id="jqgrid_LedgerDetails" style="display:none;">
+                    <table id="table_LedgerDetails"></table>
+                    <div id="pager_LedgerDetails"></div>
+                </div>
+
+                @*<div class="jqGrid_wrapper" id="jqgrid_LedgerTDS" style="display:none;">
+                        <table id="table_LedgerTDS"></table>
+                        <div id="pager_LedgerTDS"></div>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="TransactionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="overflow: auto;height: 35px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <button class="btn btn-primary" type="button" id="btnCashEntry" style="font-weight:600!important"><i class="fa fa-money"></i>&nbsp;&nbsp;Cash Entry</button>
+                    <button class="btn btn-primary" type="button" id="btnBankEntry" style="font-weight:600!important"><i class="fa fa-bank"></i>&nbsp;&nbsp;Bank Entry</button>
+                    <button class="btn btn-primary" type="button" id="btnJVEntry" style="font-weight:600!important"><i class="fa fa-offile-o"></i>&nbsp;&nbsp;JV Entry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /page container -->
+@section Scripts{
+    <script src="~/Scripts/MasterScripts/Report/LedgerReport.js?v=@DateTime.UtcNow"></script>
+
+    <script id="BSGroupNameList" type="text/x-jsrender">
+        <option value="{{>balancesheetgroupid}}">{{>bsgroupname.replaceAll('&amp;','&')}}</option>
+    </script>
+}
