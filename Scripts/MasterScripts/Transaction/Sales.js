@@ -16,9 +16,10 @@ var SalesView = {
 
     initializeJqgrid: function (url) {
         try {
-            colNames = ['SALESID', 'ESTIMATESALESID', 'ESTIMATESALESCODE', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'ACCOUNTNAME', 'CUSTOMERACCID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
+            colNames = ['SALESID','ACCOUNTID', 'ESTIMATESALESID', 'ESTIMATESALESCODE', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'ACCOUNTNAME', 'CUSTOMERACCID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
             colModel = [
                 { name: "SALESID", index: "SALESID", xmlmap: xmlvars.common_colmap + "SALESID", sortable: true, search: false, hidden: true },
+                { name: "ACCOUNTID", index: "ACCOUNTID", xmlmap: xmlvars.common_colmap + "ACCOUNTID", sortable: true, search: false, hidden: true },
                 { name: "ESTIMATESALESID", index: "ESTIMATESALESID", xmlmap: xmlvars.common_colmap + "ESTIMATESALESID", sortable: true, search: false, hidden: true },
                 { name: "ESTIMATESALESCODE", index: "ESTIMATESALESCODE", xmlmap: xmlvars.common_colmap + "ESTIMATESALESCODE", sortable: true, search: false, hidden: true },
                 { name: "STATEID", index: "STATEID", xmlmap: xmlvars.common_colmap + "STATEID", sortable: true, search: false, hidden: true },
@@ -170,7 +171,8 @@ var SalesView = {
             var DATE = (rowData['SALESDATE']).split('/');
             $("#txtBillDate").val(DATE[2] + '-' + DATE[1] + '-' + DATE[0]);
             $("#txtAccount").val(rowData['ACCOUNTNAME']);
-            $("#txtAccount").attr("partymasterid", rowData['CUSTOMERACCID']);
+            $("#txtAccount").attr("CustomerAccId", rowData['CUSTOMERACCID']);
+            $("#txtAccount").attr("accountid", rowData['ACCOUNTID']);
             $("#lblPurchaseCode").html(rowData['SALESCODE']);
             $("#txtEstimate").attr("disabled", "disabled");
             $("#txtEstimate").val(rowData['ESTIMATESALESCODE'])
@@ -1161,6 +1163,7 @@ var SalesView = {
                 noResults: "No Results Found"
             },
             select: function (event, ui) {
+                debugger
                 if (id == 'txtMobile' && ui.item.customerid) {
                     var mobileno = $("#" + id).val();
                     var name = $("#txtAccount").val();
@@ -1205,7 +1208,7 @@ var SalesView = {
                                         $("#txtAccount").attr('CustomerAccId', ui.item.customerid);
                                         $("#txtAccount").attr('AccountType', 'CUSTOMER');
                                         $("#txtMobile").val(ui.item.mobile == '[object Object]' ? '' : ui.item.mobile);
-                                        $('#txtPhone').val(ui.item.phone);
+                                        $('#txtPhone').val(ui.item.phone == '[object Object]' ? '' : ui.item.phone);
                                         $('#ddlCity').val(ui.item.cityname);
                                         $('#ddlCity').attr('cityid', ui.item.cityid);
                                         $('#txtPin').val(ui.item.pincode);
@@ -1255,7 +1258,7 @@ var SalesView = {
                         $("#txtAccount").attr('AccountType', 'CUSTOMER');
                         $("#txtMobile").val(ui.item.mobile == '[object Object]' ? '' : ui.item.mobile);
                         /*$('.mobilenomask').mask("0000000000");*/
-                        $('#txtPhone').val(ui.item.phone);
+                        $('#txtPhone').val(ui.item.phone == '[object Object]' ? '' : ui.item.phone);
                         $('#ddlCity').val(ui.item.cityname);
                         $('#ddlCity').attr('cityid', ui.item.cityid);
                         $('#txtPin').val(ui.item.pincode == '[object Object]' ? '' : ui.item.pincode);
@@ -1671,7 +1674,8 @@ var SalesView = {
                                                 label: item.estimatesalescode,
                                                 name: item.estimatesalescode,
                                                 estimatesalesid: item.estimatesalesid,
-                                                partymasterid: item.partymasterid,
+                                                customeraccid: item.customeraccid,
+                                                accountid: item.accountid,
                                                 estimatesalesdate: item.estimatesalesdate,
                                                 rof: item.rof,
                                                 totalnetamt: item.totalnetamt,
@@ -1681,7 +1685,7 @@ var SalesView = {
                                                 amtwithtax: item.amtwithtax,
                                                 rofamt: item.rofamt,
                                                 totalamt: item.totalamt,
-                                                partyname: item.partyname,
+                                                accountname: item.accountname,
                                                 statename: item.statename,
                                                 stateid: item.stateid,
                                                 mobile1: item.mobile1,
@@ -1703,7 +1707,8 @@ var SalesView = {
                                                 label: item.estimatesalescode,
                                                 name: item.estimatesalescode,
                                                 estimatesalesid: item.estimatesalesid,
-                                                partymasterid: item.partymasterid,
+                                                customeraccid: item.customeraccid,
+                                                accountid: item.accountid,
                                                 estimatesalesdate: item.estimatesalesdate,
                                                 rof: item.rof,
                                                 totalnetamt: item.totalnetamt,
@@ -1713,7 +1718,7 @@ var SalesView = {
                                                 amtwithtax: item.amtwithtax,
                                                 rofamt: item.rofamt,
                                                 totalamt: item.totalamt,
-                                                partyname: item.partyname,
+                                                accountname: item.accountname,
                                                 statename: item.statename,
                                                 stateid: item.stateid,
                                                 mobile1: item.mobile1,
@@ -1748,9 +1753,11 @@ var SalesView = {
                 noResults: "No Results Found"
             },
             select: function (event, ui) {
+                debugger
                 if (ui.item.label != 'No Results Found') {
-                    $("#txtAccount").val(ui.item.partyname);
-                    $("#txtAccount").attr("partymasterid", ui.item.partymasterid);
+                    $("#txtAccount").val(ui.item.accountname);
+                    $("#txtAccount").attr("CustomerAccId", ui.item.customeraccid);
+                    $("#txtAccount").attr("accountid", ui.item.accountid);
                     $("#lblPurchaseCode").html("");
                     $("#lblPurchaseCode").hide()
                     if (ui.item.rof == 1) {
@@ -1766,8 +1773,10 @@ var SalesView = {
                     /*$("#txtROFAmt").val(rowData['ROFAMT'] || 0);*/
                     /*$("#txtTotalAmt").val(rowData['TOTALAMT'] || 0);*/
                     $("#hdnVenderStateId").val(ui.item.stateid);
-                    $("#txtMobile").val(ui.item.mobile1);
-                    $("#txtPhone").val(ui.item.phoneno);
+                    
+                    $("#txtMobile").val(ui.item.mobile == '[object Object]' ? '' : ui.item.mobile);
+                    $("#txtPhone").val(ui.item.phoneno == '[object Object]' ? '' : ui.item.phoneno);
+
                     $("#ddlCity").attr("cityid", ui.item.cityid);
                     $("#ddlCity").val(ui.item.cityname);
                     $("#txtPin").val(ui.item.pincode);

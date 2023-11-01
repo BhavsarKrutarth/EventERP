@@ -16,9 +16,10 @@ var EstimateView = {
 
     initializeJqgrid: function (url) {
         try {
-            colNames = ['ESTIMATESALESID', 'DELETE_VIRTUALFILENAME', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'Party Name', 'PARTYMASTERID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
+            colNames = ['ESTIMATESALESID','ACCOUNTID', 'DELETE_VIRTUALFILENAME', 'STATEID', 'MOBILE1', 'PHONENO', 'CITYID', 'CITYNAME', 'ADDRESS1', 'ADDRESS2', 'ADDRESS3', 'GSTNO', 'PANNO', 'ADHARCARDNO', 'PINCODE', 'Code', 'ACCOUNTNAME', 'CUSTOMERACCID', 'PURCHASEDATE', 'ROF', 'TOTALNETAMT', 'CGST', 'SGST', 'IGST', 'AMTWITHTAX', 'ROFAMT', 'TOTALAMT', 'TDSCHK', 'TCSROF', 'TDSROF', 'TDSID', 'TDSPER', 'TDSONAMT', 'TDSROFAMT', 'TCSLIMT', 'TCSPER', 'TCSONAMT', 'CASHPAYMENT', 'CHEQUEPAYMENT', 'BANKID', 'CHEQUENO', 'CHEQUEBOOKDETAILID', 'CHEQUENAME', 'BANKNAME']
             colModel = [
                 { name: "ESTIMATESALESID", index: "ESTIMATESALESID", xmlmap: xmlvars.common_colmap + "ESTIMATESALESID", sortable: true, search: false, hidden: true },
+                { name: "ACCOUNTID", index: "ACCOUNTID", xmlmap: xmlvars.common_colmap + "ACCOUNTID", sortable: true, search: false, hidden: true },
                 { name: "DELETE_VIRTUALFILENAME", index: "DELETE_VIRTUALFILENAME", xmlmap: xmlvars.common_colmap + "DELETE_VIRTUALFILENAME", sortable: true, search: false, hidden: true },
                 { name: "STATEID", index: "STATEID", xmlmap: xmlvars.common_colmap + "STATEID", sortable: true, search: false, hidden: true },
                 { name: "MOBILE1", index: "MOBILE1", xmlmap: xmlvars.common_colmap + "MOBILE1", sortable: true, search: false, hidden: true },
@@ -34,8 +35,8 @@ var EstimateView = {
                 { name: "ADHARCARDNO", index: "ADHARCARDNO", xmlmap: xmlvars.common_colmap + "ADHARCARDNO", sortable: true, search: false, hidden: true },
                 { name: "ESTIMATESALESCODE", width: 10, index: "ESTIMATESALESCODE", xmlmap: xmlvars.common_colmap + "ESTIMATESALESCODE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
 
-                { name: "PARTYNAME", width: 10, index: "PARTYNAME", xmlmap: xmlvars.common_colmap + "PARTYNAME", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
-                { name: "PARTYMASTERID", index: "PARTYMASTERID", xmlmap: xmlvars.common_colmap + "PARTYMASTERID", sortable: true, search: false, hidden: true },
+                { name: "ACCOUNTNAME", width: 10, index: "ACCOUNTNAME", xmlmap: xmlvars.common_colmap + "ACCOUNTNAME", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
+                { name: "CUSTOMERACCID", index: "CUSTOMERACCID", xmlmap: xmlvars.common_colmap + "CUSTOMERACCID", sortable: true, search: false, hidden: true },
                 { name: "ESTIMATESALESDATE", width: 10, index: "ESTIMATESALESDATE", xmlmap: xmlvars.common_colmap + "ESTIMATESALESDATE", sortable: false, searchoptions: jqGridVariables.stringSearchOption },
                 { name: "ROF", index: "ROF", xmlmap: xmlvars.common_colmap + "ROF", sortable: true, search: false, hidden: true },
                 { name: "TOTALNETAMT", width: 10, index: "TOTALNETAMT", xmlmap: xmlvars.common_colmap + "TOTALNETAMT", sortable: false, search: false },
@@ -168,8 +169,9 @@ var EstimateView = {
             rowData = jQuery("#table_list_Quotation").getRowData(Id);
             var DATE = (rowData['ESTIMATESALESDATE']).split('/');
             $("#txtBillDate").val(DATE[2] + '-' + DATE[1] + '-' + DATE[0]);
-            $("#txtAccount").val(rowData['PARTYNAME']);
-            $("#txtAccount").attr("partymasterid", rowData['PARTYMASTERID']);
+            $("#txtAccount").val(rowData['ACCOUNTNAME']);
+            $("#txtAccount").attr("CustomerAccId", rowData['CUSTOMERACCID']);
+            $("#txtAccount").attr("accountid", rowData['ACCOUNTID']);
             $("#lblPurchaseCode").html(rowData['ESTIMATESALESCODE']);
             $("#lblPurchaseCode").show()
             if (rowData['ROF'] == 1) {
@@ -578,7 +580,8 @@ var EstimateView = {
 
             var data = {
                 "ESTIMATESALESID": $("#hdnQuotationId").val(),
-                "PARTYMASTERID": $("#txtAccount").attr("partymasterid"),
+                "CUSTOMERACCID": $("#txtAccount").attr("CustomerAccId"),
+                "ACCOUNTID": $("#txtAccount").attr("accountid"),
                 "ESTIMATESALESDATE": $("#txtBillDate").val(),
                 "ROF": $("#chkROF").prop("checked") ? 1 : 0,
                 "TOTALNETAMT": $("#txtTotalNetAmt").val(),
@@ -825,7 +828,8 @@ var EstimateView = {
         try {
             $("#imgPreviewTechnicalData").html("")
             $("#lblPurchaseCode").hide();
-            $("#txtAccount").attr("partymasterid", "")
+            $("#txtAccount").attr("CustomerAccId", "")
+            $("#txtAccount").attr("accountid", "")
             $("#hdnVenderStateId").val("");
             EstimateView.variables.ListId = 1;
             EstimateView.variables.oper = 'Add';
@@ -848,7 +852,6 @@ var EstimateView = {
             $("#panelEdit").hide();
             $("#txtMobileNo").focus();
 
-            $("#txtAccount").attr("partymasterid", "");
             $("#hdnVenderStateId").val("");
             $("#txtMobile").val("");
             $("#txtPhone").val("");
@@ -1090,20 +1093,14 @@ var EstimateView = {
         var id = $(obj).attr('id');
         $('#' + id).autocomplete({
             source: function (request, response) {
-                var myfilter, SP_Name;
+                var myfilter;
                 myfilter = { rules: [] };
 
-                var Value = "";
-                var PartyName = "";
-                //var PartyName = Value.replace(/[^a-z0-9\s]/gi, '');
+                var Value = $('#' + id).val();
+                var PartyName = Value.replace(/[^a-z0-9\s]/gi, '');
 
-                Value = $('#' + id).val().replace(/_/g, '').replace('-', '');
-                PartyName = Value.replace(/[^a-z0-9\s]/gi, '');     //.replace(/[_\s]/g, '-')
-
-                myfilter.rules.push({ field: "PARTYSEARCH", op: "eq", data: PartyName }); //$('#' + id).val().replace(/_/g, '').replace('-', '')
-                myfilter.rules.push({ field: "MASTERTYPE", op: "eq", data: 'PartyMaster' });
-
-                var url = getDomain() + "/Common/BindMastersDetails?ServiceName=PARTYMASTER_GET&ISACTIVE=1&myfilters=" + JSON.stringify(myfilter);
+                myfilter.rules.push({ field: "CUSTOMERSEARCH", op: "eq", data: PartyName });  //$('#' + id).val()
+                var url = getDomain() + "/Common/BindMastersDetails?ServiceName=CUSTOMERMASTER_GET&IsActive=1&myfilters=" + JSON.stringify(myfilter);
                 $.ajax({
                     url: url,
                     type: "POST",
@@ -1112,150 +1109,70 @@ var EstimateView = {
                     success: function (data) {
                         if ($(data).find('RESPONSECODE').text() == "0") {
                             var JsonObject = xml2json.parser(data);
-
                             if (JsonObject.serviceresponse.detailslist != undefined) {
                                 var List;
                                 if (JsonObject.serviceresponse.detailslist.details.length > 1)
                                     List = JsonObject.serviceresponse.detailslist.details;
                                 else
                                     List = JsonObject.serviceresponse.detailslist;
-
-                                if ($("#ddlSeries").val() != 'URDPurchase') {
-                                    response(
-
-                                        $.map(List, function (item) {
-                                            if (jQuery.type(item) == "object") {
-                                                return {
-                                                    label: item.searchdata,
-                                                    value: item.partyname,
-                                                    name: item.partyname,
-                                                    venderid: item.partymasterid,
-                                                    accid: item.accountid,
-                                                    referencebyid: item.referencebyid || "",
-                                                    referenceby: item.referencebyname || "",
-                                                    referencetype: item.referencetype || "",
-                                                    panno: (item.panno == "[object Object]" ? "" : item.panno) || "",
-                                                    gstno: (item.gstno == "[object Object]" ? "" : item.gstno) || "",
-                                                    aadharno: item.adharcardno || "",
-                                                    form60: item.isform60 || "",
-                                                    photo: item.panimg || "",
-                                                    address1: (item.address1 == "[object Object]" ? "" : item.address1) || "",
-                                                    address2: (item.address2 == "[object Object]" ? "" : item.address2) || "",
-                                                    address3: (item.address3 == "[object Object]" ? "" : item.address3) || "",
-                                                    cityid: item.cityid,
-                                                    cityname: item.cityname,
-                                                    StateId: item.stateid,
-                                                    pincode: (item.pincode == "[object Object]" ? "" : item.pincode) || "",
-                                                    mobile: item.mobile1,
-                                                    phone: item.phoneno || "",
-                                                    tcslimit: item.tcslimit || "",
-                                                    tcsper: item.tcsper || "",
-                                                    accounttype: item.accounttype || "",
-                                                    shortcode: item.shortcode || "",
-                                                    TDSCodeId: item.tdscodeid
-                                                }
+                                response(
+                                    $.map(List, function (item) {
+                                        if (jQuery.type(item) == "object") {
+                                            return {
+                                                label: item.accountname + (item.mobile.toString() == '[object Object]' ? '' : "-" + item.mobile),
+                                                value: item.accountname,
+                                                customerid: item.customeraccid,
+                                                accid: item.accid,
+                                                name: item.accountname,
+                                                mobile: (item.mobile || ''),
+                                                phone: item.phone || "",
+                                                cityid: item.cityid,
+                                                cityname: item.cityname,
+                                                pincode: item.pincode || "",
+                                                address1: item.address1 || "",
+                                                address2: item.address2 || "",
+                                                address3: item.address3 || "",
+                                                membershiptypeid: item.customertypeid,
+                                                customercategoryid: item.customercategoryid,
+                                                panno: item.panno || "",
+                                                gstno: item.gst || "",
+                                                aadharno: item.adhaar || "",
+                                                isosbillnotaccept: item.isosbillnotaccept,
+                                                photo: item.panimg,
+                                                StateId: item.stateid,
+                                                accounttype: item.accounttype || "",
+                                                shortcode: item.shortcode || ""
                                             }
-                                            else {
-                                                return {
-                                                    label: item.searchdata,
-                                                    value: item.partyname,
-                                                    name: item.partyname,
-                                                    venderid: item.partymasterid,
-                                                    accid: item.accountid,
-                                                    referencebyid: item.referencebyid || "",
-                                                    referenceby: item.referencebyname || "",
-                                                    referencetype: item.referencetype || "",
-                                                    panno: (item.panno == "[object Object]" ? "" : item.panno) || "",
-                                                    gstno: (item.gstno == "[object Object]" ? "" : item.gstno) || "",
-                                                    aadharno: item.adharcardno || "",
-                                                    form60: item.isform60 || "",
-                                                    photo: item.panimg || "",
-                                                    address1: (item.address1 == "[object Object]" ? "" : item.address1) || "",
-                                                    address2: (item.address2 == "[object Object]" ? "" : item.address2) || "",
-                                                    address3: (item.address3 == "[object Object]" ? "" : item.address3) || "",
-                                                    cityid: item.cityid,
-                                                    cityname: item.cityname,
-                                                    StateId: item.stateid,
-                                                    pincode: (item.pincode == "[object Object]" ? "" : item.pincode) || "",
-                                                    mobile: item.mobile1,
-                                                    phone: item.phoneno || "",
-                                                    tcslimit: item.tcslimit || "",
-                                                    tcsper: item.tcsper || "",
-                                                    accounttype: item.accounttype || "",
-                                                    shortcode: item.shortcode || "",
-                                                    TDSCodeId: item.tdscodeid
-                                                }
+                                        }
+                                        else {
+                                            return {
+                                                label: item.accountname + (item.mobile.toString() == '[object Object]' ? '' : "-" + item.mobile),
+                                                value: item.accountname,
+                                                customerid: item.customeraccid,
+                                                accid: item.accid,
+                                                name: item.accountname,
+                                                mobile: (item.mobile || ''),
+                                                phone: item.phone || "",
+                                                cityid: item.cityid,
+                                                cityname: item.cityname,
+                                                pincode: item.pincode || "",
+                                                address1: item.address1 || "",
+                                                address2: item.address2 || "",
+                                                address3: item.address3 || "",
+                                                membershiptypeid: item.customertypeid,
+                                                customercategoryid: item.customercategoryid,
+                                                panno: item.panno || "",
+                                                gstno: item.gst || "",
+                                                aadharno: item.adhaar || "",
+                                                isosbillnotaccept: item.isosbillnotaccept,
+                                                photo: item.panimg,
+                                                StateId: item.stateid,
+                                                accounttype: item.accounttype || "",
+                                                shortcode: item.shortcode || ""
                                             }
-                                        })
-                                    )
-                                }
-                                else {
-                                    response(
-                                        $.map(List, function (item) {
-                                            if (jQuery.type(item) == "object") {
-                                                return {
-                                                    label: item.accountname + '-' + (item.mobile == '[object Object]' ? '' : item.mobile),
-                                                    name: item.accountname,
-                                                    venderid: item.customeraccid,
-                                                    accid: item.accid,
-                                                    panno: item.pan || "",
-                                                    gstno: item.gst || "",
-                                                    aadharno: item.adhaar || "",
-                                                    isosbillnotaccept: item.isosbillnotaccept,
-                                                    photo: item.panimg || "",
-                                                    address1: item.address1 || "",
-                                                    address2: item.address2 || "",
-                                                    address3: item.address3 || "",
-                                                    cityid: item.cityid,
-                                                    cityname: item.cityname,
-                                                    StateId: item.stateid,
-                                                    pincode: item.pincode || "",
-                                                    mobile: item.mobile || "",
-                                                    phone: item.phone || "",
-                                                    membershipid: item.customertypeid || "",
-                                                    customercategory: item.customercategoryid || "",
-                                                    tcslimit: item.tcslimit || "",
-                                                    tcsper: item.tcsper || "",
-                                                    accounttype: item.accounttype || "",
-                                                    shortcode: item.shortcode || "",
-                                                    TDSCodeId: item.tdscodeid
-                                                }
-                                            }
-                                            else {
-                                                return {
-                                                    label: item.accountname + '-' + (item.mobile == '[object Object]' ? '' : item.mobile),
-                                                    name: item.accountname,
-                                                    venderid: item.customeraccid,
-                                                    accid: item.accid,
-                                                    panno: item.pan || "",
-                                                    gstno: item.gst || "",
-                                                    aadharno: item.adhaar || "",
-                                                    isosbillnotaccept: item.isosbillnotaccept,
-                                                    photo: item.panimg || "",
-                                                    address1: item.address1 || "",
-                                                    address2: item.address2 || "",
-                                                    address3: item.address3 || "",
-                                                    cityid: item.cityid,
-                                                    cityname: item.cityname,
-                                                    StateId: item.stateid,
-                                                    pincode: item.pincode || "",
-                                                    mobile: item.mobile,
-                                                    phone: item.phone || "",
-                                                    membershipid: item.customertypeid || "",
-                                                    customercategory: item.customercategoryid || "",
-                                                    tcslimit: item.tcslimit || "",
-                                                    tcsper: item.tcsper || "",
-                                                    accounttype: item.accounttype || "",
-                                                    shortcode: item.shortcode || "",
-                                                    TDSCodeId: item.tdscodeid
-                                                }
-                                            }
-                                        })
-                                    )
-                                }
-                            }
-                            else {
-                                $("#txtAccount").val("")
+                                        }
+                                    }))
+                            } else {
                                 var result = [
                                     {
                                         label: '',
@@ -1266,7 +1183,6 @@ var EstimateView = {
                             }
                         }
                         else {
-                            $("#txtAccount").val("")
                             notificationMessage('Head Name', $(data).find('RESPONSEMESSAGE').text(), 'error');
                         }
                     }
@@ -1276,23 +1192,157 @@ var EstimateView = {
                 noResults: "No Results Found"
             },
             select: function (event, ui) {
-                console.log(ui)
-                $("#txtAccount").attr("partymasterid", ui.item.venderid);
-                $("#hdnVenderStateId").val(ui.item.StateId);
-                $("#txtMobile").val(ui.item.mobile != '' ? ui.item.mobile : '');
-                $("#txtPhone").val(ui.item.phoneno != '' ? ui.item.phoneno : '');
-                if (ui.item.cityid) {
-                    $("#ddlCity").attr("cityid", ui.item.cityid);
-                    $("#ddlCity").val(ui.item.cityname)
-                }
-                $("#txtPin").val(ui.item.pincode);
-                $("#txtAddress1").val(ui.item.address1);
-                $("#txtAddress2").val(ui.item.address2);
-                $("#txtAddress3").val(ui.item.address3);
-                $("#txtGstNo").val(ui.item.gstno);
-                $("#txtPanNo").val(ui.item.panno);
-                $("#txtAdhhar").val(ui.item.panno);
+                if (id == 'txtMobile' && ui.item.customerid) {
+                    var mobileno = $("#" + id).val();
+                    var name = $("#txtAccount").val();
+                    setTimeout(function () {
+                        swal({
+                            title: "Are you sure?",
+                            text: "Mobile no is already exist. You want to add new with same number?",
+                            type: "warning",
+                            showCancelButton: true,
+                            cancelButtonText: "No, Fill Info.",
+                            cancelButtonColor: "#ddd",
+                            confirmButtonColor: "#FF7043",
+                            confirmButtonText: "Yes, Do It!"
+                        },
+                            function (isConfirm) {
+                                if (isConfirm) {
+                                    setTimeout(function () {
+                                        $("#customerid").val('');
+                                        $("#VenderAccId").val('');
+                                        $("#FrmVenderDetails").validate().resetForm();
+                                        $("#" + id).val(mobileno);
+                                        $("#txtAccount").val(name);
+                                        setTimeout(function () {
+                                            $("#txtPhone").focus();
+                                        }, 10)
+                                        $("#FrmVenderDetails input").prop('disabled', false);
+                                        var i = 31;
+                                        ($("#FrmBillInfo input")).each(function (key, obj) {
+                                            $(obj).attr('tabindex', i);
+                                            i++;
+                                        });
+                                        ($("#FrmPaymentDetails input")).each(function (key, obj) {
+                                            $(obj).attr('tabindex', i);
+                                            i++;
+                                        });
+                                    }, 1)
+                                }
+                                else {
+                                    setTimeout(function () {
+                                        $("#txtAccount").val(ui.item.name);
+                                        $("#txtAccount").attr('accountid', ui.item.accid);
+                                        $("#txtAccount").attr('CustomerAccId', ui.item.customerid);
+                                        $("#txtAccount").attr('AccountType', 'CUSTOMER');
+                                        $("#txtMobile").val(ui.item.mobile == '[object Object]' ? '' : ui.item.mobile);
+                                        $('#txtPhone').val(ui.item.phone == '[object Object]' ? '' : ui.item.phone);
+                                        $('#ddlCity').val(ui.item.cityname);
+                                        $('#ddlCity').attr('cityid', ui.item.cityid);
+                                        $('#txtPin').val(ui.item.pincode);
+                                        $('#txtAddress1').val(ui.item.address1);
+                                        $("#txtAddress2").val(ui.item.address2);
+                                        $('#txtAddress3').val(ui.item.address3);
+                                        $('#txtPanNo').val(ui.item.panno);
+                                        $('#txtGstNo').val(ui.item.gstno);
+                                        $("#txtAdhhar").val(ui.item.aadharno);
+                                        if (ui.item.isosbillnotaccept == true && ui.item.isosbillnotaccept != undefined) {
+                                            $("#ChkOSBillAccept").iCheck('check');
+                                        }
+                                        else {
+                                            $("#ChkOSBillAccept").iCheck('uncheck');
+                                        }
+                                        if (ui.item.photo == undefined) {
+                                            $('#imgPan').attr('src', getDomain() + '/Content/assets/PANCARD.png');
+                                        }
+                                        else {
+                                            if (ui.item.photo != '[object Object]')
+                                                $('#imgPan').attr('src', getDomain() + '/UploadFiles/CustomerMaster/' + ui.item.photo);
+                                        }
+                                        $('#hdnimg').val(getDomain() + '/UploadFiles/CustomerMaster/' + ui.item.photo);
+                                        $('#hdnVenderStateId').val(ui.item.StateId);
+                                        $("#FrmVenderDetails input.disable").prop('disabled', true);
+                                        var i = 21;
+                                        ($("#FrmBillInfo input")).each(function (key, obj) {
+                                            $(obj).attr('tabindex', i);
+                                            i++;
+                                        });
+                                        ($("#FrmPaymentDetails input")).each(function (key, obj) {
+                                            $(obj).attr('tabindex', i);
+                                            i++;
+                                        });
+                                        SRoundOff();
+                                        CRoundOff();
+                                        IRoundOff();
+                                    }, 100);
+                                }
+                            });
+                    }, 10)
+                } else if (ui.item.customerid) {
+                    setTimeout(function () {
+                        $("#txtAccount").val(ui.item.name);
+                        $("#txtAccount").attr('accountid', ui.item.accid);
+                        $("#txtAccount").attr('CustomerAccId', ui.item.customerid);
+                        $("#txtAccount").attr('AccountType', 'CUSTOMER');
+                        $("#txtMobile").val(ui.item.mobile == '[object Object]' ? '' : ui.item.mobile);
+                        /*$('.mobilenomask').mask("0000000000");*/
+                        $('#txtPhone').val(ui.item.phone == '[object Object]' ? '' : ui.item.phone);
+                        $('#ddlCity').val(ui.item.cityname);
+                        $('#ddlCity').attr('cityid', ui.item.cityid);
+                        $('#txtPin').val(ui.item.pincode == '[object Object]' ? '' : ui.item.pincode);
+                        $('#txtAddress1').val(ui.item.address1);
+                        $("#txtAddress2").val(ui.item.address2);
+                        $('#txtAddress3').val(ui.item.address3);
+                        $('#txtPanNo').val(ui.item.panno);
+                        $('#txtGstNo').val(ui.item.gstno == '[object Object]' ? '' : ui.item.gstno);
+                        $("#txtAdhhar").val(ui.item.aadharno);
+                        if (ui.item.isosbillnotaccept == true && ui.item.isosbillnotaccept != undefined) {
+                            $("#ChkOSBillAccept").iCheck('check');
+                        }
+                        else {
+                            $("#ChkOSBillAccept").iCheck('uncheck');
+                        }
+                        if (ui.item.photo == undefined) {
+                            $('#imgPan').attr('src', getDomain() + '/Content/assets/PANCARD.png');
+                        }
+                        else {
+                            if (ui.item.photo != '[object Object]')
+                                $('#imgPan').attr('src', getDomain() + '/UploadFiles/CustomerMaster/' + ui.item.photo);
+                        }
+                        $('#hdnimg').val(getDomain() + '/UploadFiles/CustomerMaster/' + ui.item.photo);
+                        $('#hdnVenderStateId').val(ui.item.StateId);
+                        $("#FrmVenderDetails input.disable").prop('disabled', true);
+                        var i = 21;
+                        ($("#FrmBillInfo input")).each(function (key, obj) {
+                            $(obj).attr('tabindex', i);
+                            i++;
+                        });
+                        ($("#FrmPaymentDetails input")).each(function (key, obj) {
+                            $(obj).attr('tabindex', i);
+                            i++;
+                        });
 
+                    }, 100);
+                } else {
+                    setTimeout(function () {
+                        if (id == 'txtAccount') {
+                            $("#txtMobile").val('');
+                        }
+                        $("#VenderAccId").val('');
+                        $("#txtAccount").attr('accountid', '');
+                        $("#txtAccount").attr('CustomerAccId', '');
+                        $("#FrmVenderDetails input").prop('disabled', false);
+                        var i = 31;
+                        ($("#FrmBillInfo input")).each(function (key, obj) {
+                            $(obj).attr('tabindex', i);
+                            i++;
+                        });
+                        ($("#FrmPaymentDetails input")).each(function (key, obj) {
+                            $(obj).attr('tabindex', i);
+                            i++;
+                        });
+                    }, 1)
+                }
             },
             minLength: 3,
             autoFocus: true
@@ -1680,7 +1730,7 @@ $(window).keydown(function (event) {
 function AutosuggestItemName(id) {
     try {
 
-        if ($("#txtAccount").attr("partymasterid")) {
+        if ($("#txtAccount").attr("CustomerAccId")) {
             var id = $(id).attr('id');
             var append = id.replace('txtItemName', '');
             $("#" + id).autocomplete({
