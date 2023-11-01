@@ -328,6 +328,10 @@ var EmployeeDetailMasView = {
                 "NEWEMPID": $("#hdnEmpId").val()
             }
             EmployeeDetailMasView.savedata(data);
+            jQuery("#table_list_EmployeeDetailMas").jqGrid('resetSelection');
+            $("#panelEmployeeDetailMasList").show();
+            $("#panelEmployeeDetailMasEdit").hide();
+            $("#panelEmployeeDetailMasDelete").modal('hide');
         } catch (e) {
             ErrorDetails(e, EmployeeDetailMasView.variables.File);
         }

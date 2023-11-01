@@ -153,6 +153,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Scripts\MasterScripts\Employee\EmployeeMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\AddNewStock.js" />
+    <Content Include="Scripts\MasterScripts\Master\BalanceSheetGroupMaster.JS" />
     <Content Include="Scripts\MasterScripts\Master\BankMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\BranchMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\City_State_Country\City.js" />
@@ -203,6 +204,7 @@
     <Content Include="Views\Master\AddNewStock.cshtml" />
     <Content Include="Views\Employee\EmployeeMaster.cshtml" />
     <Content Include="Views\Master\TagMaster.cshtml" />
+    <Content Include="Views\Master\BalanceSheetGroupMaster.cshtml" />
     <None Include="Views\Master\User_Groups.cshtml" />
     <Content Include="Views\Transaction\Purchase.cshtml" />
     <Content Include="Views\Transaction\Estimate.cshtml" />
