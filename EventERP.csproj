@@ -168,6 +168,7 @@
     <Content Include="Scripts\MasterScripts\Master\HSNCodeMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\ItemGroupMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\ItemMaster.js" />
+    <Content Include="Scripts\MasterScripts\Master\OpeningBalance.js" />
     <Content Include="Scripts\MasterScripts\Master\PartyMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\TagMaster.js" />
     <Content Include="Scripts\MasterScripts\Master\TCSMaster.js" />
@@ -205,6 +206,7 @@
     <Content Include="Views\Employee\EmployeeMaster.cshtml" />
     <Content Include="Views\Master\TagMaster.cshtml" />
     <Content Include="Views\Master\BalanceSheetGroupMaster.cshtml" />
+    <Content Include="Views\Master\OpeningBalance.cshtml" />
     <None Include="Views\Master\User_Groups.cshtml" />
     <Content Include="Views\Transaction\Purchase.cshtml" />
     <Content Include="Views\Transaction\Estimate.cshtml" />

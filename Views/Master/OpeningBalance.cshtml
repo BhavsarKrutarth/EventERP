@@ -1,0 +1,255 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #OpeningBalance_tbodytbody {
+        counter-reset: rowNumber;
+    }
+
+    #OpeningBalance_tbody tr {
+        counter-increment: rowNumber;
+    }
+
+        #OpeningBalance_tbody tr td:first-child::before {
+            content: counter(rowNumber);
+            min-width: 1em;
+            margin-right: 0.5em;
+        }
+
+    #FrmItemList table tr th {
+        font-size: 12px !important;
+    }
+
+    #FrmItemList table tfoot tr th {
+        text-align: right;
+        background-color: #fcfcfc;
+    }
+
+    #FrmItemList thead th {
+        background-color: #f5f5f5;
+        text-align: center;
+    }
+
+    #FrmItemList tr {
+        border: 1px solid #ccc;
+    }
+
+        #FrmItemList tr input {
+            padding: 5px !important;
+            border: none;
+        }
+
+    #panelEdit table thead tr th, table tfoot tr th {
+        border: 1px solid #ccc;
+        padding: 5px;
+    }
+
+    #panelEdit table tbody tr td {
+        border: 1px solid #ccc;
+    }
+
+        #panelEdit table tbody tr td select {
+            border: 1px solid #fff !important;
+        }
+
+    .btnRemove {
+        text-align: center;
+    }
+
+    .icon-plus-circle2 {
+        color: #4caf50 !important;
+        font-size: 20px !important;
+    }
+
+    .icon-cancel-circle2 {
+        color: #db4437;
+        font-size: 20px !important;
+    }
+
+    .dl-horizontal dt + dd, dd + dt {
+        margin-top: 0px !important;
+    }
+
+    #NumberShow {
+        font-size: 13px !important;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #4caf50;
+    }
+
+    .btnRemove {
+        text-align: center;
+    }
+
+    .btn-lr {
+        line-height: 1;
+        padding: 7px 5px;
+        color: #617dcf;
+        border-color: #dddddd;
+    }
+</style>
+<div class="page-container">
+    <div class="panel" id="panelView">
+        <div class="row panel-heading" style="padding: 15px 14px 15px 18px;">
+            <div class="col-lg-2 pl-0" style="padding-top: 7px;">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">Opening Balance</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-10 pr-0" style="margin-top: 4px;text-align:right;">
+                <div class="col-sm-offset-5 col-sm-4">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="txtsearchbox" tabindex="3" class="form-control searchbox" placeholder="Search Here..." autofocus>
+                        <div class="form-control-feedback">
+                            <i class="icon-search4 text-size-base"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3" style="float:right;padding-right:5px">
+                    @if (Model.ISADD == 1)
+                    {
+                        <button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddOpeningBalance" style='font-weight:600!important'><i class="fa fa-plus"></i>&nbsp;&nbsp;Opening Balance</button>
+                    }
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5 pull-right" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="jqGrid_wrapper" id="jqgrid_OpeningBalance">
+                    <table id="table_list_OpeningBalance"></table>
+                    <div id="pager_list_OpeningBalance"></div>
+                </div>
+            </div>
+        </div>
+
+        @*<div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+                <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                    <div class="jqGrid_wrapper" id="jqgrid_OpeningBalanceExample">
+                        <table id="table_list_OpeningBalanceExample"></table>
+                        <div id="pager_list_OpeningBalanceExample"></div>
+                    </div>
+                </div>
+            </div>*@
+
+    </div>
+
+    <div id="panelEdit" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Opening Balance</h5>
+                </div>
+
+                <div class="modal-body">
+                    <form class="form-horizontal row" style="padding: 0px;" id="FrmItemList">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Account Name</label>
+                                <div class="col-md-8 input-group">
+                                    <input type="text" tabindex="101" class="form-control keyboard txtAutocomplete required" onkeyup="OpeningBalanceview.AccountNameAutoComplete()" name="txtAccount" id="txtAccount">
+                                    <span class="input-group-addon CommonAddEditPartyCustomer" name="CommonAddEditPartyCustomer" style="background-color: #4caf50;color: white;"><i class="fa fa-plus"></i></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Opening Balance Rs.</label>
+                                <div class="col-md-4 pl-0">
+                                    <input type="text" tabindex="102" class="form-control numbers keyboard fixed required" name="txtOpeningBal" id="txtOpeningBal">
+                                </div>
+                                <div class="col-md-4 pl-0 pr-0">
+                                    <select class="form-control ddlOpeningSign keyboard" id="ddlOpeningSign" tabindex="103" name="ddlOpeningSign">
+                                        <option value="Credit">Credit</option>
+                                        <option value="Debit">Debit</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Remark</label>
+                                    <div class="col-md-8 pl-0 pr-0">
+                                        <textarea type="text" tabindex="104" onkeypress="AutosuggestRemark(this)" class="form-control remarks keyboard" name="txtRemark" id="txtRemark"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    @*<form id="formTable">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:1%;">No.</th>
+                                    <th style="width:7%;">Item Name</th>
+                                    <th style="width:4%;">Weight</th>
+                                    <th style="width:5%;">Op Sign</th>
+                                    <th style="width:2%;">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody id="OpeningBalance_tbody"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">
+                                        <a class="pull-left" id="addnewOpeningBalance" onclick="ItemAddNewRow()">+ Add New</a>
+                                        <span class="pull-right">Total</span>
+                                    </th>
+                                    <th id="totalweight" class="text-right">0.000</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </form>*@
+                </div>
+                <div class="modal-footer">
+                    @if (Model.ISADD == 1)
+                    {
+                        <button type="button" id="btnSaveOpeningBalance" class="btn btn-success btn-lg btnSave" tabindex="10"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Save</button>
+                    }
+                    <button type="button" id="btncancelOpeningBalance" class="btn btn-warning btn-lg btnCancel"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete form modal -->
+    <div id="ModalOpeningBalanceDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Opening Balance</h5>
+                </div>
+                <form class="form-horizontal" id="frmOpeningBalanceDelete" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Account Name: </dt>
+                                <dd id="delAccountName"></dd>
+                                <dt>Opening Balance: </dt>
+                                <dd id="delOpBalance"></dd>
+                                <dt>Opening Sign: </dt>
+                                <dd id="delOpSign"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @if (Model.ISDELETE == 1)
+                        {
+                            <button type="button" id="btnDeleteOpeningBalance" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                        }
+                        <button id="btnCancelDelete" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /Delete form modal -->
+</div>
+<input type="hidden" id="hdnOpeningBalanceId" />
+
+@section scripts{
+    <script src="~/Scripts/MasterScripts/Master/OpeningBalance.js?v=@DateTime.UtcNow"></script>
+}

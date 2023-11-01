@@ -3,7 +3,7 @@ var LedgerReportView = {
     variables: {
         //BindLedgerAccList_Summary_Url: "/Common/BindMastersDetails?ServiceName=LEDGERREPORT_SUMMARY_GET",
         BindLedgerAccListUrl: "/Common/BindMastersDetails?ServiceName=LEDGER_ACCOUNT_LIST_GET",
-        BindLedgerAccList_WithoutZero_Url: "/Common/BindMastersDetails?ServiceName=LEDGER_ACCOUNT_LIST_WITHZERO_GET",
+        /*BindLedgerAccList_WithoutZero_Url: "/Common/BindMastersDetails?ServiceName=LEDGER_ACCOUNT_LIST_GET",*/
         BindDefaultListUrl: "/Common/BindMastersDetails?ServiceName=LEDGERREPORT_DEFAULT_GET",
         BindLedgerDetailsUrl: "/Common/BindMastersDetails?ServiceName=LEDGER_REPORT_GET",
         BindBSGroupUrl: "/Common/BindMastersDetails?ServiceName=BALANCESHEETGROUPMAS_GET&IsRecordAll=true&ISACTIVE=1",
@@ -465,7 +465,7 @@ var LedgerReportView = {
         try {
             var myfilter = { rules: [] };
             myfilter.rules.push({ field: "FROMDATE", op: "eq", data: $("#date_fromDate").val() }, { field: "TODATE", op: "eq", data: $("#date_toDate").val() });
-            myfilter.rules.push({ field: "ZEROFILTER", op: "eq", data: $("#ddlZeroFilter").val() });
+           /* myfilter.rules.push({ field: "ZEROFILTER", op: "eq", data: $("#ddlZeroFilter").val() });*/
 
             if ($("#ddlBalSheetGroup").val() != '') {
                 myfilter.rules.push({ field: "BALSHEET", op: "eq", data: $("#ddlBalSheetGroup").val() });
@@ -482,12 +482,12 @@ var LedgerReportView = {
             if ($("#ddlType").val() == "Summary") {
                 $("#jqgrid_LedgerAccountList").show();
                 $("#jqgrid_LedgerDetails").hide();
-                if ($("#ddlZeroFilter").val() == 'WithoutZero') {
-                    var url = LedgerReportView.variables.BindLedgerAccList_WithoutZero_Url + "&myfilters=" + JSON.stringify(myfilter);
-                }
-                else {
+                //if ($("#ddlZeroFilter").val() == 'WithoutZero') {
+                //    var url = LedgerReportView.variables.BindLedgerAccList_WithoutZero_Url + "&myfilters=" + JSON.stringify(myfilter);
+                //}
+                //else {
                     var url = LedgerReportView.variables.BindLedgerAccListUrl + "&myfilters=" + JSON.stringify(myfilter);
-                }
+                /*}*/
 
                 LedgerReportView.initializeJqgrid(url);
             }
@@ -502,29 +502,11 @@ var LedgerReportView = {
             ErrorDetails(e, LedgerReportView.variables.File);
         }
     },
-
-    Default_get: function () {
-        $.ajax({
-            url: getDomain() + LedgerReportView.variables.BindDefaultListUrl,
-            async: false,
-            cache: false,
-            type: 'POST',
-            success: function (data) {
-                var JsonObject = xml2json.parser(data);
-                if (JsonObject.serviceresponse != undefined) {
-                    if (JsonObject.serviceresponse.detailslist.details.amounttype) {
-                        $("#ddlZeroFilter").val(JsonObject.serviceresponse.detailslist.details.amounttype);
-                    }
-                }
-            },
-            error: OnError
-        });
-    },
 }
 
 $(document).ready(function () {
     try {
-        LedgerReportView.Default_get();
+        /*LedgerReportView.Default_get();*/
         $("#ddlBalSheetGroup").hide();
         var today = new Date().toISOString().split('T')[0];
         $('#date_toDate').val(today);
@@ -538,36 +520,6 @@ $(document).ready(function () {
 
         LedgerReportView.DataGetCall();
 
-        //$("#btnViewLedger").click(function () {
-        //    var myfilter = { rules: [] };
-        //    myfilter.rules.push({ field: "FROMDATE", op: "eq", data: $("#date_fromDate").val() }, { field: "TODATE", op: "eq", data: $("#date_toDate").val() });
-        //    myfilter.rules.push({ field: "ZEROFILTER", op: "eq", data: $("#ddlZeroFilter").val() });
-
-        //    if ($("#ddlBalSheetGroup").val() != '') {
-        //        myfilter.rules.push({ field: "BALSHEET", op: "eq", data: $("#ddlBalSheetGroup").val() });
-        //    }
-
-        //    if ($("#ddlBranch").val()) {
-        //        myfilter.rules.push({ field: "BRANCHID", op: "eq", data: $("#ddlBranch").val() });
-        //    }
-
-        //    if (LedgerReportView.variables.AccountId) {
-        //        myfilter.rules.push({ field: "ACCID", op: "eq", data: LedgerReportView.variables.AccountId });
-        //    }
-
-        //    if ($("#ddlType").val() == "Summary") {
-        //        $("#jqgrid_LedgerAccountList").show();
-        //        $("#jqgrid_LedgerDetails").hide();
-        //        var url = LedgerReportView.variables.BindLedgerAccListUrl + "&myfilters=" + JSON.stringify(myfilter);
-        //        LedgerReportView.initializeJqgrid(url);
-        //    }
-        //    else {
-        //        $("#jqgrid_LedgerAccountList").hide();
-        //        $("#jqgrid_LedgerDetails").show();
-        //        var url = LedgerReportView.variables.BindLedgerDetailsUrl + "&myfilters=" + JSON.stringify(myfilter);
-        //        LedgerReportView.initializeJqgridDetail(url);
-        //    }
-        //});
 
         $("#btnBack").click(function () {
             $("#txt_account").val("");

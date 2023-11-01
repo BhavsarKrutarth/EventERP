@@ -124,5 +124,11 @@ namespace EventERP.Controllers
             return View(FormPermissionHelper.GetFormPermission("BalanceSheetGroupMaster", "Master"));
         }
 
+        [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+        public ActionResult OpeningBalance()
+        {
+            return View(FormPermissionHelper.GetFormPermission("OpeningBalance", "Master"));
+        }
+
     }
 }
