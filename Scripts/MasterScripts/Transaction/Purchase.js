@@ -553,6 +553,7 @@ var PurchaseView = {
             var data = {
                 "PURCHASEID": $("#hdnQuotationId").val(),
                 "PARTYMASTERID": $("#txtAccount").attr("partymasterid"),
+                "ACCOUNTID": $("#txtAccount").attr("accid"),
                 "PURCHASEDATE": $("#txtBillDate").val(),
                 "ROF": $("#chkROF").prop("checked") ? 1: 0,
                 "TOTALNETAMT": $("#txtTotalNetAmt").val(),
@@ -790,6 +791,8 @@ var PurchaseView = {
             $("#txtMobileNo").focus();
 
             $("#txtAccount").attr("partymasterid", "");
+            $("#txtAccount").attr("accid", "");
+            
             $("#hdnVenderStateId").val("");
             $("#txtMobile").val("");
             $("#txtPhone").val("");
@@ -1219,6 +1222,7 @@ var PurchaseView = {
             select: function (event, ui) {
                 console.log(ui)
                 $("#txtAccount").attr("partymasterid", ui.item.venderid);
+                $("#txtAccount").attr("accid", ui.item.accid);
                 $("#hdnVenderStateId").val(ui.item.StateId);
                 $("#txtMobile").val(ui.item.mobile != '' ? ui.item.mobile : '');
                 $("#txtPhone").val(ui.item.phoneno != '' ? ui.item.phoneno : '');
