@@ -68,7 +68,7 @@ var CustomerMasterView = {
             async: true,
             cache: false,
             pager: "#pager_CustomerMaster",
-            multiselect: true,
+            multiselect: false,
             xmlReader: {
                 root: xmlvars.common_root,
                 row: xmlvars.common_row,

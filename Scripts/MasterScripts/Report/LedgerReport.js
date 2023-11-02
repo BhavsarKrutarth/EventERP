@@ -17,11 +17,12 @@ var LedgerReportView = {
 
     initializeJqgrid: function (url) {
         try {
-            colNames = ['ROWNUM', 'ACCOUNTID', 'Account Name', 'accounttype', 'Bal. Sheet Group', 'Mobile No', 'Opening Amt', 'Credit Amt', 'Debit Amt', 'Balance'],
+            colNames = ['ROWNUM', 'ACCOUNTID', 'Account Name','Account Type', 'accounttype', 'Bal. Sheet Group', 'Mobile No', 'Opening Amt', 'Credit Amt', 'Debit Amt', 'Balance'],
                 colModel = [
                     { name: "ROWNUM", index: "ROWNUM", xmlmap: xmlvars.common_colmap + "ROWNUM", sortable: false, search: false, hidden: true },
                     { name: "ACCOUNTID", index: "ACCOUNTID", xmlmap: xmlvars.common_colmap + "ACCOUNTID", sortable: false, search: false, hidden: true },
-                    { name: "ACCOUNTNAME", width: 20, index: "ACCOUNTNAME", xmlmap: xmlvars.common_colmap + "ACCOUNTNAME", sortable: false, search: false },   //, searchoptions: jqGridVariables.stringSearchOption
+                { name: "ACCOUNTNAME", width: 20, index: "ACCOUNTNAME", xmlmap: xmlvars.common_colmap + "ACCOUNTNAME", sortable: false, search: false },   //, searchoptions: jqGridVariables.stringSearchOption
+                { name: "ACCOUNTTYPE", width: 20, index: "ACCOUNTTYPE", xmlmap: xmlvars.common_colmap + "ACCOUNTTYPE", sortable: false, search: false },   //, searchoptions: jqGridVariables.stringSearchOption
                     { name: "ACCOUNTTYPE", index: "ACCOUNTTYPE", xmlmap: xmlvars.common_colmap + "ACCOUNTTYPE", sortable: false, hidden: true },
                     { name: "BSGROUPNAME", index: "BSGROUPNAME", xmlmap: xmlvars.common_colmap + "BSGROUPNAME", sortable: false, hidden: true },
                     { name: "MOBILE", exports: false, width: 10, index: "MOBILE", xmlmap: xmlvars.common_colmap + "MOBILE", sortable: false, search: false },  //, searchoptions: jqGridVariables.stringSearchOption
@@ -289,6 +290,7 @@ var LedgerReportView = {
                 select: function (event, ui) {
                     if (ui.item.label != 'No Results Found') {
                         LedgerReportView.variables.AccountId = ui.item.Id;
+                        LedgerReportView.DataGetCall()
                     }
                     else {
                         setTimeout(function () {
@@ -478,6 +480,7 @@ var LedgerReportView = {
             if (LedgerReportView.variables.AccountId) {
                 myfilter.rules.push({ field: "ACCID", op: "eq", data: LedgerReportView.variables.AccountId });
             }
+           
 
             if ($("#ddlType").val() == "Summary") {
                 $("#jqgrid_LedgerAccountList").show();
@@ -520,57 +523,31 @@ $(document).ready(function () {
 
         LedgerReportView.DataGetCall();
 
+        //$("#btnBack").click(function () {
+        //    $("#txt_account").val("");
+        //    LedgerReportView.variables.AccountId = "";
+        //    $("#jqgrid_LedgerAccountList").show();
+        //    $("#jqgrid_LedgerDetails").hide();
+        //    //$("#jqgrid_LedgerTDS").hide();
+        //    $("#btnBack").hide();
+        //});
 
-        $("#btnBack").click(function () {
-            $("#txt_account").val("");
-            LedgerReportView.variables.AccountId = "";
-            $("#jqgrid_LedgerAccountList").show();
-            $("#jqgrid_LedgerDetails").hide();
-            //$("#jqgrid_LedgerTDS").hide();
-            $("#btnBack").hide();
-        });
         $("#btnPrintLedger").click(function () {
-            var url;
-            if ($("#ddlType").val() == "Summary") {
-                if (LedgerReportView.variables.AccountId) {
-                    url = '/Transaction/LedgerSummaryPrint?ServiceName=LEDGER_ACCOUNT_LIST_GET&IsRecordAll=1&FROMDATE=' + $("#date_fromDate").val() + '&TODATE=' + $("#date_toDate").val() + '&TYPE=' + $("#ddlType").val() + '&ZEROFILTER=' + $("#ddlZeroFilter").val() + '&ACCID=' + LedgerReportView.variables.AccountId + '&ACCNAME=' + $("#txt_account").val();
-                } else {
-                    url = '/Transaction/LedgerSummaryPrint?ServiceName=LEDGER_ACCOUNT_LIST_GET&IsRecordAll=1&FROMDATE=' + $("#date_fromDate").val() + '&TODATE=' + $("#date_toDate").val() + '&TYPE=' + $("#ddlType").val() + '&ZEROFILTER=' + $("#ddlZeroFilter").val();
-                }
-            }
-            else if ($("#ddlType").val() == "Details") {
-                if (!LedgerReportView.variables.AccountId) {
-                    url = '/Transaction/LedgerDetailPrint?ServiceName=LEDGER_REPORT_GET&IsRecordAll=1&FROMDATE=' + $("#date_fromDate").val() + '&TODATE=' + $("#date_toDate").val();
-                } else {
-                    url = '/Transaction/LedgerDetailPrint?ServiceName=LEDGER_REPORT_GET&IsRecordAll=1&FROMDATE=' + $("#date_fromDate").val() + '&TODATE=' + $("#date_toDate").val() + '&ACCID=' + LedgerReportView.variables.AccountId + '&ACCNAME=' + $("#txt_account").val();
-                }
-            }
-            $.ajax({
-                url: getDomain() + url,
-                type: 'POST',
-                async: false,
-                cache: false,
-                beforeSend: function () {
-                    $(".cd-overlay").addClass("is-visible");
-                    $(".loding-div").show();
-                },
-                success: function (data) {
-                    if (data == "No data Found.") {
-                        notificationMessage("Warning", data, 'warning');
-                    }
-                    else {
-                        var random = Math.random();
-                        var Epath = getDomain() + data + "?" + random;
-                        window.open(Epath, '_blank');
-                    }
-                },
-                error: OnError,
-                complete: function () {
-                    $(".loding-div").hide();
-                    $(".cd-overlay").removeClass("is-visible");
-                }
-            });
+            $("#table_LedgerAccountList").jqGrid("exportToPdf", {
+                includeLabels: true,
+                includeGroupHeader: true,
+                includeFooter: true,
+                fileName: "LedgerReport.pdf"
+            })
         });
+        $("#btnExcelPrint").click(function () {
+            $("#table_LedgerAccountList").jqGrid("exportToExcel", {
+                includeLabels: true,
+                includeGroupHeader: true,
+                includeFooter: true,
+                fileName: "LedgerReport.xlsx"
+            })
+        })
         $("#refreshgrid").click(function () {
             //if ($("#table_LedgerDetails").is(":visible")) {
             //    LedgerReportView.variables.TotalAmount = 0;
@@ -583,59 +560,32 @@ $(document).ready(function () {
             location.reload();
 
         });
-        /*$("#btnViewLedger").click();*/
-        $("#btnCashEntry").click(function () {
-            $("#TransactionModal").modal('hide');
-            window.open(getDomain() + '/Transaction/CashOnHand?AccountId=' + LedgerReportView.variables.AccountId + '&AccountName=' + LedgerReportView.variables.AccountName + '&AccountType=' + LedgerReportView.variables.AccountType, "_blank");
-        });
-        $("#btnBankEntry").click(function () {
-            $("#TransactionModal").modal('hide');
-            window.open(getDomain() + '/Transaction/BankBook?AccountId=' + LedgerReportView.variables.AccountId + '&AccountName=' + LedgerReportView.variables.AccountName + '&AccountType=' + LedgerReportView.variables.AccountType, "_blank");
-        });
-        $("#btnJVEntry").click(function () {
-            $("#TransactionModal").modal('hide');
-            window.open(getDomain() + '/Transaction/JournalVoucher', "_blank");
-        });
-        var params = new window.URLSearchParams(window.location.search);
-        if (params.get('AccountId')) {
-            $("#ddlType").val('Details');
-            $("#txt_account").val(params.get('AccountName'));
-            LedgerReportView.variables.AccountId = params.get('AccountId');
-            //$("#btnViewLedger").click();
-            LedgerReportView.DataGetCall();
-        }
-        $("#btnExcelPrint").click(function () {
+        ///*$("#btnViewLedger").click();*/
+        //$("#btnCashEntry").click(function () {
+        //    $("#TransactionModal").modal('hide');
+        //    window.open(getDomain() + '/Transaction/CashOnHand?AccountId=' + LedgerReportView.variables.AccountId + '&AccountName=' + LedgerReportView.variables.AccountName + '&AccountType=' + LedgerReportView.variables.AccountType, "_blank");
+        //});
+        //$("#btnBankEntry").click(function () {
+        //    $("#TransactionModal").modal('hide');
+        //    window.open(getDomain() + '/Transaction/BankBook?AccountId=' + LedgerReportView.variables.AccountId + '&AccountName=' + LedgerReportView.variables.AccountName + '&AccountType=' + LedgerReportView.variables.AccountType, "_blank");
+        //});
+        //$("#btnJVEntry").click(function () {
+        //    $("#TransactionModal").modal('hide');
+        //    window.open(getDomain() + '/Transaction/JournalVoucher', "_blank");
+        //});
+        //var params = new window.URLSearchParams(window.location.search);
+        //if (params.get('AccountId')) {
+        //    $("#ddlType").val('Details');
+        //    $("#txt_account").val(params.get('AccountName'));
+        //    LedgerReportView.variables.AccountId = params.get('AccountId');
+        //    //$("#btnViewLedger").click();
+        //    LedgerReportView.DataGetCall();
+        //}
+        
 
-            if ($("#table_LedgerAccountList").is(':visible')) {
-                $("#table_LedgerAccountList").jqGrid("exportToExcel", {
-                    includeLabels: true,
-                    includeGroupHeader: true,
-                    includeFooter: true,
-                    fileName: "LedgerAccountReport.xlsx",
-                    //columns: [
-                    //    //{ id: "text", header: "Title", width: 150 },
-                    //    { id: "BALANCE_AMT", header: "Balance", width: 250, type: "General" }
-                    //],
-                    //colModel: [
-                    //    {
-                    //        formatter: 'number'
-                    //    }
-                    //],
-                })
-            }
-            if ($("#table_LedgerDetails").is(':visible')) {
-                $("#table_LedgerDetails").jqGrid("exportToExcel", {
-                    includeLabels: true,
-                    includeGroupHeader: true,
-                    includeFooter: true,
-                    fileName: "LedgerVoucherReport.xlsx"
-                })
-            }
-        });
-
-        $("#ddlType, #ddlBalSheetGroup, #ddlZeroFilter, #ddlBranch, #date_fromDate ,#date_toDate, #txt_account").change(function () {
-            LedgerReportView.DataGetCall();
-        });
+        //$("#ddlType, #ddlBalSheetGroup, #ddlZeroFilter, #ddlBranch, #date_fromDate ,#date_toDate, #txt_account").change(function () {
+        //    LedgerReportView.DataGetCall();
+        //});
     }
     catch (e) {
         ErrorDetails(e, LedgerReportView.variables.File);

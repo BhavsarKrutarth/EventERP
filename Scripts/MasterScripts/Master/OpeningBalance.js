@@ -429,6 +429,7 @@ var OpeningBalanceview = {
                 var myfilter;
                 myfilter = { rules: [] };
                 myfilter.rules.push({ field: "SEARCH", op: "eq", data: $('#txtAccount').val() });
+                myfilter.rules.push({ field: "TYPE", op: "eq", data: 'BUYER_SELLER' });
                 var url = getDomain() + "/Common/BindMastersDetails?ServiceName=ACCOUNTMASTER_GET&myfilters=" + JSON.stringify(myfilter);   //CUSTOMERPARTY_GET
                 $.ajax({
                     url: url,
