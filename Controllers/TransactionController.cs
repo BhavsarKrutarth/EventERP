@@ -13,8 +13,9 @@ namespace EventERP.Controllers
     [AuthorizeUserAttribute]
     public class TransactionController : Controller
     {
-        public ActionResult Purchase()
+        public ActionResult Purchase(string VoucherId)
         {
+            ViewBag.VoucherId = VoucherId;
             return View(FormPermissionHelper.GetFormPermission("Purchase", "Transaction"));
         }
         public ActionResult Estimate()
@@ -22,8 +23,9 @@ namespace EventERP.Controllers
             return View(FormPermissionHelper.GetFormPermission("Estimate", "Transaction"));
         }
         
-        public ActionResult Sales()
+        public ActionResult Sales(string VoucherId)
         {
+            ViewBag.VoucherId = VoucherId;
             return View(FormPermissionHelper.GetFormPermission("Sales", "Transaction"));
         }
 

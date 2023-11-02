@@ -737,6 +737,7 @@ var CustomerMasterView = {
     },
     CityAutoComplete: function () {
         try {
+            debugger
             $("#ddlCity").autocomplete({
                 source: function (request, response) {
                     var url = getDomain() + "/Common/BindMastersDetails?ServiceName=COMMON_CITYMASTER_GET&_search=true&ISRECORDALL=1&ISACTIVE=1&searchField=CITYNAME&searchOper=cn&searchString=" + $("#ddlCity").val();
@@ -747,6 +748,7 @@ var CustomerMasterView = {
                         cache: false,
                         success: function (data) {
                             if ($(data).find('RESPONSECODE').text() == "0") {
+                                debugger
                                 var JsonObject = xml2json.parser(data);
 
                                 if (JsonObject.serviceresponse.detailslist != undefined) {
@@ -755,6 +757,7 @@ var CustomerMasterView = {
                                         List = JsonObject.serviceresponse.detailslist.details;
                                     else
                                         List = JsonObject.serviceresponse.detailslist;
+                                    debugger
                                     response(
                                         $.map(List, function (item) {
                                             if (jQuery.type(item) == "object") {

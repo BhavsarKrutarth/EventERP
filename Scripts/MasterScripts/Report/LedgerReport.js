@@ -583,9 +583,9 @@ $(document).ready(function () {
         //}
         
 
-        //$("#ddlType, #ddlBalSheetGroup, #ddlZeroFilter, #ddlBranch, #date_fromDate ,#date_toDate, #txt_account").change(function () {
-        //    LedgerReportView.DataGetCall();
-        //});
+        $("#ddlType, #ddlBalSheetGroup, #ddlZeroFilter, #ddlBranch, #date_fromDate ,#date_toDate, #txt_account").change(function () {
+            LedgerReportView.DataGetCall();
+        });
     }
     catch (e) {
         ErrorDetails(e, LedgerReportView.variables.File);
