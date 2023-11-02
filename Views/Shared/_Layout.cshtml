@@ -98,11 +98,11 @@
 </head>
 
 <body class="navbar-top pace-done">
-    
+
     <div id="div_loading" style="background-color: #cccccc85; position: fixed; z-index: 999; height: 100%; width: 100%; top: 0;display:none ">
         <div class="loader" style=" position: fixed; z-index: 1; top: 50%; left: 50%">Loading...</div>
     </div>
-    
+
 
     <input type="hidden" id="MenuName" value="@Model.ACTION" />
 
@@ -1210,6 +1210,7 @@
     <input type="hidden" id="hdnCommonPreviousActiveId" />   <!--  Previous tab id    -->
     <!-- Add Edit form modal -->
     <input type="hidden" id="hdnHsnCodeId" />
+    <input type="hidden" id="hdnHeaderStateid" value="@EventERP.CommonClasses.SessionFacade.UserSession.STATEID" />
 </body>
 </html>
 
