@@ -432,7 +432,7 @@ var SalesView = {
 
             $("#txtTotalNetAmt").val(totalamt.toFixed(2));
 
-            if ($("#hdnVenderStateId").val() == $("#ddlPartyBranch").val()) {
+            if ($("#hdnVenderStateId").val() == $("#hdnHeaderStateid").val()) {
                 /*$("#txtSGSTTaxAmt").val(((+taxamount) / 2).toFixed(2))*/
 
                 $("#txtSGSTTaxAmt").val((totaltaxamt / 2).toFixed(2));

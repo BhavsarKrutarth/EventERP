@@ -176,6 +176,7 @@
     <Content Include="Scripts\MasterScripts\Master\UserAccount.js" />
     <Content Include="Scripts\MasterScripts\Report\ItemWiseStockReport.js" />
     <Content Include="Scripts\MasterScripts\Report\LedgerReport.js" />
+    <Content Include="Scripts\MasterScripts\Transaction\BankBook.js" />
     <Content Include="Scripts\MasterScripts\Transaction\Estimate.js" />
     <Content Include="Scripts\MasterScripts\Transaction\Purchase.js" />
     <Content Include="Scripts\MasterScripts\Transaction\Sales.js" />
@@ -215,6 +216,7 @@
     <Content Include="Views\Transaction\SalesEstimate.cshtml" />
     <Content Include="Views\Report\LedgerReport.cshtml" />
     <Content Include="Views\Report\ItemWiseStockReport.cshtml" />
+    <Content Include="Views\Transaction\BankBook.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\EventERPReference\Event_Service.disco" />
