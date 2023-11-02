@@ -1,0 +1,110 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .btn-group {
+        width: 100%;
+    }
+
+    li.multiselect-filter i {
+        font-size: 13px;
+        position: relative !important;
+        left: unset !important;
+        top: unset !important;
+        margin-top: unset !important;
+        opacity: .5;
+        filter: alpha(opacity=50);
+    }
+</style>
+<div class="page-container">
+  
+    <!-- Delete form modal -->
+    <div id="panelItemMasterDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Item Master</h5>
+                </div>
+                <form class="form-horizontal" id="frmCommon_CountryMaster" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <dl class="dl-horizontal">
+                                <dt>Item Name: </dt>
+                                <dd id="delblItemName"></dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @if (Model.ISDELETE == 1)
+                        {
+                            <button type="button" id="btnDeleteItemMaster" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                        }
+                        <button name="CancelItemMaster" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /Delete form modal -->
+    <div class="panel" id="panelItemMasterList" style="display: block; margin-bottom: 0px;">
+        <div class="row panel-heading">
+            <div class="col-lg-7 pt-5 pl-0">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">Item Master</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 pr-0">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        @*<label class="control-label col-md-3">Item Group</label>*@
+                        <div class="col-md-12">
+                            <select tabindex="1" name="ddlItemGroup" id="ddlItemGroup" class="form-control required"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-7 txtR">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="txtsearchbox" class="form-control searchbox" placeholder="Search Here..." autofocus>
+                        <div class="form-control-feedback">
+                            <i class="icon-search4 text-size-base"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-1 pr-0 txtR">
+                    @if (Model.ISADD == 1)
+                    {
+                        @*<button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddItemMaster" style="font-weight:600!important"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>*@
+                    }
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="jqGrid_wrapper" id="jqGrid_ItemMaster">
+                    <table id="table_ItemMaster"></table>
+                    <div id="pager_ItemMaster"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="hdnItemId" value="" />
+</div>
+
+@section scripts{
+    <script src="~/Scripts/MasterScripts/Report/ItemWiseStockReport.js?v=@DateTime.UtcNow"></script>
+    <script type="text/x-jsrender" id="GroupDropdownList">
+        <option value="{{>itemgroupmasterid}}">{{>itemgroupname}}</option>
+    </script>
+    <script type="text/x-jsrender" id="HSNDropdownList">
+        <option value="{{>hsnid}}">{{>hsncode}} - GST({{>gst}} %)</option>
+    </script>
+    <script type="text/x-jsrender" id="SubItemTyperopdownList">
+        <option value="{{>itemid}}">{{>itemname}}</option>
+    </script>
+
+}
