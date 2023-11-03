@@ -763,6 +763,14 @@ var PurchaseView = {
 
     ClearData: function () {
         try {
+            $("#hdnChequebookid").val();
+            $("#hdnRPTFileName").val();
+            $("#hdnQuotationId").val();
+            $("#hdnChequeId").val();
+            $("#hdnVenderStateId").val();
+            $("#hdnVoucherId").val();
+
+            $("#BankDetailDiv").html('')
             $("#hdnVoucherId").val("");
             $("#totalpcs").html("0.00")
             $("#totalamt").html("0.00")
@@ -824,6 +832,8 @@ var PurchaseView = {
             $("#txtChequeNo").val("");
             $("#hdnChequebookid").val("");
             $("#txtOsPayment").val(0.00)
+
+         
 
             //------ New Code Add ------//
             //$('.as_add_data_wrap').hide();
@@ -2375,7 +2385,7 @@ function BankDetail(id) {
                         cache: false,
                         success: function (data) {
                             if ($(data).find('RESPONSECODE').text() == "0") {
-                                
+                                debugger
                                 var JsonObject = xml2json.parser(data);
                                 if (JsonObject.serviceresponse.detailslist != undefined) {
                                    
