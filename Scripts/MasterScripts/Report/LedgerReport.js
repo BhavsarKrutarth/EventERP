@@ -573,14 +573,14 @@ $(document).ready(function () {
         //    $("#TransactionModal").modal('hide');
         //    window.open(getDomain() + '/Transaction/JournalVoucher', "_blank");
         //});
-        //var params = new window.URLSearchParams(window.location.search);
-        //if (params.get('AccountId')) {
-        //    $("#ddlType").val('Details');
-        //    $("#txt_account").val(params.get('AccountName'));
-        //    LedgerReportView.variables.AccountId = params.get('AccountId');
-        //    //$("#btnViewLedger").click();
-        //    LedgerReportView.DataGetCall();
-        //}
+        var params = new window.URLSearchParams(window.location.search);
+        if (params.get('AccountId')) {
+            $("#ddlType").val('Details');
+            $("#txt_account").val(params.get('AccountName'));
+            LedgerReportView.variables.AccountId = params.get('AccountId');
+            //$("#btnViewLedger").click();
+            LedgerReportView.DataGetCall();
+        }
         
 
         $("#ddlType, #ddlBalSheetGroup, #ddlZeroFilter, #ddlBranch, #date_fromDate ,#date_toDate, #txt_account").change(function () {

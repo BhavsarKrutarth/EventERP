@@ -1,5 +1,379 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .btnRemove {
+        text-align: center;
+    }
 
+    .icon-plus-circle2 {
+        color: #4caf50 !important;
+        font-size: 20px !important;
+    }
 
+    .icon-cancel-circle2 {
+        color: #db4437;
+        font-size: 20px !important;
+    }
+
+    .dl-horizontal dt + dd, dd + dt {
+        margin-top: 0px !important;
+    }
+
+    #NumberShow {
+        font-size: 13px !important;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #4caf50;
+    }
+
+    .btn-lr {
+        line-height: 1;
+        padding: 7px 5px;
+        color: #617dcf;
+        border-color: #dddddd;
+    }
+
+    .balance {
+        color: #000 !important;
+        font-weight: 800 !important;
+        font-size: 15px;
+        text-align: left !important;
+    }
+
+    #ddlBillType {
+        min-height: 45px;
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<div class="page-container">
+    <div class="panel" id="panelView">
+        <div class="row panel-heading" style="padding: 15px 10px 15px 18px;">
+            <div class="col-lg-1 pl-0" style="padding-top: 7px;">
+                <div class="clearfix">
+                    <div class="caption">
+                        <i class="fa fa-th-list"></i>
+                        <span class="caption-subject font-common-sharp bold">Bank Book List</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-11 pr-0" style="text-align: right;">
+                <div class="col-lg-5" style="text-align: right;">
+                    <form class="form-inline">
+                        <div class="btn btn-sm btn-default btn-lr" onclick="DateLess('txtFromDate')"><span class="fa fa-chevron-left"></span></div>
+                        <div class="form-group">
+                            <input type="date" onchange="VoucehrDateValidation(this)" onfocusout="AllData()" tabindex="1" name="txtFromDate" id="txtFromDate" class="form-control FromToDate col-lg-6">
+                        </div>
+                        <div class="btn btn-sm btn-default btn-lr" onclick="DateAdd('txtFromDate')" style="margin-right: 10px;"><span class="fa fa-chevron-right"></span></div>
+                        To
+                        <div class="btn btn-sm btn-default btn-lr" onclick="DateLess('txtToDate')" style="margin-left: 10px;"><span class="fa fa-chevron-left"></span></div>
+                        <div class="form-group">
+                            <input type="date" onchange="VoucehrDateValidation(this)" onfocusout="AllData()" tabindex="2" name="txtToDate" id="txtToDate" class="form-control FromToDate col-lg-6">
+                        </div>
+                        <div class="btn btn-sm btn-default btn-lr" onclick="DateAdd('txtToDate')"><span class="fa fa-chevron-right"></span></div>
+                    </form>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group has-feedback">
+                        <input type="text" id="txtsearchbox" class="form-control searchbox" tabindex="3" placeholder="Search Here..." autofocus>
+                        <div class="form-control-feedback">
+                            <i class="icon-search4 text-size-base"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="form-group has-feedback">
+                        <select type="text" class="form-control" id="ddlPaymentType">
+                            <option value="All">All</option>
+                            <option value="BANK">CHEQUE</option>
+                            <option value="CARD">CARD</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3" style="text-align: right;">
+                    <div class="btn btn-sm btn-default" id="refreshgrid"><span class="fa fa-refresh" style="color: #617dcf;"></span></div>
+                    @if (Model.ISADD == 1)
+                    {
+                        <button class="formstylebutton  btn btn-success waves-effect waves-light m-t-10 btnAddNew" type="button" id="btnAddnewCashOnHand" style='font-weight:600!important'><i class="fa fa-plus"></i>&nbsp;&nbsp;Add New</button>
+                    }
+                    <button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600 ml-5 pull-right" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                    <button class="formstylebutton divflotR btn alpha-green text-green-800 border-green-800" type="button" id="btnExcelPrint"><i class="fa fa-table"></i></button>
+                    <button class="formstylebutton divflotR btn alpha-danger text-danger-800 border-danger-800" type="button" id="btnPdfPrint"><i class="fa fa-file-pdf-o"></i></button>
+                </div>
+
+            </div>
+        </div>
+        <div class="panel-body" style="padding: 0px 10px 18px 7px !important">
+            <div class="col-sm-12" style="overflow-x:auto; overflow-y:hidden; ">
+                <div class="jqGrid_wrapper" id="jqgrid_CashOnHand">
+                    <table id="table_CashOnHand"></table>
+                    <div id="pager_CashOnHand"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel_container">
+        <div class="panel panel-white" id="panelEdit" style="display:none;">
+            <div class="row panel-heading" style="padding:0;">
+                <form class="form-horizontal col-md-12 panel-title pt-5" style="background-color:#ebebeb" action="#" id="formCash">
+                    <div class="col-md-2" style="margin-top:4px;">
+                        <select type="text" class="form-control required" tabindex="1" name="BillType" id="ddlBillType">
+                            <option value="Payment">Receipt</option>
+                            <option value="Receipt">Payment</option>
+                        </select>
+                    </div>
+                    <div class="col-md-10" style="margin-top:8px;">
+                        <div class="form-group">
+                            <lable class="control-label col-md-2" style="padding-left: 0;">Voucher Date<span style="color:red"> *</span></lable>
+                            <div class="col-md-2">
+                                <input type="date" tabindex="2" class="form-control datemask required" onchange="VoucehrDateValidation(this)" name="txtVoucherDate" id="txtVoucherDate" />
+                            </div>
+                            <lable class="control-label col-md-2 voucherno"> Voucher No. </lable>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control voucherno" id="txtvoucherno" disabled />
+                            </div>
+                            @*<div class="col-md-2">
+                                    <select class="form-control required" id="ddlCounter" tabindex="3" name="Counter"></select>
+                                </div>*@
+                            @*<label class="col-md-2 control-label">Cash Counter :50000</label>*@
+                            <div class="col-sm-3" style="float:right;">
+                                @*<button class="formstylebutton ExitWindow divflotR btn alpha-orange text-orange-800 border-orange-600" type="button"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>*@
+                                <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnNext"><i class="fa fa-angle-double-right"></i></button>
+                                <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnViewList"><i class="fa fa-th-list"></i>&nbsp;&nbsp;View List</button>
+                                <button class="formstylebutton divflotR btn alpha-blue text-blue-800 border-blue-600" type="button" id="btnPrevious"><i class="fa fa-angle-double-left"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal row" style="padding: 0px;" id="FrmPaymentList">
+                    <div class="form-group">
+                        <label class="control-label col-md-1">Bank Name<span style="color:red;"> *</span></label>
+                        <div class="col-md-3">
+                            <select class="form-control required" tabindex="4" id="ddlBank" name="ddlBank" required></select>
+                            @*<input type="text" class="form-control required txtAutocomplete" name="txtBank" id="txtBank" onkeyup="BankBookview.AutosuggestBank()" />
+                                <input type="hidden" id="hdnBankId" />*@
+                        </div>
+                        @*<label class="col-md-2 control-label balance">Balance : <span id="balance">50000</span></label>*@
+
+                        @*<label class="control-label col-md-2">Bank Account Name<span style="color:red;"> *</span></label>
+                            <div class="col-md-3">
+                                <select class="form-control" tabindex="5" id="BankAccountName" name="BankAccountName" required></select>
+                            </div>*@
+                    </div>
+                </form>
+                <form class="form-horizontal row acto_frmItemlist">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:1%;">No.</th>
+                                <th style="width:13%;">Account Name</th>
+                                @*<th style="width:7%;">Other Account </th>*@
+                                <th style="width:4%;">Type</th>
+                                <th class="txtOrder" style="width:6%;">Order</th>
+                                <th style="width:3%;">Amount</th>
+                                @*<th style="width:3%;">Other Amt </th>*@
+                                <th style="width:3%;">Payment From</th>
+                                <th style="width:6%;" class="PartyBank bankpayment">Party Bank</th>
+                                <th style="width:4%;" class="bankpayment">Cheque No.</th>
+                                <th style="width:2%;">TDS Applicable</th>
+                                <th style="width:4%;">TDS </th>
+                                <th style="width:2%;">TDS Amt</th>
+                                <th style="width:2%">Discount</th>
+                                <th style="width:4%;">Total Amt</th>
+                                <th style="width:8%;">Remark</th>
+                                <th style="width:1%;">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="PaymentList_tbody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2" class="txtR">
+                                    <a class="pull-left" id="addPaymentList" onclick="ItemAddNewRow()">+ Add New</a>
+                                    Total
+                                </th>
+                                <th colspan="1"></th>
+                                <th class="txtOrder"></th>
+                                <th id="TotalAmt">0.00</th>
+                                @*<th id="TotalOtherAmt">0.00</th>*@
+                                <th></th>
+                                <th class="PartyBank bankpayment"></th>
+                                <th class="bankpayment"></th>
+                                <th colspan="1" id="TDSdeductonamt"></th>
+                                <th colspan="2" id="TDSamt">0</th>
+                                <th id="Discount">0.00</th>
+                                <th id="Totalamt">0.00</th>
+                                <th colspan="2"></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </form>
+                <div class="row mt-15">
+                    <form class="form-horizontal row" style="margin-top: 10px !important;" id="FrmAccBal">
+                        <div class="form-group">
+                            <lable class="control-label col-md-1" style="padding-left: 0;font-size:15px"><b>Account Bal</b></lable>
+                            <div class="col-md-2">
+                                <b><input type="text" class="form-control txtAccBal" style="font-size:15px" name="txtAccBal" id="txtAccBal" disabled /></b>
+                            </div>
+                            <div class="col-md-2" style="padding-left: 0;">
+                                <button type="button" id="btnViewLedger" class="btn bg-slate-400">View Ledger</button>
+                            </div>
+                            <span id="NumberShow"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1" id="lblBank">Party Bank</label>
+                            <div class="col-md-3">
+                                @*<textarea class="form-control required" rows="3" onblur="BankBookview.validation(this)" name="txtBankVal" id="txtBankVal"></textarea>*@
+                                <input name="txtBankVal" id="txtBankVal" class="form-control" rows="3" onblur="BankBookview.validation(this)">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="panel-footer p-10 txtC mulPanel">
+                    <button type="button" class="btn btn-primary btn-lg" id="btnPrint" style="display:none;"><i class="fa fa-print"></i>&nbsp;&nbsp;Print</button>
+
+                    @if (Model.ISADD == 1)
+                    {
+                        @*<button type="button" class="btn btn-primary btn-lg" id="btnSavePrint"><i class="fa fa-print"></i>&nbsp;&nbsp;Save & Print</button>*@
+                        <button type="button" id="btnSaveCashOnHand" class="btn btn-success btn-lg btnSave" tabindex="6"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Save</button>
+                    }
+                    <button type="button" id="btncancelCashOnHand" class="btn btn-warning btn-lg btnCancel"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancel</button>
+                    <button type="button" class="formstylebutton ExitWindow btn btn-lg btn-danger"><i class="fa fa-close"></i>&nbsp;&nbsp;Exit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete form modal -->
+<div id="CashOnHandDelete" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Bank Book</h5>
+            </div>
+            <form class="form-horizontal" id="frmCashOnHandDelete" method="get">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <dl class="dl-horizontal">
+                            <dt>Type: </dt>
+                            <dd id="delType"></dd>
+                            @*<dt>Account Name: </dt>
+                                <dd id="delAccname"></dd>*@
+
+                            <dt>Voucher No: </dt>
+                            <dd id="delVoucherNo"></dd>
+                            <dt>Voucher Date: </dt>
+                            <dd id="delVoucherDate"></dd>
+                            <dt>Amount: </dt>
+                            <dd id="delAmt"></dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @if (Model.ISDELETE == 1)
+                    {
+                        <button type="button" id="btnDeleteCashOnHand" class="btn btn-danger btnDelete"><span class="fa fa-trash-o"></span> Delete</button>
+                    }
+                    <button id="btnCancelDelete" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Delete form modal -->
+<div id="ModalOrder" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8 p-0">
+                        <h5 class="modal-title">Order Selection :<span id="lblAccName"></span></h5>
+                    </div>
+                    <div class="col-md-2 txtR p-0">
+                        <button type="button" id="btnImport" class="btn btn-success btnSave"><span class="fa fa-floppy-o"></span>&nbsp;&nbsp; Import</button>
+                    </div>
+                    <div class="col-md-2 txtR p-0">
+                        <button type="button" id="btnBackModal" data-dismiss="modal" class="btn bg-slate-400 btn-md btnCancel"><span class="fa fa-long-arrow-left"></span>&nbsp;&nbsp; Back</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <form class="form-horizontal acto_frmItemlist" method="get">
+                        <input type="hidden" id="hdntdOrder" />
+                        <table class="mt-10">
+                            <thead>
+                                <tr>
+                                    <th style="width:2%;">Sr No.</th>
+                                    <th style="width:1%;"><input type="checkbox" name="chk_SelectAllOrder" id="chk_SelectAllOrder" checked></th>
+                                    <th style="width:10%;">Account Name</th>
+                                    <th style="width:5%;">Bill Amount</th>
+                                    <th style="width:2%;">Voucher No</th>
+                                    <th style="width:2%;">Voucher Date</th>
+                                    @*<th style="width:2%;">Amount</th>*@
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_OrderList"></tbody>
+                        </table>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Cheque form modal -->
+<div id="ModalChequePrint" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left">Cheque Print</h5>
+                <div class="pull-right">
+                    <input type="checkbox" tabindex="1" class="icheckminimal" name="chkDatetime" id="chkDatetime">
+                    <label class="control-label">Print Date/Time</label>
+                </div>
+            </div>
+            <div class="modal-body">
+                <embed src="" id="chequepdf" width="800" height="350" style="overflow-y:hidden!important" />
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancelPrintModal" class="btn bg-slate-400 btnCancel" data-dismiss="modal" type="button"><i class="fa fa-times"></i> Cancel</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="col-md-10 hidden">
+    <div class="input-group">
+        <input type="text" style="text-transform: uppercase;" class="form-control required txtAutocomplete" id="txtAccount" />
+        <span class="input-group-addon CommonAddEditPartyCustomer" name="CommonAddEditPartyCustomer" style="background-color: #4caf50;color: white;"><i class="fa fa-plus"></i></span>
+    </div>
+</div>
+<!-- /Cheque form modal -->
+<input type="hidden" id="hdnBankBookId" />
+<input type="hidden" value="@EventERP.CommonClasses.SessionFacade.UserSession.EMPDEFAULTBANKACCID" id="empdefaultbankid" />
+
+@section scripts{
+    <script src="~/Scripts/MasterScripts/Transaction/BankBook.js?v=@DateTime.UtcNow"></script>
+    <script type="text/x-jsrender" id="TDSDropdownList">
+        <option value="{{>tdsid}}" Percentage="{{:percentage}}">{{>code}}</option>
+    </script>
+    <script type="text/x-jsrender" id="BankDropdownList">
+        <option value="{{:bankmasterid}}" banklink="{{:banklink}}" rptfile="{{:rptfilename}}" default="{{:bydefault}}">{{:bankname}}</option>
+    </script>
+    <script type="text/x-jsrender" id="OrderRender">
+        <tr orderid="{{:orderid}}">
+            <td class="txtC"></td>
+            <td class="txtC"><input type="checkbox" name="chk_AP_{{:rownum}}" id="chk_AP_{{:rownum}}" checked class="chkAPItem"></td>
+            <td class="txtC">{{:accname}}</td>
+            <td class="txtC">{{:~format(billamt,2)}}</td>
+            <td class="txtC voucherno">{{:voucherno}}</td>
+            <td class="txtC">{{:voucherdate}}</td>
+        </tr>
+    </script>
+    <script type="text/x-jsrender" id="BankAccountDropdownList">
+        <option value="{{>partymasterid}}" accountid="{{>accountid}}">{{>partyname}}</option>
+    </script>
+
+}

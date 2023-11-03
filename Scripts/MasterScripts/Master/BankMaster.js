@@ -250,6 +250,7 @@ var BankMasterView = {
     },
 
     toggleSwitch: function (id) {
+        debugger
         var data = {
             "BYDEFAULT": $("#toggleSwitch" + id).prop("checked") ? "1" : "0",
             "BANKMASTERID": id,
@@ -505,6 +506,7 @@ var BankMasterView = {
     },
 
     ViewCHequeList: function (id) {
+        debugger
         $("#panelBankMasterList").hide();
         $("#panelChequeBookIssueList").show();
         BankMasterView.variables.ChequeMasterID = id;
