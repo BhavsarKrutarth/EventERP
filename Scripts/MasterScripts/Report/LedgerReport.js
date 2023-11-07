@@ -541,20 +541,41 @@ $(document).ready(function () {
         //});
 
         $("#btnPrintLedger").click(function () {
-            $("#table_LedgerAccountList").jqGrid("exportToPdf", {
-                includeLabels: true,
-                includeGroupHeader: true,
-                includeFooter: true,
-                fileName: "LedgerReport.pdf"
-            })
+            if ($("#ddlType").val() == 'Summary') {
+                $("#table_LedgerAccountList").jqGrid("exportToPdf", {
+                    includeLabels: true,
+                    includeGroupHeader: true,
+                    includeFooter: true,
+                    fileName: "LedgerReport.pdf"
+                })
+            }
+            else if ($("#ddlType").val() == 'Details') { 
+                $("#table_LedgerDetails").jqGrid("exportToPdf", {
+                    includeLabels: true,
+                    includeGroupHeader: true,
+                    includeFooter: true,
+                    fileName: "LedgerReport.pdf"
+                })
+            }
+           
         });
         $("#btnExcelPrint").click(function () {
-            $("#table_LedgerAccountList").jqGrid("exportToExcel", {
-                includeLabels: true,
-                includeGroupHeader: true,
-                includeFooter: true,
-                fileName: "LedgerReport.xlsx"
-            })
+            if ($("#ddlType").val() == 'Summary') {
+                $("#table_LedgerAccountList").jqGrid("exportToExcel", {
+                    includeLabels: true,
+                    includeGroupHeader: true,
+                    includeFooter: true,
+                    fileName: "LedgerReport.xlsx"
+                })
+            }
+            else if ($("#ddlType").val() == 'Details') {
+                $("#table_LedgerDetails").jqGrid("exportToExcel", {
+                    includeLabels: true,
+                    includeGroupHeader: true,
+                    includeFooter: true,
+                    fileName: "LedgerReport.xlsx"
+                })
+            }
         })
         $("#refreshgrid").click(function () {
             //if ($("#table_LedgerDetails").is(":visible")) {
