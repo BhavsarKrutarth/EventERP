@@ -509,6 +509,14 @@ var LedgerReportView = {
 
 $(document).ready(function () {
     try {
+        $("#btnBack").click(function () {
+            $("#txt_account").val("");
+            LedgerReportView.variables.AccountId = "";
+            $("#jqgrid_LedgerAccountList").show();
+            $("#jqgrid_LedgerDetails").hide();
+            //$("#jqgrid_LedgerTDS").hide();
+            $("#btnBack").hide();
+        });
         /*LedgerReportView.Default_get();*/
         $("#ddlBalSheetGroup").hide();
         var today = new Date().toISOString().split('T')[0];

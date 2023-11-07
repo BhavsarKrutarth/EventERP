@@ -1,4 +1,5 @@
 ﻿var View = "SalesView", afterTableId = "txtTotalAmt", searchtxt = ''; // -------- variables for keyboard use in tables
+var ChequeDetail = '';
 var SalesView = {
     variables: {
         oper: 'Add',
@@ -11,7 +12,8 @@ var SalesView = {
         QuotationEstimateDetailUrl: "/Common/BindMastersDetails?ServiceName=ESTIMATESALES_DETAILS_GET",
         //table: "",
         HSNCodeList: [],
-        ItemId:""
+        ItemId: "",
+        ChequeRowCount: 1,
     },
 
     initializeJqgrid: function (url) {
@@ -459,7 +461,7 @@ var SalesView = {
                 $("#txtTotalAmt").val(totalamtteax.toFixed(2))
             }
             var txtCashPayment = +$("#txtCashPayment").val() || 0
-            var txtChequePayment = +$("#txtChequePayment").val() || 0
+            var txtChequePayment = +$("#txtChequeRec").val() || 0
             //if ($("#toggleSwitch").bootstrapSwitch('state') == true) {
 
             //    if ($("#ddlTDS").val()) {
@@ -579,6 +581,9 @@ var SalesView = {
 
             xmlsaveFiles += resultXml.xmlsaveFiles;
             xmlsaveFiles += "</SALES_DETAILS>";
+            if (ChequeDetail != "")
+                xmlsaveFiles += ChequeDetail;
+
             var data = {
                 "SALESID": $("#hdnQuotationId").val(),
                 "CUSTOMERACCID": $("#txtAccount").attr("CustomerAccId"),
@@ -605,7 +610,7 @@ var SalesView = {
                 "TDSONAMT": $("#txtTDSOnAmt").val() ? $("#txtTDSOnAmt").val() : 0,
                 "TDSAMT": $("#txtTDSAmt").val() ? $("#txtTDSAmt").val() : 0,
                 "CASHPAYMENT": $("#txtCashPayment").val() || 0,
-                "CHEQUEPAYMENT": $("#txtChequePayment").val() || 0,
+                "CHEQUEPAYMENT": $("#txtChequeRec").val() || 0,
                 /*"EVENTMASTERID": $("#ddlevent").val(),*/
                 "ACCYEARID": $("#CurrentAccountYear").attr("accyearid"),
                 "ESTIMATESALESID": $("#txtEstimate").attr("estimatesalesid")
@@ -619,12 +624,12 @@ var SalesView = {
             data.TDSROF = (($('#chkROFTDS').prop("checked") == true) ? 1 : 0);
             /*data.GSTCHK = (($('#chkROF').prop("checked") == true) ? 1 : 0);*/
 
-            if ($("#txtChequePayment").val() > 0) {
-                data.BANKID = $("#hdnbankId").val();
-                data.CHEQUENO = $("#txtChequeNo").val();
-                data.CHEQUEBOOKDETAILID = $("#hdnChequebookid").val();
-                /*data.CHEQUENAME = $("#txtAccount").val();*/
-            }
+            //if ($("#txtChequePayment").val() > 0) {
+            //    data.BANKID = $("#hdnbankId").val();
+            //    data.CHEQUENO = $("#txtChequeNo").val();
+            //    data.CHEQUEBOOKDETAILID = $("#hdnChequebookid").val();
+            //    /*data.CHEQUENAME = $("#txtAccount").val();*/
+            //}
 
             $.ajax({
                 url: getDomain() + SalesView.variables.PerformMasterOperationUrl,
@@ -792,6 +797,8 @@ var SalesView = {
 
     ClearData: function () {
         try {
+            ChequeDetail= ""
+            SalesView.variables.ChequeRowCount = 1
             $("#txtBankAC").val("");
             $("#txtEstimate").removeAttr("disabled");
             $("#txtEstimate").val("");
@@ -842,7 +849,7 @@ var SalesView = {
             $("#txtTDSOnAmt").val("")
             $("#txtTDSAmt").val("")
             $("#txtCashPayment").val("")
-            $("#txtChequePayment").val("")
+            $("#txtChequeRec").val("")
             $("#ddlTDS").val("")
             $("#txtTDSRofAmt").val("")
             $("#chkROFTCS").iCheck('uncheck');
@@ -986,7 +993,7 @@ var SalesView = {
                         $("#txtTDSRofAmt").val(rowData.tdsrofamt);
 
                         $("#txtCashPayment").val(parseFloat(rowData.cashpayment || 0.00).toFixed(2));
-                        $("#txtChequePayment").val(parseFloat(rowData.chequepayment || 0.00).toFixed(2));
+                        $("#txtChequeRec").val(parseFloat(rowData.chequepayment || 0.00).toFixed(2));
 
                         //if (parseInt(rowData['CHEQUEPAYMENT']) > 0) {
                         //    BankDetail(id);
@@ -1975,7 +1982,369 @@ var SalesView = {
             },
             error: OnError
         });
-    }
+    },
+    //-------------------------------------- Item Add/Remove in Cheque Modal ------------------------------------//
+    ItemAddNewRowChequeDetail: function () {
+        try {
+            var id = SalesView.variables.ChequeRowCount;
+            var today = new Date().toISOString().split('T')[0];
+            $("#ChequeDetailBody").append('<tr>' +
+                '<td style="text-align:center;" class="srno"></td>' +
+                '<td>' +
+                '<input type="text" onblur="SalesView.ValueChangeChequeModal(' + id + ')" onfocusout="Velidation(this)" class="form-control txtR numbers required fixed txtChequeAmt" decimals="2" name="txtChequeAmt' + id + '" id="txtChequeAmt' + id + '">' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" onfocusout="Velidation(this)" class="form-control number required ChequeNo" name="txtChequeNo' + id + '" id="txtChequeNo' + id + '">' +
+                '</td>' +
+                '<td>' +
+                '<input type="date" onfocusout="Velidation(this)" value="' + today + '" class="form-control required ChequeDate" name="txtChequeDate' + id + '" id="txtChequeDate' + id + '">' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" onfocusout="Velidation(this)" onkeyup="SalesView.AutosuggestBankName(this)" class="form-control required ChequeDrawnBank txtAutocomplete" name="txtChequeDrawnBank' + id + '" id="txtChequeDrawnBank' + id + '">' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" onfocusout="Velidation(this)" onkeyup="SalesView.AutosuggestChequeReceiveBank(this)" class="form-control required ChequeReceiveBankNo" name="txtChequeReceiveBankNo' + id + '" id="txtChequeReceiveBankNo' + id + '"/>' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" onfocusout="Velidation(this)" class="form-control required ChequeReceiveBank" name="txtChequeReceiveBank' + id + '" id="txtChequeReceiveBank' + id + '"/>' +
+                '</td>' +
+                '<td class="btnRemove" id="btnRemoveCheque' + id + '">' +
+                '<div>' +
+                '<i class="icon-cancel-circle2" onclick="SalesView.ItemRemoveRowChequeDetail(this)"></i>' +
+                '</div>' +
+                '</td>' +
+                '</tr>');
+
+            SalesView.BindChequeReceiveAccount(id, 'txtChequeReceiveBankNo', 'txtChequeReceiveBank', 'txtChequeReceiveBank', 'ReceiveBankId');
+            FixValue();
+            SalesView.variables.ChequeRowCount = id + 1;
+        } catch (e) {
+            ErrorDetails(e, SalesView.variables.File);
+        }
+    },
+    ItemRemoveRowChequeDetail: function (row) {
+        $(row).closest('tr').remove();
+        SalesView.ValueChangeChequeModal(0);
+    },
+    ValueChangeChequeModal: function (id) {
+        if (id > 0) {
+            if (+$("#txtChequeAmt" + id).val() > 0) {
+                $("#txtChequeAmt" + id).removeClass('table-input-error');
+            } else {
+                $("#txtChequeAmt" + id).addClass('table-input-error');
+            }
+
+            if (+$("#txtChequeNo" + id).val() > 0) {
+                $("#txtChequeNo" + id).removeClass('table-input-error');
+            } else {
+                $("#txtChequeNo" + id).addClass('table-input-error');
+            }
+
+            if ($("#txtChequeDate" + id).val()) {
+                $("#txtChequeDate" + id).removeClass('table-input-error');
+            } else {
+                $("#txtChequeDate" + id).addClass('table-input-error');
+            }
+
+            if ($("#txtChequeDrawnBank" + id).val()) {
+                $("#txtChequeDrawnBank" + id).removeClass('table-input-error');
+            } else {
+                $("#txtChequeDrawnBank" + id).addClass('table-input-error');
+            }
+
+            if ($("#txtChequeReceiveBank" + id).val()) {
+                $("#txtChequeReceiveBank" + id).removeClass('table-input-error');
+            } else {
+                $("#txtChequeReceiveBank" + id).addClass('table-input-error');
+            }
+        }
+
+        var sum = 0;
+        $('.txtChequeAmt').each(function () {
+            sum += +parseFloat(this.value || 0.00).toFixed(2);
+        });
+        $("#LblTotalChequeAmt").html(parseFloat(sum || 0.00).toFixed(2));
+    },
+    AutosuggestChequeReceiveBank: function (input) {
+        try {
+            var id = $(input).attr('id');
+            var append = id.replace('txtChequeReceiveBankNo', '');
+            $("#" + id).autocomplete({
+                source: function (request, response) {
+                    var myfilter,
+                        myfilter = { rules: [] };
+                    myfilter.rules.push({ field: "SEARCH", op: "eq", data: $("#" + id).val() });
+                    var url = getDomain() + "/Common/BindMastersDetails?ServiceName=BANKMASTER_GET" + "&myfilters=" + JSON.stringify(myfilter);
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        async: false,
+                        cache: false,
+                        success: function (data) {
+                            if ($(data).find('RESPONSECODE').text() == "0") {
+                                var JsonObject = xml2json.parser(data);
+                                if (JsonObject.serviceresponse.detailslist != undefined) {
+                                    var List;
+                                    if (JsonObject.serviceresponse.detailslist.details.length > 1)
+                                        List = JsonObject.serviceresponse.detailslist.details;
+                                    else
+                                        List = JsonObject.serviceresponse.detailslist;
+                                    response(
+                                        $.map(List, function (item) {
+                                            if (jQuery.type(item) == "object") {
+
+                                                return {
+                                                    label: item.lbl,
+                                                    value: item.accountno,
+                                                    Id: item.bankmasterid,
+                                                    BankName: item.bankname,
+                                                }
+                                            }
+                                            else {
+                                                return {
+                                                    label: item.lbl,
+                                                    value: item.accountno,
+                                                    Id: item.bankmasterid,
+                                                    BankName: item.bankname,
+                                                }
+                                            }
+                                        }))
+                                }
+                                else {
+                                    if ($("#" + id).val().length <= 1) {
+                                        $("#txtChequeReceiveBank" + append).val('');
+                                    }
+                                    var result = [
+                                        {
+                                            label: 'No Results Found',
+                                            value: ''
+                                        }
+                                    ];
+                                    response(result);
+                                }
+                            }
+                            else {
+                                if ($("#" + id).val().length <= 1) {
+                                    $("#txtChequeReceiveBank" + append).val('');
+                                }
+                                notificationMessage('Head Name', $(data).find('RESPONSEMESSAGE').text(), 'error');
+                            }
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "No Results Found"
+                },
+                select: function (event, ui) {
+                    if (ui.item.label != 'No Results Found') {
+                        $("#txtChequeReceiveBank" + append).val(ui.item.BankName);
+                        $("#txtChequeReceiveBank" + append).attr('ReceiveBankId', ui.item.Id);
+                    } else {
+                        setTimeout(function () {
+                            $("#" + id).val('');
+                        }, 1)
+                    }
+
+                },
+                minLength: 1,
+                autoFocus: true
+            });
+        } catch (e) {
+            ErrorDetails(e, SalesView.variables.File);
+        }
+    },
+
+    BindChequeReceiveAccount(append, AccNo, BankName, HiddenInput, hidden) {
+        try {
+            $.ajax({
+                url: getDomain() + "/Common/BindMastersDetails?ServiceName=BANKMASTER_GET",
+                type: "POST",
+                async: false,
+                cache: false,
+                success: function (data) {
+                    if ($(data).find('RESPONSECODE').text() == "0") {
+                        var JsonObject = xml2json.parser(data);
+                        if (JsonObject.serviceresponse.detailslist != undefined) {
+                            var List;
+                            if (JsonObject.serviceresponse.detailslist.details.length > 1)
+                                List = JsonObject.serviceresponse.detailslist.details[0];
+                            else
+                                List = JsonObject.serviceresponse.detailslist.details;
+
+                            $("#" + AccNo + append).val(List.accountno);
+                            $("#" + BankName + append).val(List.bankname);
+                            $("#" + HiddenInput + append).attr(hidden, List.bankmasterid);
+                        }
+                    }
+                }
+            })
+        }
+        catch (e) {
+            ErrorDetails(e, SalesView.variables.File);
+        }
+    },
+
+
+    //-------------------------------------- Open Cheque Modal --------------------------------------------------//
+    ChequeModal: function () {
+        debugger
+        if (ChequeDetail) {
+            var JsonObject = xml2json.parser(ChequeDetail);
+            if (JsonObject.chequedetail) {
+                if (JsonObject.chequedetail.cqdetail != undefined) {
+                    var list;
+                    if (JsonObject.chequedetail.cqdetail.length > 1)
+                        list = JsonObject.chequedetail.cqdetail;
+                    else
+                        list = JsonObject.chequedetail;
+                    SalesView.variables.ChequeRowCount = 1;
+                    $("#ChequeDetailBody").html('');
+                    $.each(list, function (key, innerjsonDetails) {
+                        id = SalesView.variables.ChequeRowCount;
+                        $("#ChequeDetailBody").append('<tr>' +
+                            '<td style="text-align:center;" class="srno"></td>' +
+                            '<td>' +
+                            '<input type="text" value="' + innerjsonDetails.chqamt + '" onblur="SalesView.ValueChangeChequeModal(' + id + ')" onfocusout="Velidation(this)" class="form-control txtR numbers required fixed txtChequeAmt" decimals="2" name="txtChequeAmt' + id + '" id="txtChequeAmt' + id + '">' +
+                            '</td>' +
+                            '<td>' +
+                            '<input type="text" value="' + innerjsonDetails.chqno + '" onfocusout="Velidation(this)" class="form-control number required ChequeNo" name="txtChequeNo' + id + '" id="txtChequeNo' + id + '">' +
+                            '</td>' +
+                            '<td>' +
+                            '<input type="date" value="' + innerjsonDetails.chqdate + '" onfocusout="Velidation(this)" class="form-control required ChequeDate" name="txtChequeDate' + id + '" id="txtChequeDate' + id + '">' +
+                            '</td>' +
+                            '<td>' +
+                            '<input type="text" value="' + innerjsonDetails.drawnbank + '" onfocusout="Velidation(this)" onkeyup="SalesView.AutosuggestBankName(this)" class="form-control required ChequeDrawnBank txtAutocomplete txtAutocomplete" name="txtChequeDrawnBank' + id + '" id="txtChequeDrawnBank' + id + '">' +
+                            '</td>' +
+                            '<td>' +
+                            '<input type="text" value="' + innerjsonDetails.acnumber + '" onfocusout="Velidation(this)" onkeyup="SalesView.AutosuggestChequeReceiveBank(this)" class="form-control required ChequeReceiveBankNo" name="txtChequeReceiveBankNo' + id + '" id="txtChequeReceiveBankNo' + id + '"/>' +
+                            '</td>' +
+                            '<td>' +
+                            '<input type="text" value="' + innerjsonDetails.receivebank + '" ReceiveBankId="' + innerjsonDetails.receivebankid + '" onfocusout="Velidation(this)" class="form-control required ChequeReceiveBank" name="txtChequeReceiveBank' + id + '" id="txtChequeReceiveBank' + id + '"/>' +
+                            '</td>' +
+                            '<td class="btnRemove" id="btnRemoveCheque' + id + '">' +
+                            '<div>' +
+                            '<i class="icon-cancel-circle2" onclick="SalesView.ItemRemoveRowChequeDetail(this)"></i>' +
+                            '</div>' +
+                            '</td>' +
+                            '</tr>');
+                        FixValue();
+                        SalesView.ValueChangeChequeModal(id);
+                        SalesView.variables.ChequeRowCount = id + 1;
+                    });
+                    //SalesView.ValueChangeChequeModal(id);
+                    $("#ModalChequeDetail").modal('show');
+                }
+            }
+            else {
+                $("#ChequeDetailBody").html('');
+                SalesView.ItemAddNewRowChequeDetail();
+                $("#ModalChequeDetail").modal('show');
+            }
+        } else {
+            $("#ChequeDetailBody").html('');
+            SalesView.ItemAddNewRowChequeDetail();
+            $("#ModalChequeDetail").modal('show');
+        }
+
+    },
+
+    AutosuggestBankName: function (input) {
+        try {
+            var id = $(input).attr('id');
+            var append = id.replace('txtCardDrawnBank', '');
+            $("#" + id).autocomplete({
+                source: function (request, response) {
+                    var myfilter,
+                        myfilter = { rules: [] };
+                    myfilter.rules.push({ field: "COMMONMASTERDETAILNAME", op: "eq", data: $("#" + id).val() });
+                    var url = getDomain() + "/Common/BindMastersDetails?ServiceName=COMMONMASTERDETAIL_GET&ISACTIVE=1&IsRecordAll=true&_search=true&ColumnRequested=COMMONMASTERDETAILID,COMMONMASTERDETAILNAME&IsRecordAll=true&sidx=COMMONMASTERDETAILNAME&sord=asc&searchField=COMMONMASTERNAME&searchOper=eq&searchString=Bank Name&myfilters=" + JSON.stringify(myfilter);
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        async: false,
+                        cache: false,
+                        success: function (data) {
+                            if ($(data).find('RESPONSECODE').text() == "0") {
+                                var JsonObject = xml2json.parser(data);
+                                if (JsonObject.serviceresponse.detailslist != undefined) {
+                                    var List;
+                                    if (JsonObject.serviceresponse.detailslist.details.length > 1)
+                                        List = JsonObject.serviceresponse.detailslist.details;
+                                    else
+                                        List = JsonObject.serviceresponse.detailslist;
+                                    response(
+                                        $.map(List, function (item) {
+                                            if (jQuery.type(item) == "object") {
+
+                                                return {
+                                                    label: item.commonmasterdetailname,
+                                                    value: item.commonmasterdetailname,
+                                                    Id: item.commonmasterdetailid,
+                                                }
+                                            }
+                                            else {
+                                                return {
+                                                    label: item.commonmasterdetailname,
+                                                    value: item.commonmasterdetailname,
+                                                    Id: item.commonmasterdetailid,
+                                                }
+                                            }
+                                        }))
+                                }
+                                else {
+                                    if ($("#" + id).val().length <= 1) {
+                                        $("#txtCardDrawnBank" + append).attr('BankId', '');
+                                        $("#txtCardDrawnBank" + append).val('');
+                                    }
+                                    var result = [
+                                        {
+                                            label: 'No Results Found',
+                                            value: ''
+                                        }
+                                    ];
+                                    response(result);
+                                }
+                            }
+                            else {
+                                if ($("#" + id).val().length <= 1) {
+                                    $("#txtCardDrawnBank" + append).attr('BankId', '');
+                                    $("#txtCardDrawnBank" + append).val('');
+                                }
+                                notificationMessage('Head Name', $(data).find('RESPONSEMESSAGE').text(), 'error');
+                            }
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "No Results Found"
+                },
+                select: function (event, ui) {
+                    if (ui.item.label != 'No Results Found') {
+                        $("#txtCardDrawnBank" + append).attr('BankId', ui.item.Id);
+                    } else {
+                        setTimeout(function () {
+                            $("#" + id).val('');
+                        }, 1)
+                    }
+                },
+                change: function (event, ui) {
+                    if (!ui.item) {
+                        $("#txtCardDrawnBank" + append).attr('BankId', '');
+                        $("#txtCardDrawnBank" + append).val('');
+                    }
+                },
+                focus: function (event, ui) {
+                    $("#txtCardDrawnBank" + append).attr('BankId', '');
+                    $("#txtCardDrawnBank" + append).val('');
+                },
+                minLength: 1,
+                autoFocus: true
+            });
+        } catch (e) {
+            ErrorDetails(e, SalesView.variables.File);
+        }
+    },
+    //------------------------------------------ Item Autosugest in URD modal -----------------------------------//
 }
 
 $(document).ready(function () {
@@ -2176,7 +2545,77 @@ $(document).ready(function () {
             $(".TDSCalculate").show();
             $(".TCSCalculate").show();
         }
+        //-------------------------------------- Cheque Detail Open/Close Event --------------------------------------//
+        $('#ModalChequeDetail').on('shown.bs.modal', function () {
+            $('#ChequeDetailBody tr:first td:nth-child(2) input').focus();
+        });
+        $('#ModalChequeDetail').on('hidden.bs.modal', function () {
+            SalesView.variables.ChequeRowCount = 1;
+            $("#LblTotalChequeAmt").html('0.00');
+            $("#ChequeDetailBody").html('');
+            $("#txtChequeRec").focus();
+        });
 
+
+        $("#txtChequeRec").keydown(function (e) {
+            debugger
+            if (e.keyCode == 32) {
+                SalesView.ChequeModal();
+            } else if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
+                setTimeout(function () {
+                    $("#txtChequeRec").val('');
+                }, 10);
+                SalesView.ChequeModal();
+            }
+        });
+
+
+        //-------------------------------------- Cheque Detail Save/Cancel/Clear event --------------------------------------//
+        $("#btnSaveChequeDetail").click(function () {
+            try {
+                if ($("#ChequeDetailBody").find('.table-input-error').length > 0) {
+                    notificationTost('warning', 'Please fill Item details.');
+                } else {
+                    var xmlsaveFiles = '';
+                    ChequeDetail = '';
+                    $("#ChequeDetailBody").find('tr').each(function (key, obj) {
+                        xmlsaveFiles += '<CQDETAIL>';
+                        xmlsaveFiles += '<CHQAMT>' + ($(obj).find('.txtChequeAmt').val() || 0) + '</CHQAMT>';
+                        xmlsaveFiles += '<CHQNO>' + ($(obj).find('.ChequeNo').val() || 0) + '</CHQNO>';
+                        xmlsaveFiles += '<CHQDATE>' + ($(obj).find('.ChequeDate').val() || 0) + '</CHQDATE>';
+                        xmlsaveFiles += '<DRAWNBANK>' + ($(obj).find('.ChequeDrawnBank').val() || 0) + '</DRAWNBANK>';
+                        xmlsaveFiles += '<ACNUMBER>' + $(obj).find(".ChequeReceiveBankNo").val() + '</ACNUMBER>';
+                        xmlsaveFiles += '<RECEIVEBANKID>' + $(obj).find(".ChequeReceiveBank").attr('ReceiveBankId') + '</RECEIVEBANKID>';
+                        xmlsaveFiles += '<RECEIVEBANK>' + $(obj).find(".ChequeReceiveBank").val() + '</RECEIVEBANK>';
+                        xmlsaveFiles += '</CQDETAIL>';
+                    });
+                    if (xmlsaveFiles) {
+                        var xmlsaveFiles1 = "<CHEQUEDETAIL>";
+                        xmlsaveFiles1 += xmlsaveFiles;
+                        xmlsaveFiles1 += "</CHEQUEDETAIL>";
+                        ChequeDetail = xmlsaveFiles1;
+                    }
+                    $("#txtChequeRec").val($("#LblTotalChequeAmt").html());
+                    $("#ModalChequeDetail").modal('hide');
+                    SalesView.Calculation()
+                }
+            } catch (e) {
+                ErrorDetails(e, SalesView.variables.File);
+            }
+
+        });
+        $("#btnClearChequeDetail").click(function () {
+            SalesView.variables.ChequeRowCount = 1;
+            $("#ChequeDetailBody").html('');
+            SalesView.ItemAddNewRowChequeDetail();
+        });
+
+        $("#btnCancelChequeDetail").click(function () {
+            SalesView.variables.ChequeRowCount = 1;
+            $("#ChequeDetailBody").html('');
+            $("#ModalChequeDetail").modal('hide');
+        });
+        //-------------------------------------- Cheque Detail Save/Cancel/Clear event --------------------------------------//
 
     }
     catch (e) {
@@ -2628,9 +3067,16 @@ function CalculateBill_PaymentInfo() {
 
 }
 
-function Velidation() {
-
-
+function Velidation(id) {
+    try {
+        if ($("#" + id.id).val()) {
+            $("#" + id.id).removeClass('table-input-error');
+        } else {
+            $("#" + id.id).addClass('table-input-error');
+        }
+    } catch (e) {
+        ErrorDetails(e, TaxInvoiceview.variables.File);
+    }
 }
 
 //-------------------------------------- Bank Detail Hide/Show --------------------------------------//
@@ -2905,4 +3351,6 @@ function AutosuggestChequeNo(obj) {
         ErrorDetails(e, SalesView.variables.File);
     }
 }
+
+
 //-------------------------------------- /Bank Detail Hide/Show --------------------------------------//

@@ -408,7 +408,7 @@
                                             <div class="form-group">
                                                 <label class="control-label col-md-5">Cheque Payment</label>
                                                 <div class="col-md-7">
-                                                    <input type="text" tabindex="27" class="form-control txtR number" onfocusout="SalesView.Calculation()" onblur="BankDetail('')" name="ChequePayment" id="txtChequePayment">
+                                                    <input type="text" tabindex="27" class="form-control txtR number" onfocusout="SalesView.Calculation()"  name="ChequePayment" id="txtChequeRec">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -474,6 +474,55 @@
     <!-- /Delete form modal -->
 </div>
 <!------ /old Design ------>
+<!-- Cheque Detail form modal -->
+<div id="ModalChequeDetail" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cheque Detail</h5>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal acto_frmItemlist" id="frmChequeDetail">
+                    <table class="mt-20">
+                        <thead>
+                            <tr>
+                                <th style="width:2%;">Sr No.</th>
+                                <th style="width:2%;">Cheque Amt</th>
+                                <th style="width:2%;">Cheque No</th>
+                                <th style="width:2%;">Cheque Date</th>
+                                <th style="width:5%;">Drawn Bank</th>
+                                <th style="width:5%;">A/C No</th>
+                                <th style="width:5%;">Receive Bank</th>
+                                <th style="width:1%;">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ChequeDetailBody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <th>
+                                    <a class="pull-left" onclick="SalesView.ItemAddNewRowChequeDetail()">+Add New</a>
+                                </th>
+                                <th id="LblTotalChequeAmt">0.00</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSaveChequeDetail" tabindex="12" class="btn btn-success btnSave"><span class="fa fa-floppy-o"></span> Save</button>
+                <button type="button" id="btnClearChequeDetail" class="btn btn-warning btn-md"><span class="fa fa-floppy-o"></span> Clear</button>
+                <button name="CancelCheque" id="btnCancelChequeDetail" class="btn bg-slate-400 btnCancel" type="button"><i class="fa fa-times"></i> Cancel</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <input type="hidden" id="hdnQuotationId" />
 <input type="hidden" id="hdnChequeId" />
