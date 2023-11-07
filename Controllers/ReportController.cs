@@ -22,6 +22,11 @@ namespace EventERP.Controllers
             return View(FormPermissionHelper.GetFormPermission("ItemWiseStockReport", "Report"));
         }
 
+        public ActionResult BalanceSheet()
+        {
+            return View(FormPermissionHelper.GetFormPermission("BalanceSheet", "Report"));
+        }
         
+
     }
 }
